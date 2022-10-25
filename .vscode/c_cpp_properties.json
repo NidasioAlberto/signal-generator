@@ -1,0 +1,42 @@
+{
+    "configurations": [
+        {
+            "name": "stm32f072rb_stm32f0discovery",
+            "cStandard": "c11",
+            "cppStandard": "c++14",
+            "compilerPath": "/opt/arm-miosix-eabi/bin/arm-miosix-eabi-g++",
+            "defines": [
+                "_MIOSIX_BOARDNAME=stm32f072rb_stm32f0discovery",
+                "_ARCH_CORTEXM4_STM32F4",
+                "_BOARD_STM32F072RB_DISCO",
+                "HSI_VALUE=8000000",
+                "SYSCLK_FREQ_8MHz=8000000",
+                "_MIOSIX",
+                "DEBUG"
+            ],
+            "includePath": [
+                "${workspaceFolder}/miosix-kernel/miosix/config/arch/cortexM0_stm32/stm32f072rb_stm32f0discovery",
+                "${workspaceFolder}/miosix-kernel/miosix/arch/cortexM0_stm32/stm32f072rb_stm32f0discovery",
+                "${workspaceFolder}/miosix-kernel/miosix/arch/cortexM0_stm32/common",
+                "${workspaceFolder}/miosix-kernel/miosix/arch/common",
+                "${workspaceFolder}/miosix-kernel/miosix"
+            ],
+            "browse": {
+                "path": [
+                    "${workspaceFolder}/miosix-kernel/miosix/config/arch/cortexM0_stm32/stm32f072rb_stm32f0discovery",
+                    "${workspaceFolder}/miosix-kernel/miosix/arch/cortexM0_stm32/stm32f072rb_stm32f0discovery",
+                    "${workspaceFolder}/miosix-kernel/miosix/arch/cortexM0_stm32/common",
+                    "${workspaceFolder}/miosix-kernel/miosix/stdlib_integration",
+                    "${workspaceFolder}/miosix-kernel/miosix/arch/common",
+                    "${workspaceFolder}/miosix-kernel/miosix/interfaces",
+                    "${workspaceFolder}/miosix-kernel/miosix/filesystem",
+                    "${workspaceFolder}/miosix-kernel/miosix/kernel",
+                    "${workspaceFolder}/miosix-kernel/miosix/util",
+                    "${workspaceFolder}/miosix-kernel/miosix/e20"
+                ],
+                "limitSymbolsToIncludedHeaders": true
+            }
+        }
+    ],
+    "version": 4
+}
