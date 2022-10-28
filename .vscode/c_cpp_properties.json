@@ -7,7 +7,8 @@
             "compilerPath": "/opt/arm-miosix-eabi/bin/arm-miosix-eabi-g++",
             "defines": [
                 "_MIOSIX_BOARDNAME=stm32f072rb_stm32f0discovery",
-                "_ARCH_CORTEXM4_STM32F4",
+                "_ARCH_CORTEXM0_STM32",
+                "STM32F072xB",
                 "_BOARD_STM32F072RB_DISCO",
                 "HSI_VALUE=8000000",
                 "SYSCLK_FREQ_8MHz=8000000",

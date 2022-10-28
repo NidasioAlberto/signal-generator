@@ -1,0 +1,19 @@
+{
+    "version": "1.0.0",
+    "configurations": [
+        {
+            "cwd": "${workspaceRoot}",
+            "executable": "${workspaceFolder}/${fileBasenameNoExtension}.elf",
+            "name": "ST-LINK V2",
+            "request": "attach",
+            "type": "cortex-debug",
+            "servertype": "openocd",
+            "device": "STM32F072RB",
+            "armToolchainPath": "/opt/arm-miosix-eabi/bin",
+            "toolchainPrefix": "arm-miosix-eabi",
+            "configFiles": [
+                "${workspaceFolder}/miosix-kernel/miosix/arch/cortexM0_stm32/stm32f072rb_stm32f0discovery/stm32f0discovery.cfg"
+            ]
+        }
+    ]
+}

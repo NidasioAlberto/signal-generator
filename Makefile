@@ -18,7 +18,7 @@ SUBDIRS := $(KPATH)
 ##
 ## List here your source files (both .s, .c and .cpp)
 ##
-SRC := src/main.cpp
+SRC := main.cpp
 
 ##
 ## List here additional static libraries with relative path
@@ -94,6 +94,9 @@ main: main.elf
 	$(ECHO) "[CP  ] main.bin"
 	$(Q)$(CP) -O binary main.elf main.bin
 	$(Q)$(SZ) main.elf
+
+assembly:
+	$(CXX) -S -fverbose-asm -o main.asm main.cpp $(DFLAGS) $(CXXFLAGS)
 
 main.elf: $(OBJ) all-recursive
 	$(ECHO) "[LD  ] main.elf"
