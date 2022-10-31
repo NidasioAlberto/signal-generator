@@ -1,7 +1,6 @@
 **/*.aux
 **/*.log
 **/*.out
-**/*.pdf
 
 # Exclude doxygen
 miosix/_doc/doxygen/html/*
