@@ -11,6 +11,7 @@ main.elf
 main.bin
 main.hex
 main.map
+main.asm
 *.o
 *.a
 *.d
