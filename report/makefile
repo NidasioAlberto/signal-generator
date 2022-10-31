@@ -1,4 +1,3 @@
-
 report.pdf: report.tex
 	pdflatex $<  | tee latex.log | egrep "arning|eror"
 
