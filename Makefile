@@ -95,9 +95,6 @@ main: main.elf
 	$(Q)$(CP) -O binary main.elf main.bin
 	$(Q)$(SZ) main.elf
 
-assembly:
-	$(CXX) -S -fverbose-asm -o main.asm main.cpp $(DFLAGS) $(CXXFLAGS)
-
 main.elf: $(OBJ) all-recursive
 	$(ECHO) "[LD  ] main.elf"
 	$(Q)$(CXX) $(LFLAGS) -o main.elf $(OBJ) $(KPATH)/$(BOOT_FILE) $(LINK_LIBS)

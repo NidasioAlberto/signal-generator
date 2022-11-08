@@ -7,7 +7,7 @@
             "compilerPath": "/opt/arm-miosix-eabi/bin/arm-miosix-eabi-g++",
             "defines": [
                 "_MIOSIX_BOARDNAME=stm32f072rb_stm32f0discovery",
-                "_ARCH_CORTEXM0_STM32",
+                "_ARCH_CORTEXM0_STM32F0",
                 "STM32F072xB",
                 "_BOARD_STM32F072RB_DISCO",
                 "HSI_VALUE=8000000",
@@ -16,17 +16,17 @@
                 "DEBUG"
             ],
             "includePath": [
-                "${workspaceFolder}/miosix-kernel/miosix/config/arch/cortexM0_stm32/stm32f072rb_stm32f0discovery",
-                "${workspaceFolder}/miosix-kernel/miosix/arch/cortexM0_stm32/stm32f072rb_stm32f0discovery",
-                "${workspaceFolder}/miosix-kernel/miosix/arch/cortexM0_stm32/common",
+                "${workspaceFolder}/miosix-kernel/miosix/config/arch/cortexM0_stm32f0/stm32f072rb_stm32f0discovery",
+                "${workspaceFolder}/miosix-kernel/miosix/arch/cortexM0_stm32f0/stm32f072rb_stm32f0discovery",
+                "${workspaceFolder}/miosix-kernel/miosix/arch/cortexM0_stm32f0/common",
                 "${workspaceFolder}/miosix-kernel/miosix/arch/common",
                 "${workspaceFolder}/miosix-kernel/miosix"
             ],
             "browse": {
                 "path": [
-                    "${workspaceFolder}/miosix-kernel/miosix/config/arch/cortexM0_stm32/stm32f072rb_stm32f0discovery",
-                    "${workspaceFolder}/miosix-kernel/miosix/arch/cortexM0_stm32/stm32f072rb_stm32f0discovery",
-                    "${workspaceFolder}/miosix-kernel/miosix/arch/cortexM0_stm32/common",
+                    "${workspaceFolder}/miosix-kernel/miosix/config/arch/cortexM0_stm32f0/stm32f072rb_stm32f0discovery",
+                    "${workspaceFolder}/miosix-kernel/miosix/arch/cortexM0_stm32f0/stm32f072rb_stm32f0discovery",
+                    "${workspaceFolder}/miosix-kernel/miosix/arch/cortexM0_stm32f0/common",
                     "${workspaceFolder}/miosix-kernel/miosix/stdlib_integration",
                     "${workspaceFolder}/miosix-kernel/miosix/arch/common",
                     "${workspaceFolder}/miosix-kernel/miosix/interfaces",

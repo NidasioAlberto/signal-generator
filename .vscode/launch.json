@@ -12,7 +12,7 @@
             "armToolchainPath": "/opt/arm-miosix-eabi/bin",
             "toolchainPrefix": "arm-miosix-eabi",
             "configFiles": [
-                "${workspaceFolder}/miosix-kernel/miosix/arch/cortexM0_stm32/stm32f072rb_stm32f0discovery/stm32f0discovery.cfg"
+                "${workspaceFolder}/miosix-kernel/miosix/arch/cortexM0_stm32f0/stm32f072rb_stm32f0discovery/stm32f0discovery.cfg"
             ]
         }
     ]
