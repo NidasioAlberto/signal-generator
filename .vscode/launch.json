@@ -13,7 +13,8 @@
             "toolchainPrefix": "arm-miosix-eabi",
             "configFiles": [
                 "${workspaceFolder}/miosix-kernel/miosix/arch/cortexM0_stm32f0/stm32f072rb_stm32f0discovery/stm32f0discovery.cfg"
-            ]
+            ],
+            "svdFile": "${workspaceFolder}/miosix-kernel/miosix/arch/cortexM0_stm32f0/common/STM32F0x0.svd"
         }
     ]
 }

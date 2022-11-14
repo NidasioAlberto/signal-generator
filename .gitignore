@@ -17,3 +17,6 @@ miosix/_doc/doxygen/html/*
 
 # Exclude Mac OS X temporary
 .DS_Store
+
+# VS-Code Cortex Debug extension
+**/.cortex-debug**
