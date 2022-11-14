@@ -8,6 +8,7 @@ using namespace std;
 using namespace miosix;
 
 // Serial pins: PA9 PA10
+typedef Gpio<GPIOA_BASE, 4> ch1;
 
 constexpr size_t UPDATE_FREQ = 1e6;
 
@@ -27,6 +28,8 @@ int main() {
 
     // DAC
     {
+        ch1::mode(Mode::INPUT_ANALOG);
+
         // Enable the DAC clock
         RCC->APB1ENR |= RCC_APB1ENR_DACEN;
 
