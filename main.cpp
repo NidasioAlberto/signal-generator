@@ -33,17 +33,19 @@ int main() {
     dac.enableTrigger(1, DACDriver::TriggerSource::TIM6_TRGO);
 
     // DMA
-    DMADriver dma(DMA1, DMA1_Channel3);
-    dma.clockOn();
-    dma.setPeripheralDataAddress((void*)&(DAC->DHR12R1));
-    dma.setMemoryDataAddress(signal_data);
-    dma.setTransferSize(SIGNAL_ARRAY_SIZE);
-    dma.enableMemoryIncrement();
-    dma.setMemoryDataSize(DMADriver::DataSize::BITS_16);
-    dma.setPeripheralDataSize(DMADriver::DataSize::BITS_32);
-    dma.setMemoryToPeripheralDirection();
-    dma.enableCircularMode();
-    dma.enable();
+    DMATransaction tr;
+    tr.direction = DMATransaction::Direction::MEM_TO_PER;
+    tr.sourceSize = DMATransaction::DataSize::BITS_16;
+    tr.sourceAddress = signal_data;
+    tr.destinationAddress = (void*)&(DAC->DHR12R1);
+    tr.numberOfDataItems = SIGNAL_ARRAY_SIZE;
+    tr.sourceIncrement = true;
+    tr.circularMode = true;
+
+    auto channel = DMADriver::instance().acquireChannel(DMAChannelId::DMA1_CH3);
+    channel->setup(tr);
+    channel->enable();
+    printf("DMA ready: %4X\n", DMA1_Channel3->CCR);
 
     // TIM6
     BasicTimerDriver tim6(TIM6);
