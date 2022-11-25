@@ -57,6 +57,7 @@
     "cortex-debug.registerUseNaturalFormat": true,
     "cortex-debug.variableUseNaturalFormat": false,
     "cSpell.words": [
+        "ADPCM",
         "AHBENR",
         "CANEN",
         "CFGR",
@@ -85,6 +86,7 @@
         "GPIOF",
         "GPIOFEN",
         "HCLK",
+        "iprintf",
         "MAMP",
         "MINC",
         "miosix",
