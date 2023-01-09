@@ -3,19 +3,28 @@
 \textbf{2 pages max please}
 
 \begin{itemize}
-\item What is your project about?
-\item Why it is important for the AOS course?
+    \item What is your project about?
+    \item Why it is important for the AOS course?
 \end{itemize}
 
 For those who choose to work on an open source project, please put here any
 reference/copy of messages exchanged with project maintainers to \textbf{identify the subject
-of the pull request}.
+    of the pull request}.
 
-\subsection{Design and implementation}
-Describe here the structure of the solution you devised. Note, don't put major
-parts of the source code here; if you can, put hyperlinks to existing repos.
+\subsection{Introduction}
 
-For those who choose to work on an open source project, please put here an
-history (mail messages/github issues etc..) of the interaction with the
-development team that helped you identify such design and the code reviews that
-helped you improve it.
+The main idea of this project is to develop a waveform generator instrument using an STM32
+micro controller and its built in DAC. The project has 2 parts:
+\begin{itemize}
+    \item \textbf{Software}: The application needs to showcase the STM32 capability of output
+          waveforms  at sample rates of 100kHz or greater. The software need to include a
+          peripheral driver to access the built in DAC using DMA;
+    \item \textbf{Hardware}: The device has to to implement a waveform generator output stage
+          circuitry that allows to extend the capabilities of the built in DAC.
+\end{itemize}
+
+\todo[inline]{Present the key features of the realized design}
+
+\subsection{Design of the Printed Circuit Board}
+
+The goal I set out to achieve is a stand-alone PCB with builtin micro controller

@@ -5,7 +5,7 @@ watch: report.pdf
 	open $<
 
 clean:
-	rm -f *.synctex.gz *.log *.aux
+	rm -f *.synctex.gz *.log *.toc *.aux **/*.aux
 	rm -f *.bbl *.blg *.fls *.fdb_latexmk *.out *.pdf *.ps main.ppress.tex
 	rm -rf auto _region_* submission
 	rm -f *.zip
