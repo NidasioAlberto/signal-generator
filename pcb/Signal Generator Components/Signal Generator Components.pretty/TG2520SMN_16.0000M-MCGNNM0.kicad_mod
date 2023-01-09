@@ -4,17 +4,13 @@
   (descr "TCXO Oscillators 16MHz 2.8-3.3V 0.5PPM")
   (tags "SMD SMT crystal oscillator")
   (attr smd)
-  (fp_text reference "Y?" (at 0 3) (layer "F.SilkS") hide
+  (fp_text reference "Y?" (at 0 0) (layer "F.Fab")
     (effects (font (size 1.27 1.27) (thickness 0.254)))
     (tstamp 8e6c12ac-83db-4eba-bb81-44554170860d)
   )
   (fp_text value "TG2520SMN_16.0000M-MCGNNM0" (at 0 0) (layer "F.SilkS") hide
     (effects (font (size 1.27 1.27) (thickness 0.254)))
     (tstamp f220148d-27ae-4c55-af36-432263a1de3e)
-  )
-  (fp_text user "${REFERENCE}" (at 0 3) (layer "F.Fab")
-    (effects (font (size 1.27 1.27) (thickness 0.254)))
-    (tstamp 081351f9-c8de-46f7-931e-1e4527ef192c)
   )
   (fp_circle (center -1.7 0.9) (end -1.6 0.9) (layer "F.SilkS") (width 0.12) (fill solid) (tstamp e463c478-4986-44b6-9e73-f372a4f27b2c))
   (fp_line (start -2 -1.5) (end 2 -1.5) (layer "F.CrtYd") (width 0.1) (tstamp 3436c044-534b-40e1-bba2-08ab6db9ff44))
@@ -29,7 +25,7 @@
   (pad "2" smd rect (at 1.05 0.7) (size 0.8 1) (layers "F.Cu" "F.Paste" "F.Mask") (tstamp e2dd10e6-7b9d-461d-a2c4-8a59b1f6037d))
   (pad "3" smd rect (at 1.05 -0.7) (size 0.8 1) (layers "F.Cu" "F.Paste" "F.Mask") (tstamp 06e095ab-db5e-4a5c-ad27-40a749e9c9d2))
   (pad "4" smd rect (at -1.05 -0.7) (size 0.8 1) (layers "F.Cu" "F.Paste" "F.Mask") (tstamp 631e8ea1-2bf0-4b50-bbca-8ec00ae5bb9c))
-  (model "/Users/alberton/Desktop/signal-generator/pcb/Signal Generator Components/3D Models/TG2520SMN.step"
+  (model "${KIPRJMOD}/../Signal Generator Components/3D Models/TG2520SMN.step"
     (offset (xyz 0 0 0))
     (scale (xyz 1 1 1))
     (rotate (xyz 0 0 0))
