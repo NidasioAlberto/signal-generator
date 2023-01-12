@@ -1,3 +1,0 @@
-(sym_lib_table
-  (lib (name "Signal Generator Components")(type "KiCad")(uri "${SKYWARD_LIBRARY_PATH}/Signal Generator Components.kicad_sym")(options "")(descr ""))
-)
