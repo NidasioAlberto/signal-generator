@@ -1,3 +1,2 @@
 (sym_lib_table
-  (lib (name "Signal Generator Components")(type "KiCad")(uri "${SIGNAL_GENERATOR}/pcb-library/Signal Generator Components.kicad_sym")(options "")(descr ""))
 )

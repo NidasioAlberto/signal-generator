@@ -10,7 +10,7 @@
     (tstamp 92d5c0bd-07ad-4ce6-b432-b3cd9f7b36c8)
   )
   (fp_rect (start 0.75 0.25) (end 8.25 7.75)
-    (stroke (width 0.05) (type default)) (fill none) (layer "Margin") (tstamp a79dbd2c-7e2d-4d35-9b9a-a0ccbfb21c8d))
+    (stroke (width 0.05) (type default)) (fill none) (layer "F.CrtYd") (tstamp a79dbd2c-7e2d-4d35-9b9a-a0ccbfb21c8d))
   (fp_rect (start 1 0.5) (end 8 7.5)
     (stroke (width 0.05) (type default)) (fill none) (layer "F.Fab") (tstamp 55d4818d-c5f4-4cf5-a6d4-8aa8deffeb8e))
   (pad "1" thru_hole circle (at 2 2) (size 1.524 1.524) (drill 0.762) (layers "*.Cu" "*.Mask") (tstamp 7ddb9668-bea1-4e4b-b8c0-98ab4bf71f48))
