@@ -910,7 +910,7 @@
     (uuid feb9ff45-f46b-4a76-ae5d-cb2ee3e47ab8)
   )
 
-  (text_box "TODO:\n [x] Determinare valori resistenze per OpAmp\n [ ] Controllare cortocircuiti nell'inserire il Jack -> Application note di Francesco\n [x] Aggiungere micro SD\n [x] Aggiungere led RGB addressable\n [x] Assegnare valori e PN\n [x] Completare BOM"
+  (text_box "TODO:\n [x] Determinare valori resistenze per OpAmp\n [ ] Controllare cortocircuiti nell'inserire il Jack -> Application note di Francesco\n [x] Aggiungere micro SD\n [x] Aggiungere led RGB addressable\n [x] Assegnare valori e PN\n [x] Completare BOM\n [x] Aggiungere connettore ST-Link"
     (at 63.5 149.86 0) (size 85.09 17.78)
     (stroke (width 0) (type default))
     (fill (type none))
