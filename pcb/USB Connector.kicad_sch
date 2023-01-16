@@ -1127,7 +1127,7 @@
   (symbol (lib_id "Device:C") (at 100.33 140.97 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 5e6188d6-fe6f-4709-85cb-8ea556482a1f)
-    (property "Reference" "C4" (at 104.14 140.335 0)
+    (property "Reference" "C5" (at 104.14 140.335 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "47p" (at 104.14 142.875 0)
@@ -1147,7 +1147,7 @@
     (instances
       (project "Signal Generator"
         (path "/f6255c48-6253-4c69-a6db-1ceaf4eff04d/9d99cf62-f968-426c-bcde-130807203ad1"
-          (reference "C4") (unit 1)
+          (reference "C5") (unit 1)
         )
       )
     )
@@ -1387,7 +1387,7 @@
   (symbol (lib_id "Device:C") (at 128.27 143.51 0) (mirror y) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid a1619db8-84d3-41f4-a2d0-3b8bb1f99fa4)
-    (property "Reference" "C5" (at 124.46 142.875 0)
+    (property "Reference" "C6" (at 124.46 142.875 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "100n" (at 124.46 145.415 0)
@@ -1407,7 +1407,7 @@
     (instances
       (project "Signal Generator"
         (path "/f6255c48-6253-4c69-a6db-1ceaf4eff04d/9d99cf62-f968-426c-bcde-130807203ad1"
-          (reference "C5") (unit 1)
+          (reference "C6") (unit 1)
         )
       )
     )
@@ -1466,7 +1466,7 @@
   (symbol (lib_id "Device:C") (at 87.63 140.97 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid b965f3ea-b3b7-4b55-ae43-a9d7db28a0b3)
-    (property "Reference" "C3" (at 91.44 140.335 0)
+    (property "Reference" "C4" (at 91.44 140.335 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "47p" (at 91.44 142.875 0)
@@ -1486,7 +1486,7 @@
     (instances
       (project "Signal Generator"
         (path "/f6255c48-6253-4c69-a6db-1ceaf4eff04d/9d99cf62-f968-426c-bcde-130807203ad1"
-          (reference "C3") (unit 1)
+          (reference "C4") (unit 1)
         )
       )
     )
