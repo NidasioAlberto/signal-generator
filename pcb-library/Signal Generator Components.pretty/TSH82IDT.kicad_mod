@@ -7,7 +7,7 @@
       (effects (font (size 1.27 1.27) (thickness 0.254)))
     (tstamp f97af2ce-2f66-4ac0-89e2-d9b30cf0cfc3)
   )
-  (fp_text value "TSH82IDT" (at 0 4) (layer "F.Fab")
+  (fp_text value "TSH82IDT" (at 0 4) (layer "F.Fab") hide
       (effects (font (size 1.27 1.27) (thickness 0.254)))
     (tstamp ce562e78-57c4-468c-a801-fdbacc1ebe50)
   )

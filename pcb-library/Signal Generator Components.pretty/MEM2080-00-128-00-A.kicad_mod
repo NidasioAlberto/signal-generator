@@ -1,11 +1,11 @@
 (footprint "MEM2080-00-128-00-A" (version 20221018) (generator pcbnew)
   (layer "F.Cu")
   (attr through_hole)
-  (fp_text reference "${REFERENCE}" (at 0 0) (layer "F.SilkS")
+  (fp_text reference "${REFERENCE}" (at 0 0) (layer "F.Fab")
       (effects (font (size 1 1) (thickness 0.15)))
     (tstamp fa035a5e-7447-4117-aa12-6ec233e4778a)
   )
-  (fp_text value "MEM2080-00-128-00-A" (at 0 8.75) (layer "F.Fab")
+  (fp_text value "MEM2080-00-128-00-A" (at 0 8.75) (layer "F.Fab") hide
       (effects (font (size 1 1) (thickness 0.15)))
     (tstamp 5c17ea28-8312-4eb2-b956-d4d60a242012)
   )

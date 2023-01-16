@@ -3,10 +3,10 @@
   (tags "Power Supply")
   (attr smd)
   (fp_text reference "${REFERENCE}" (at 0 0) (layer "F.Fab")
-      (effects (font (size 1.27 1.27) (thickness 0.254)))
+      (effects (font (size 1 1) (thickness 0.15)))
     (tstamp d7206aaf-d7c3-4e16-9d91-1eadc6196d19)
   )
-  (fp_text value "LD39050PU33R" (at 0 2.95) (layer "F.Fab")
+  (fp_text value "LD39050PU33R" (at 0 2.95) (layer "F.Fab") hide
       (effects (font (size 1.27 1.27) (thickness 0.254)))
     (tstamp 096b5e69-7526-45ee-b0ba-0e385892aad0)
   )

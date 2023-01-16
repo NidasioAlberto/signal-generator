@@ -6,7 +6,7 @@
       (effects (font (size 1.27 1.27) (thickness 0.254)))
     (tstamp e61ea9c0-48b7-43b3-8fc6-ab352b866419)
   )
-  (fp_text value "TS972IYQT" (at 0 3) (layer "F.Fab")
+  (fp_text value "TS972IYQT" (at 0 3) (layer "F.Fab") hide
       (effects (font (size 1.27 1.27) (thickness 0.254)))
     (tstamp 857669e9-65ce-49c1-aa7d-44f523a8a517)
   )

@@ -1,11 +1,11 @@
 (footprint "IN-PI55QA" (version 20221018) (generator pcbnew)
   (layer "F.Cu")
   (attr smd)
-  (fp_text reference "${REFERENCE}" (at 0 0) (layer "F.SilkS")
+  (fp_text reference "${REFERENCE}" (at 0 0) (layer "F.Fab")
       (effects (font (size 1 1) (thickness 0.15)))
     (tstamp 91030031-69c9-40ae-ae11-52bd1e7851fa)
   )
-  (fp_text value "IN-PI55QA" (at 0 4) (layer "F.Fab")
+  (fp_text value "IN-PI55QA" (at 0 4) (layer "F.Fab") hide
       (effects (font (size 1 1) (thickness 0.15)))
     (tstamp 4012ea67-447f-4769-90be-1adc100f005d)
   )
