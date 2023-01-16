@@ -6,6 +6,8 @@
 
   (title_block
     (title "Microcontroller Unit")
+    (date "2023-01-16")
+    (rev "0")
   )
 
   (lib_symbols
@@ -1735,7 +1737,7 @@
           (reference "R1") (unit 1)
         )
         (path "/f6255c48-6253-4c69-a6db-1ceaf4eff04d/fadc918d-eb15-47ed-9103-62412ffd5e96"
-          (reference "R17") (unit 1)
+          (reference "R18") (unit 1)
         )
       )
     )
@@ -2038,7 +2040,7 @@
   (symbol (lib_id "Device:R") (at 151.13 139.7 90) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 6eeda114-b3f6-4771-bfb0-77d23ad76b6f)
-    (property "Reference" "R20" (at 151.13 134.62 90)
+    (property "Reference" "R17" (at 151.13 134.62 90)
       (effects (font (size 1.27 1.27)))
     )
     (property "Value" "1k" (at 151.13 137.16 90)
@@ -2058,7 +2060,7 @@
     (instances
       (project "Signal Generator"
         (path "/f6255c48-6253-4c69-a6db-1ceaf4eff04d/fadc918d-eb15-47ed-9103-62412ffd5e96"
-          (reference "R20") (unit 1)
+          (reference "R17") (unit 1)
         )
       )
     )
@@ -2095,7 +2097,7 @@
   (symbol (lib_id "Signal Generator Components:IN-PI55QA") (at 163.83 142.24 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 7c0bf89d-2a0a-4220-b5f1-0b1b276fa4e1)
-    (property "Reference" "D4" (at 163.83 133.35 0)
+    (property "Reference" "D3" (at 163.83 133.35 0)
       (effects (font (size 1.27 1.27)))
     )
     (property "Value" "IN-PI55QA" (at 163.83 135.89 0)
@@ -2117,7 +2119,7 @@
     (instances
       (project "Signal Generator"
         (path "/f6255c48-6253-4c69-a6db-1ceaf4eff04d/fadc918d-eb15-47ed-9103-62412ffd5e96"
-          (reference "D4") (unit 1)
+          (reference "D3") (unit 1)
         )
       )
     )

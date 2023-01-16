@@ -6,6 +6,8 @@
 
   (title_block
     (title "Power")
+    (date "2023-01-16")
+    (rev "0")
   )
 
   (lib_symbols
@@ -899,7 +901,7 @@
   (symbol (lib_id "Device:R") (at 143.51 121.92 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 16698e8e-112a-4f4b-8c0b-58ec29f3a0c5)
-    (property "Reference" "R18" (at 146.05 121.285 0)
+    (property "Reference" "R19" (at 146.05 121.285 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "1.54M" (at 146.05 123.825 0)
@@ -919,7 +921,7 @@
     (instances
       (project "Signal Generator"
         (path "/f6255c48-6253-4c69-a6db-1ceaf4eff04d/755a5482-c972-48ba-877b-a349f74d45fc"
-          (reference "R18") (unit 1)
+          (reference "R19") (unit 1)
         )
       )
     )
@@ -1014,7 +1016,7 @@
   (symbol (lib_id "Device:R") (at 143.51 132.08 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 5a58e293-cc2e-423b-940f-2714d2e72532)
-    (property "Reference" "R19" (at 146.05 131.445 0)
+    (property "Reference" "R20" (at 146.05 131.445 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "100k" (at 146.05 133.985 0)
@@ -1034,7 +1036,7 @@
     (instances
       (project "Signal Generator"
         (path "/f6255c48-6253-4c69-a6db-1ceaf4eff04d/755a5482-c972-48ba-877b-a349f74d45fc"
-          (reference "R19") (unit 1)
+          (reference "R20") (unit 1)
         )
       )
     )
@@ -1130,7 +1132,7 @@
   (symbol (lib_id "Device:D_Zener") (at 138.43 116.84 180) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 78ab9ee2-d79b-4d3a-9838-eeb2b58745fb)
-    (property "Reference" "D3" (at 138.43 111.76 0)
+    (property "Reference" "D4" (at 138.43 111.76 0)
       (effects (font (size 1.27 1.27)))
     )
     (property "Value" "D_Zener" (at 138.43 114.3 0)
@@ -1150,7 +1152,7 @@
     (instances
       (project "Signal Generator"
         (path "/f6255c48-6253-4c69-a6db-1ceaf4eff04d/755a5482-c972-48ba-877b-a349f74d45fc"
-          (reference "D3") (unit 1)
+          (reference "D4") (unit 1)
         )
       )
     )

@@ -6,6 +6,8 @@
 
   (title_block
     (title "USB Connector")
+    (date "2023-01-16")
+    (rev "0")
   )
 
   (lib_symbols
@@ -829,7 +831,7 @@
     (uuid fee2e367-187a-4fc5-ac20-d24f3ad86dfe)
   )
 
-  (text_box "LEDs resistor calculator:\n - Blue: Vf = 3.2V@30mA -> 3.2Ohm\n - Orange: Vf = 2V@30mA -> 43.2Ohm"
+  (text_box "LEDs resistor calculator:\n - Blue: Vf = 3.2V@30mA -> 3.32Ohm\n - Orange: Vf = 2V@30mA -> 43.2Ohm"
     (at 176.53 148.59 0) (size 41.91 8.89)
     (stroke (width 0) (type default))
     (fill (type none))
