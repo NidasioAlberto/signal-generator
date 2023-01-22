@@ -1,0 +1,66 @@
+
+**** 07/09/19 13:40:44 ******* PSpice 16.2.0 (Oct 2008) ******* ID# 0 ********
+
+ ** Profile: "SCHEMATIC1-TR"  [ C:\ELAB_MODEL_WS\ELAB_MODEL_DS\Part_Numbers\TLV61048\Release_TI\PSPICE\TLV61048_PSPICE_TRANS\TLV61048
+
+
+ ****     CIRCUIT DESCRIPTION
+
+
+******************************************************************************
+
+
+
+
+** Creating circuit file "TR.cir" 
+** WARNING: THIS AUTOMATICALLY GENERATED FILE MAY BE OVERWRITTEN BY SUBSEQUENT SIMULATIONS
+
+*Libraries: 
+* Profile Libraries :
+* Local Libraries :
+.LIB "../../../tlv61048.lib" 
+* From [PSPICE NETLIST] section of C:\Cadence\SPB_16.2\tools\PSpice\PSpice.ini file:
+
+*Analysis directives: 
+.TRAN  0 15m 0 20n 
+.OPTIONS STEPGMIN
+.OPTIONS PREORDER
+.OPTIONS ITL1= 1000
+.OPTIONS ITL2= 400
+.OPTIONS ITL4= 400
+.AUTOCONVERGE ITL1=1000 ITL2=1000 ITL4=1000 RELTOL=0.05 ABSTOL=1.0E-6 VNTOL=.001 PIVTOL=1.0E-10 
+.PROBE V(alias(*)) I(alias(*)) 
+.INC "..\SCHEMATIC1.net" 
+
+
+
+**** INCLUDING SCHEMATIC1.net ****
+* source TLV61048
+R_R4         N16555536 0  107k TC=0,0 
+X_U10         N16555352 N16555352 0 SW N16555536 0 TLV61048 PARAMS: 
++  SS_CURRENT=10n
+C_C2         VOUT N16555570  8u  TC=0,0 
+V_V13         N16555352 0 3.3
+R_R5         N16555570 0  5m TC=0,0 
+I_I1         VOUT 0 DC 0Adc AC 0Aac
++PULSE 0 -150m 1 1u 1u 489.1u 1m
+R_R2         N16555424 N16555352  65m TC=0,0 
+L_L1         N16555424 SW  4.7uH  
+C_C1         N16555352 N16555370  1u  TC=0,0 
+R_R1         N16555370 0  2m TC=0,0 
+X_U9         SW VOUT D_D
+R_R6         VOUT 0  60 TC=0,0 
+R_R3         VOUT N16555536  1.5MEG TC=0,0 
+
+**** RESUMING TR.cir ****
+.END
+
+WARNING -- Library file C:\ELAB_MODEL_WS\ELAB_MODEL_DS\Part_Numbers\TLV61048\Release_TI\PSPICE\TLV61048_PSPICE_TRANS\tlv61048.lib has changed since index file tlv61048.ind was created.
+WARNING -- The timestamp changed from Tue Jul 09 13:39:33 2019 to Tue Jul 09 13:40:21 2019.
+Making new index file tlv61048.ind for library file tlv61048.lib
+Index has 52 entries from 1 file(s).
+
+ERROR -- Model D_D1 used by X_U10.X_TOP_PFM_U3.D_D10 is undefined
+ERROR -- Model D_D1 used by X_U10.X_TOP_PFM_U3.D_D11 is undefined
+ERROR -- Model D_D1 used by X_U10.X_TOP_Offtimer_U3.D_D10 is undefined
+ERROR -- Model D_D1 used by X_U10.X_TOP_Offtimer_U3.D_D11 is undefined

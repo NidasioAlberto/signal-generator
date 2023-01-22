@@ -23,10 +23,10 @@
     (stroke (width 0.1) (type solid)) (layer "F.Fab") (tstamp b47373c6-1448-4df8-89fa-1ecdace902ba))
   (fp_line (start 0.8 1.45) (end -0.8 1.45)
     (stroke (width 0.1) (type solid)) (layer "F.Fab") (tstamp 629121be-3772-4a53-b998-80997fb80ba0))
+  (pad "" smd rect (at 1.15 0.95 90) (size 0.6 1.2) (layers "F.Cu" "F.Paste" "F.Mask") (tstamp 0265f19e-1a3c-4077-a2a7-bae9a9fa0a0b))
   (pad "1" smd rect (at -1.15 -0.95 90) (size 0.6 1.2) (layers "F.Cu" "F.Paste" "F.Mask") (tstamp a8180da3-2ff3-4363-a852-53c1eef05ab5))
   (pad "2" smd rect (at -1.15 0 90) (size 0.6 1.2) (layers "F.Cu" "F.Paste" "F.Mask") (tstamp caa9094c-843c-4170-ac4e-b3e728740c19))
   (pad "3" smd rect (at -1.15 0.95 90) (size 0.6 1.2) (layers "F.Cu" "F.Paste" "F.Mask") (tstamp b84f0f3d-e4b2-47e2-9366-32c5e24706e1))
-  (pad "4" smd rect (at 1.15 0.95 90) (size 0.6 1.2) (layers "F.Cu" "F.Paste" "F.Mask") (tstamp 0265f19e-1a3c-4077-a2a7-bae9a9fa0a0b))
   (pad "5" smd rect (at 1.15 -0.95 90) (size 0.6 1.2) (layers "F.Cu" "F.Paste" "F.Mask") (tstamp 91cad156-90c5-42a7-ac41-cc7e64624e1f))
   (model "${SIGNAL_GENERATOR}/pcb-library/3D Models/LDK320AM120R.step"
     (offset (xyz 0 0 0))
