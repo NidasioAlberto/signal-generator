@@ -1,4 +1,4 @@
-(kicad_sch (version 20221206) (generator eeschema)
+(kicad_sch (version 20230121) (generator eeschema)
 
   (uuid f6255c48-6253-4c69-a6db-1ceaf4eff04d)
 
@@ -6,8 +6,8 @@
 
   (title_block
     (title "Signal Generator")
-    (date "2023-01-16")
-    (rev "0")
+    (date "2023-02-28")
+    (rev "2")
   )
 
   (lib_symbols

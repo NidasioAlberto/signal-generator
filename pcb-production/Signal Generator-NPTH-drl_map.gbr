@@ -1,12 +1,12 @@
-%TF.GenerationSoftware,KiCad,Pcbnew,(7.0.0-rc1-56-g82a1175d72)*%
-%TF.CreationDate,2023-01-28T19:42:42+01:00*%
+%TF.GenerationSoftware,KiCad,Pcbnew,7.0.0*%
+%TF.CreationDate,2023-02-28T23:08:13+01:00*%
 %TF.ProjectId,Signal Generator,5369676e-616c-4204-9765-6e657261746f,0*%
 %TF.SameCoordinates,Original*%
 %TF.FileFunction,Drillmap*%
 %TF.FilePolarity,Positive*%
 %FSLAX45Y45*%
 G04 Gerber Fmt 4.5, Leading zero omitted, Abs format (unit mm)*
-G04 Created by KiCad (PCBNEW (7.0.0-rc1-56-g82a1175d72)) date 2023-01-28 19:42:42*
+G04 Created by KiCad (PCBNEW 7.0.0) date 2023-02-28 23:08:13*
 %MOMM*%
 %LPD*%
 G01*
