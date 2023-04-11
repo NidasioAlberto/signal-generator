@@ -7,6 +7,9 @@
 using namespace std;
 using namespace miosix;
 
+#define RCC_APB1ENR_DACEN \
+    ((uint32_t)0x20000000) /*!< DAC interface clock enable */
+
 // Serial pins: PA9 PA10
 typedef Gpio<GPIOA_BASE, 4> ch1;
 
@@ -26,6 +29,8 @@ void loadWave() {
 int main() {
     loadWave();
 
+    printf("Started\n");
+
     // DAC
     {
         ch1::mode(Mode::INPUT_ANALOG);
@@ -39,8 +44,8 @@ int main() {
         // Enable DMA on DAC ch1
         DAC->CR |= DAC_CR_DMAEN1;
 
-        // Select TIM6 as trigger by writing 000 in TSEL1
-        DAC->CR &= ~DAC_CR_TSEL1;
+        // Select TIM2 as trigger by writing 000 in TSEL1
+        DAC->CR |= DAC_CR_TSEL1_2;
 
         // Enable DAC ch1 trigger
         DAC->CR |= DAC_CR_TEN1;
@@ -61,40 +66,40 @@ int main() {
         DMA1_Channel3->CNDTR = SIGNAL_ARRAY_SIZE;
 
         // Enable memory increment
-        DMA1_Channel3->CCR |= DMA_CCR_MINC;
+        DMA1_Channel3->CCR |= DMA_CCR3_MINC;
 
         // Memory size 32bit
-        DMA1_Channel3->CCR |= DMA_CCR_MSIZE_1;
+        DMA1_Channel3->CCR |= DMA_CCR3_MSIZE_1;
 
         // Peripheral size 32 bit
-        DMA1_Channel3->CCR |= DMA_CCR_PSIZE_1;
+        DMA1_Channel3->CCR |= DMA_CCR3_PSIZE_1;
 
         // Set transfer form memory to peripheral
-        DMA1_Channel3->CCR |= DMA_CCR_DIR;
+        DMA1_Channel3->CCR |= DMA_CCR3_DIR;
 
         // Enable circular mode
-        DMA1_Channel3->CCR |= DMA_CCR_CIRC;
+        DMA1_Channel3->CCR |= DMA_CCR3_CIRC;
 
         // Enable the DMA channel 3
-        DMA1_Channel3->CCR |= DMA_CCR_EN;
+        DMA1_Channel3->CCR |= DMA_CCR3_EN;
     }
 
-    // TIM6
+    // TIM2
     {
-        // Enable the TIM6 clock
-        RCC->APB1ENR |= RCC_APB1ENR_TIM6EN;
+        // Enable the TIM2 clock
+        RCC->APB1ENR |= RCC_APB1ENR_TIM2EN;
 
         // Set as TRGO source the UEV
-        TIM6->CR2 |= TIM_CR2_MMS_1;
+        TIM2->CR2 |= TIM_CR2_MMS_1;
 
         // Set the prescaler
-        TIM6->PSC = 4;
+        TIM2->PSC = 4;
 
         // Set the auto reload register
-        TIM6->ARR = 1;
+        TIM2->ARR = 1;
 
         // Enable the timer
-        TIM6->CR1 |= TIM_CR1_CEN;
+        TIM2->CR1 |= TIM_CR1_CEN;
     }
 
     while (true)

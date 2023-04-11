@@ -1,19 +1,5 @@
-**/*.aux
-**/*.log
-**/*.out
-
-# Exclude doxygen
-miosix/_doc/doxygen/html/*
-
-# Exclude temporary files
-*.elf
-*.bin
-*.hex
-*.map
-*.asm
-*.o
-*.a
-*.d
+# Exclude build dir
+build/
 
 # Exclude Mac OS X temporary
 .DS_Store

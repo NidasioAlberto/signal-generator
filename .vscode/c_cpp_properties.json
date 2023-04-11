@@ -1,81 +1,39 @@
 {
+    "env": {
+        "defaultDefines": [
+            "_MIOSIX",
+            "DEBUG",
+            "__cplusplus=201402L"
+        ],
+        "defaultIncludePaths": [
+            "${workspaceFolder}/miosix-kernel/miosix",
+            "${workspaceFolder}/miosix-kernel/miosix/arch/common",
+            "${workspaceFolder}"
+        ]
+    },
     "configurations": [
         {
-            "name": "stm32f072rb_stm32f0discovery",
+            "name": "stm32f103rb_signal-generator",
             "cStandard": "c11",
             "cppStandard": "c++14",
             "compilerPath": "/opt/arm-miosix-eabi/bin/arm-miosix-eabi-g++",
             "defines": [
-                "_MIOSIX_BOARDNAME=stm32f072rb_stm32f0discovery",
-                "_ARCH_CORTEXM0_STM32F0",
-                "STM32F072xB",
-                "_BOARD_STM32F072RB_DISCO",
-                "HSI_VALUE=8000000",
-                "SYSCLK_FREQ_8MHz=8000000",
-                "_MIOSIX",
-                "DEBUG"
+                "{defaultDefines}",
+                "_MIOSIX_BOARDNAME=stm32f103rb_signal-generator",
+                "_BOARD_STM32FF103RB_SIGNAL-GENERATOR",
+                "_ARCH_CORTEXM3_STM32F1",
+                "STM32F103xx",
+                "STM32F10X_MD",
+                "STM32F10X_MD_VL",
+                "RUN_WITH_HSI",
+                "SYSCLK_FREQ_24MHz=24000000"
             ],
             "includePath": [
-                "${workspaceFolder}/miosix-kernel/miosix/config/arch/cortexM0_stm32f0/stm32f072rb_stm32f0discovery",
-                "${workspaceFolder}/miosix-kernel/miosix/arch/cortexM0_stm32f0/stm32f072rb_stm32f0discovery",
-                "${workspaceFolder}/miosix-kernel/miosix/arch/cortexM0_stm32f0/common",
-                "${workspaceFolder}/miosix-kernel/miosix/arch/common",
-                "${workspaceFolder}/miosix-kernel/miosix"
-            ],
-            "browse": {
-                "path": [
-                    "${workspaceFolder}/miosix-kernel/miosix/config/arch/cortexM0_stm32f0/stm32f072rb_stm32f0discovery",
-                    "${workspaceFolder}/miosix-kernel/miosix/arch/cortexM0_stm32f0/stm32f072rb_stm32f0discovery",
-                    "${workspaceFolder}/miosix-kernel/miosix/arch/cortexM0_stm32f0/common",
-                    "${workspaceFolder}/miosix-kernel/miosix/stdlib_integration",
-                    "${workspaceFolder}/miosix-kernel/miosix/arch/common",
-                    "${workspaceFolder}/miosix-kernel/miosix/interfaces",
-                    "${workspaceFolder}/miosix-kernel/miosix/filesystem",
-                    "${workspaceFolder}/miosix-kernel/miosix/kernel",
-                    "${workspaceFolder}/miosix-kernel/miosix/util",
-                    "${workspaceFolder}/miosix-kernel/miosix/e20"
-                ],
-                "limitSymbolsToIncludedHeaders": true
-            }
-        },
-        {
-            "name": "stm32f769ni_discovery",
-            "cStandard": "c11",
-            "cppStandard": "c++14",
-            "compilerPath": "/opt/arm-miosix-eabi/bin/arm-miosix-eabi-g++",
-            "defines": [
-                "_MIOSIX_BOARDNAME=stm32f769ni_discovery",
-                "_ARCH_CORTEXM7_STM32F7",
-                "STM32F072xB",
-                "_BOARD_STM32F769NI_DISCO",
-                "HSE_VALUE=25000000",
-                "SYSCLK_FREQ_216MHz=216000000",
-                "__ENABLE_XRAM",
-                "_MIOSIX",
-                "DEBUG"
-            ],
-            "includePath": [
-                "${workspaceFolder}/miosix-kernel/miosix/config/arch/cortexM7_stm32f7/stm32f769ni_discovery",
-                "${workspaceFolder}/miosix-kernel/miosix/arch/cortexM7_stm32f7/stm32f769ni_discovery",
-                "${workspaceFolder}/miosix-kernel/miosix/arch/cortexM7_stm32f7/common",
-                "${workspaceFolder}/miosix-kernel/miosix/arch/common",
-                "${workspaceFolder}/miosix-kernel/miosix"
-            ],
-            "browse": {
-                "path": [
-                    "${workspaceFolder}/miosix-kernel/miosix/config/arch/cortexM7_stm32f7/stm32f769ni_discovery",
-                    "${workspaceFolder}/miosix-kernel/miosix/arch/cortexM7_stm32f7/stm32f769ni_discovery",
-                    "${workspaceFolder}/miosix-kernel/miosix/arch/cortexM7_stm32f7/common",
-                    "${workspaceFolder}/miosix-kernel/miosix/stdlib_integration",
-                    "${workspaceFolder}/miosix-kernel/miosix/arch/common",
-                    "${workspaceFolder}/miosix-kernel/miosix/interfaces",
-                    "${workspaceFolder}/miosix-kernel/miosix/filesystem",
-                    "${workspaceFolder}/miosix-kernel/miosix/kernel",
-                    "${workspaceFolder}/miosix-kernel/miosix/util",
-                    "${workspaceFolder}/miosix-kernel/miosix/e20"
-                ],
-                "limitSymbolsToIncludedHeaders": true
-            }
+                "${defaultIncludePaths}",
+                "${workspaceFolder}/miosix-kernel/miosix/arch/cortexM3_stm32f1/common",
+                "${workspaceFolder}/miosix-kernel/miosix/arch/cortexM3_stm32f1/stm32f103cx_generic",
+                "${workspaceFolder}/miosix-kernel/miosix/config/arch/cortexM3_stm32f1/stm32f103cx_generic"
+            ]
         }
     ],
     "version": 4
