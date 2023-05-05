@@ -34,6 +34,46 @@
             ]
         },
         {
+            "name": "stm32f100rb_stm32vldiscovery",
+            "cStandard": "c11",
+            "cppStandard": "c++14",
+            "compilerPath": "/opt/arm-miosix-eabi/bin/arm-miosix-eabi-g++",
+            "defines": [
+                "{defaultDefines}",
+                "_MIOSIX_BOARDNAME=stm32f100rb_stm32vldiscovery",
+                "_ARCH_CORTEXM3_STM32F1",
+                "STM32F10X_MD_VL",
+                "_BOARD_STM32VLDISCOVERY",
+                "SYSCLK_FREQ_24MHz=24000000"
+            ],
+            "includePath": [
+                "${defaultIncludePaths}",
+                "${workspaceFolder}/miosix-kernel/miosix/arch/cortexM3_stm32f1/common",
+                "${workspaceFolder}/miosix-kernel/miosix/arch/cortexM3_stm32f1/stm32f100rb_stm32vldiscovery",
+                "${workspaceFolder}/miosix-kernel/miosix/config/arch/cortexM3_stm32f1/stm32f100rb_stm32vldiscovery"
+            ]
+        },
+        {
+            "name": "stm32f103rb_signal-generator",
+            "cStandard": "c11",
+            "cppStandard": "c++14",
+            "compilerPath": "/opt/arm-miosix-eabi/bin/arm-miosix-eabi-g++",
+            "defines": [
+                "{defaultDefines}",
+                "_MIOSIX_BOARDNAME=stm32f103rb_signal-generator",
+                "_ARCH_CORTEXM3_STM32F1",
+                "STM32F10X_MD",
+                "_BOARD_STM32F103RB_SIGNAL_GENERATOR",
+                "SYSCLK_FREQ_24MHz=24000000"
+            ],
+            "includePath": [
+                "${defaultIncludePaths}",
+                "${workspaceFolder}/miosix-kernel/miosix/arch/cortexM3_stm32f1/common",
+                "${workspaceFolder}/miosix-kernel/miosix/arch/cortexM3_stm32f1/stm32f103rb_signal-generator",
+                "${workspaceFolder}/miosix-kernel/miosix/config/arch/cortexM3_stm32f1/stm32f103rb_signal-generator"
+            ]
+        },
+        {
             "name": "stm32f407vg_stm32f4discovery",
             "cStandard": "c11",
             "cppStandard": "c++14",
