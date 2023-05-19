@@ -38,11 +38,16 @@ void setColor(SPIBus &spi, uint8_t red, uint8_t green, uint8_t blue,
 }
 
 int main() {
+    printf("Starting...\n");
+
     mosi.mode(Mode::OUTPUT);
     mosi.low();
     Thread::sleep(100);
+    mosi.high();
+    Thread::sleep(100);
 
     mosi.mode(Mode::ALTERNATE);
+    mosi.alternateFunction(5);
 
     SPIBus spi(SPI2);
     SPIBusConfig config;
@@ -50,6 +55,8 @@ int main() {
     spi.configure(config);
 
     while (true) {
+        printf("loop\n");
+
         for (int i = 0; i < 256; i++) {
             setColor(spi, i, 0x00, 0x00, 0x00);
             Thread::sleep(5);
