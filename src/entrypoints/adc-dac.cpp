@@ -25,13 +25,15 @@ int main() {
     DACDriver dac;
     dac.enableChannel(DACDriver::Channel::CH1);
     dac.enableChannel(DACDriver::Channel::CH2);
+    dac.disableBuffer(DACDriver::Channel::CH1);
+    dac.disableBuffer(DACDriver::Channel::CH2);
 
     thread signalGen([&]() {
         while (true) {
             float sinVal =
-                1.65 + 1.65 * sin(2 * 3.14 * (getTime() / 1e9) * 0.01);
+                1.65 + 1.65 * sin(2 * 3.14 * (getTime() / 1e9) * 0.05);
             float cosVal =
-                1.65 + 1.65 * cos(2 * 3.14 * (getTime() / 1e9) * 0.01);
+                1.65 + 1.65 * cos(2 * 3.14 * (getTime() / 1e9) * 0.05);
 
             dac.setChannel(DACDriver::Channel::CH1, sinVal);
             dac.setChannel(DACDriver::Channel::CH2, cosVal);

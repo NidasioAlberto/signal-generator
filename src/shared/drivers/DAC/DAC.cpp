@@ -74,16 +74,16 @@ void DACDriver::setChannel(Channel channel, float voltage) {
 
 void DACDriver::enableBuffer(Channel channel) {
     if (channel == Channel::CH1)
-        DAC->CR |= DAC_CR_BOFF1;
+        DAC->CR &= ~DAC_CR_BOFF1;
     else
-        DAC->CR |= DAC_CR_BOFF2;
+        DAC->CR &= ~DAC_CR_BOFF2;
 }
 
 void DACDriver::disableBuffer(Channel channel) {
     if (channel == Channel::CH1)
-        DAC->CR &= ~DAC_CR_BOFF1;
+        DAC->CR |= DAC_CR_BOFF1;
     else
-        DAC->CR &= ~DAC_CR_BOFF2;
+        DAC->CR |= DAC_CR_BOFF2;
 }
 
 void DACDriver::enableTrigger(Channel channel, TriggerSource source) {
