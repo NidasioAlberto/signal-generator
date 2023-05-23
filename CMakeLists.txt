@@ -13,6 +13,11 @@ function(mbs_custom_target TARGET OPT_BOARD)
         $<$<STREQUAL:${ARCH},cortexM3_stm32f2>:src/shared/drivers/DAC/DAC.cpp>
         $<$<STREQUAL:${ARCH},cortexM4_stm32f4>:src/shared/drivers/DAC/DAC.cpp>
         $<$<STREQUAL:${ARCH},cortexM4_stm32f7>:src/shared/drivers/DAC/DAC.cpp>
+        
+        # ADC driver only for f2, f4 and f7 micros
+        $<$<STREQUAL:${ARCH},cortexM3_stm32f2>:src/shared/drivers/ADC/ADC.cpp>
+        $<$<STREQUAL:${ARCH},cortexM4_stm32f4>:src/shared/drivers/ADC/ADC.cpp>
+        $<$<STREQUAL:${ARCH},cortexM4_stm32f7>:src/shared/drivers/ADC/ADC.cpp>
 
         # DMA driver only for f2, f4 and f7 micros
         $<$<STREQUAL:${ARCH},cortexM3_stm32f2>:src/shared/drivers/DMA/DMA.cpp>
@@ -32,11 +37,17 @@ endfunction()
 #                                   Tests                                     #
 #-----------------------------------------------------------------------------#
 
-add_executable(test-rgb-led src/entrypoints/test-rgb-led.cpp)
-mbs_custom_target(test-rgb-led stm32f205rc_signal_generator)
+add_executable(adc-dac src/entrypoints/adc-dac.cpp)
+mbs_custom_target(adc-dac stm32f205rc_signal_generator)
+
+add_executable(dac-dma-timer src/entrypoints/dac-dma-timer.cpp)
+mbs_custom_target(dac-dma-timer stm32f205rc_signal_generator)
 
 add_executable(dac-example src/entrypoints/dac-example.cpp)
 mbs_custom_target(dac-example stm32f205rc_signal_generator)
 
-add_executable(dac-dma-timer src/entrypoints/dac-dma-timer.cpp)
-mbs_custom_target(dac-dma-timer stm32f205rc_signal_generator)
+add_executable(hello-world src/entrypoints/hello-world.cpp)
+mbs_custom_target(hello-world stm32f205rc_signal_generator)
+
+add_executable(test-rgb-led src/entrypoints/test-rgb-led.cpp)
+mbs_custom_target(test-rgb-led stm32f205rc_signal_generator)
