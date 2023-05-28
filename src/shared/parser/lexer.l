@@ -5,9 +5,6 @@
     #include "parser.h"
 }
 
-DIGIT    [0-9]
-ID       [a-zA-Z_][a-zA-Z0-9_]*
-
 %%
 
 "sin"   { return SIN; }
@@ -17,7 +14,14 @@ ID       [a-zA-Z_][a-zA-Z0-9_]*
 "("     { return LPAR; }
 ")"     { return RPAR; }
 
-{DIGIT}+("."{DIGIT}+)?    {
+"+"     { return ADD_OP; }
+"-"     { return SUB_OP; }
+"*"     { return MUL_OP; }
+"/"     { return DIV_OP; }
+
+"pi"    { return PI; }
+
+[0-9]+("."[0-9]+)? {
     yylval.numeric_value = atof(yytext);
     return(NUMBER);
 }

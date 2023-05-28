@@ -354,8 +354,8 @@ static void yynoreturn yy_fatal_error ( const char* msg  );
 	(yy_hold_char) = *yy_cp; \
 	*yy_cp = '\0'; \
 	(yy_c_buf_p) = yy_cp;
-#define YY_NUM_RULES 7
-#define YY_END_OF_BUFFER 8
+#define YY_NUM_RULES 12
+#define YY_END_OF_BUFFER 13
 /* This struct is not used in this scanner,
    but its presence is necessary. */
 struct yy_trans_info
@@ -363,10 +363,11 @@ struct yy_trans_info
 	flex_int32_t yy_verify;
 	flex_int32_t yy_nxt;
 	};
-static const flex_int16_t yy_accept[21] =
+static const flex_int16_t yy_accept[27] =
     {   0,
-        0,    0,    8,    7,    4,    5,    6,    7,    7,    0,
-        6,    0,    0,    0,    6,    1,    0,    2,    3,    0
+        0,    0,   13,   12,    4,    5,    8,    6,    7,    9,
+       11,   12,   12,   12,    0,   11,   10,    0,    0,    0,
+       11,    1,    0,    2,    3,    0
     } ;
 
 static const YY_CHAR yy_ec[256] =
@@ -375,15 +376,15 @@ static const YY_CHAR yy_ec[256] =
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    2,
-        3,    1,    1,    1,    1,    4,    1,    5,    5,    5,
-        5,    5,    5,    5,    5,    5,    5,    1,    1,    1,
+        3,    4,    5,    1,    6,    7,    8,    9,    9,    9,
+        9,    9,    9,    9,    9,    9,    9,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
 
-        6,    1,    1,    1,    7,    1,    1,    1,    1,    8,
-        1,    9,    1,   10,   11,   12,    1,    1,    1,    1,
+       10,    1,    1,    1,   11,    1,    1,    1,    1,   12,
+        1,   13,    1,   14,   15,   16,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
@@ -401,38 +402,42 @@ static const YY_CHAR yy_ec[256] =
         1,    1,    1,    1,    1
     } ;
 
-static const YY_CHAR yy_meta[13] =
+static const YY_CHAR yy_meta[17] =
     {   0,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    1
+        1,    1,    1,    1,    1,    1
     } ;
 
-static const flex_int16_t yy_base[21] =
+static const flex_int16_t yy_base[27] =
     {   0,
-        0,    0,   24,   25,   25,   25,    9,    8,   13,   17,
-        0,   13,   13,   11,   12,   25,    7,   25,   25,   25
+        0,    0,   31,   32,   32,   32,   32,   32,   32,   32,
+       10,   19,    7,   15,   19,   13,   32,   15,   16,   14,
+       15,   32,    8,   32,   32,   32
     } ;
 
-static const flex_int16_t yy_def[21] =
+static const flex_int16_t yy_def[27] =
     {   0,
-       20,    1,   20,   20,   20,   20,   20,   20,   20,   20,
-        7,   20,   20,   20,   20,   20,   20,   20,   20,    0
+       26,    1,   26,   26,   26,   26,   26,   26,   26,   26,
+       26,   26,   26,   26,   26,   26,   26,   26,   26,   26,
+       26,   26,   26,   26,   26,    0
     } ;
 
-static const flex_int16_t yy_nxt[38] =
+static const flex_int16_t yy_nxt[49] =
     {   0,
-        4,    5,    6,    4,    7,    4,    4,    4,    4,    4,
-        8,    9,   10,   11,   12,   19,   15,   18,   17,   13,
-       16,   15,   14,   20,    3,   20,   20,   20,   20,   20,
-       20,   20,   20,   20,   20,   20,   20
+        4,    5,    6,    7,    8,    9,    4,   10,   11,    4,
+        4,    4,   12,    4,   13,   14,   15,   18,   16,   15,
+       25,   16,   19,   21,   24,   23,   22,   21,   20,   17,
+       26,    3,   26,   26,   26,   26,   26,   26,   26,   26,
+       26,   26,   26,   26,   26,   26,   26,   26
     } ;
 
-static const flex_int16_t yy_chk[38] =
+static const flex_int16_t yy_chk[49] =
     {   0,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    1,    7,    7,    8,   17,   15,   14,   13,    8,
-       12,   10,    9,    3,   20,   20,   20,   20,   20,   20,
-       20,   20,   20,   20,   20,   20,   20
+        1,    1,    1,    1,    1,    1,   11,   13,   11,   16,
+       23,   16,   13,   21,   20,   19,   18,   15,   14,   12,
+        3,   26,   26,   26,   26,   26,   26,   26,   26,   26,
+       26,   26,   26,   26,   26,   26,   26,   26
     } ;
 
 static yy_state_type yy_last_accepting_state;
@@ -452,7 +457,7 @@ char *yytext;
 #line 1 "/home/alberton/Desktop/signal-generator/src/shared/parser/lexer.l"
 /* Flex file */
 
-#line 456 "/home/alberton/Desktop/signal-generator/src/shared/parser/lexer.c"
+#line 461 "/home/alberton/Desktop/signal-generator/src/shared/parser/lexer.c"
 
 #define INITIAL 0
 
@@ -669,10 +674,10 @@ YY_DECL
 		}
 
 	{
-#line 11 "/home/alberton/Desktop/signal-generator/src/shared/parser/lexer.l"
+#line 8 "/home/alberton/Desktop/signal-generator/src/shared/parser/lexer.l"
 
 
-#line 676 "/home/alberton/Desktop/signal-generator/src/shared/parser/lexer.c"
+#line 681 "/home/alberton/Desktop/signal-generator/src/shared/parser/lexer.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -699,13 +704,13 @@ yy_match:
 			while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 				{
 				yy_current_state = (int) yy_def[yy_current_state];
-				if ( yy_current_state >= 21 )
+				if ( yy_current_state >= 27 )
 					yy_c = yy_meta[yy_c];
 				}
 			yy_current_state = yy_nxt[yy_base[yy_current_state] + yy_c];
 			++yy_cp;
 			}
-		while ( yy_base[yy_current_state] != 25 );
+		while ( yy_base[yy_current_state] != 32 );
 
 yy_find_action:
 		yy_act = yy_accept[yy_current_state];
@@ -731,43 +736,68 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 13 "/home/alberton/Desktop/signal-generator/src/shared/parser/lexer.l"
+#line 10 "/home/alberton/Desktop/signal-generator/src/shared/parser/lexer.l"
 { return SIN; }
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 14 "/home/alberton/Desktop/signal-generator/src/shared/parser/lexer.l"
+#line 11 "/home/alberton/Desktop/signal-generator/src/shared/parser/lexer.l"
 { return TRI; }
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 15 "/home/alberton/Desktop/signal-generator/src/shared/parser/lexer.l"
+#line 12 "/home/alberton/Desktop/signal-generator/src/shared/parser/lexer.l"
 { return STEP; }
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 17 "/home/alberton/Desktop/signal-generator/src/shared/parser/lexer.l"
+#line 14 "/home/alberton/Desktop/signal-generator/src/shared/parser/lexer.l"
 { return LPAR; }
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 18 "/home/alberton/Desktop/signal-generator/src/shared/parser/lexer.l"
+#line 15 "/home/alberton/Desktop/signal-generator/src/shared/parser/lexer.l"
 { return RPAR; }
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 20 "/home/alberton/Desktop/signal-generator/src/shared/parser/lexer.l"
-{
-                yylval.numeric_value = atof(yytext);
-                return(NUMBER);
-            }
+#line 17 "/home/alberton/Desktop/signal-generator/src/shared/parser/lexer.l"
+{ return ADD_OP; }
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
+#line 18 "/home/alberton/Desktop/signal-generator/src/shared/parser/lexer.l"
+{ return SUB_OP; }
+	YY_BREAK
+case 8:
+YY_RULE_SETUP
+#line 19 "/home/alberton/Desktop/signal-generator/src/shared/parser/lexer.l"
+{ return MUL_OP; }
+	YY_BREAK
+case 9:
+YY_RULE_SETUP
+#line 20 "/home/alberton/Desktop/signal-generator/src/shared/parser/lexer.l"
+{ return DIV_OP; }
+	YY_BREAK
+case 10:
+YY_RULE_SETUP
+#line 22 "/home/alberton/Desktop/signal-generator/src/shared/parser/lexer.l"
+{ return PI; }
+	YY_BREAK
+case 11:
+YY_RULE_SETUP
 #line 24 "/home/alberton/Desktop/signal-generator/src/shared/parser/lexer.l"
+{
+    yylval.numeric_value = atof(yytext);
+    return(NUMBER);
+}
+	YY_BREAK
+case 12:
+YY_RULE_SETUP
+#line 28 "/home/alberton/Desktop/signal-generator/src/shared/parser/lexer.l"
 ECHO;
 	YY_BREAK
-#line 771 "/home/alberton/Desktop/signal-generator/src/shared/parser/lexer.c"
+#line 801 "/home/alberton/Desktop/signal-generator/src/shared/parser/lexer.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1064,7 +1094,7 @@ static int yy_get_next_buffer (void)
 		while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 			{
 			yy_current_state = (int) yy_def[yy_current_state];
-			if ( yy_current_state >= 21 )
+			if ( yy_current_state >= 27 )
 				yy_c = yy_meta[yy_c];
 			}
 		yy_current_state = yy_nxt[yy_base[yy_current_state] + yy_c];
@@ -1092,11 +1122,11 @@ static int yy_get_next_buffer (void)
 	while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 		{
 		yy_current_state = (int) yy_def[yy_current_state];
-		if ( yy_current_state >= 21 )
+		if ( yy_current_state >= 27 )
 			yy_c = yy_meta[yy_c];
 		}
 	yy_current_state = yy_nxt[yy_base[yy_current_state] + yy_c];
-	yy_is_jam = (yy_current_state == 20);
+	yy_is_jam = (yy_current_state == 26);
 
 		return yy_is_jam ? 0 : yy_current_state;
 }
@@ -1772,4 +1802,4 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 24 "/home/alberton/Desktop/signal-generator/src/shared/parser/lexer.l"
+#line 28 "/home/alberton/Desktop/signal-generator/src/shared/parser/lexer.l"

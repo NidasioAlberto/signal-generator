@@ -468,7 +468,7 @@ extern int yylex (void);
 #undef yyTABLES_NAME
 #endif
 
-#line 24 "/home/alberton/Desktop/signal-generator/src/shared/parser/lexer.l"
+#line 28 "/home/alberton/Desktop/signal-generator/src/shared/parser/lexer.l"
 
 #line 474 "/home/alberton/Desktop/signal-generator/src/shared/parser/lexer.h"
 #undef yyIN_HEADER

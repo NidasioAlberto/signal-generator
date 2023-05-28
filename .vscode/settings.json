@@ -56,7 +56,11 @@
         "arch_registers_impl.h": "c",
         "condition_variable": "cpp",
         "future": "cpp",
-        "miosix.h": "c"
+        "miosix.h": "c",
+        "bitset": "cpp",
+        "regex": "cpp",
+        "mutex": "cpp",
+        "shared_mutex": "cpp"
     },
     "cortex-debug.registerUseNaturalFormat": true,
     "cortex-debug.variableUseNaturalFormat": false,

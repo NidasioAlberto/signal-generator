@@ -44,6 +44,12 @@
 #if YYDEBUG
 extern int yydebug;
 #endif
+/* "%code requires" blocks.  */
+#line 3 "/home/alberton/Desktop/signal-generator/src/shared/parser/parser.y"
+
+#include "parser_types.h"
+
+#line 53 "/home/alberton/Desktop/signal-generator/src/shared/parser/parser.h"
 
 /* Token kinds.  */
 #ifndef YYTOKENTYPE
@@ -59,7 +65,12 @@ extern int yydebug;
     STEP = 260,                    /* STEP  */
     LPAR = 261,                    /* LPAR  */
     RPAR = 262,                    /* RPAR  */
-    NUMBER = 263                   /* NUMBER  */
+    ADD_OP = 263,                  /* ADD_OP  */
+    SUB_OP = 264,                  /* SUB_OP  */
+    MUL_OP = 265,                  /* MUL_OP  */
+    DIV_OP = 266,                  /* DIV_OP  */
+    PI = 267,                      /* PI  */
+    NUMBER = 268                   /* NUMBER  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -68,11 +79,12 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 11 "/home/alberton/Desktop/signal-generator/src/shared/parser/parser.y"
+#line 19 "/home/alberton/Desktop/signal-generator/src/shared/parser/parser.y"
 
     float numeric_value;
+    Expression *exp;
 
-#line 76 "/home/alberton/Desktop/signal-generator/src/shared/parser/parser.h"
+#line 88 "/home/alberton/Desktop/signal-generator/src/shared/parser/parser.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
@@ -84,7 +96,7 @@ typedef union YYSTYPE YYSTYPE;
 extern YYSTYPE yylval;
 
 
-int yyparse (void);
+int yyparse (Command *ret);
 
 
 #endif /* !YY_YY_HOME_ALBERTON_DESKTOP_SIGNAL_GENERATOR_SRC_SHARED_PARSER_PARSER_H_INCLUDED  */
