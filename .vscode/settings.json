@@ -55,7 +55,8 @@
         "typeinfo": "cpp",
         "arch_registers_impl.h": "c",
         "condition_variable": "cpp",
-        "future": "cpp"
+        "future": "cpp",
+        "miosix.h": "c"
     },
     "cortex-debug.registerUseNaturalFormat": true,
     "cortex-debug.variableUseNaturalFormat": false,
