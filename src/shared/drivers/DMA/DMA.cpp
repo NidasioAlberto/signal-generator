@@ -50,8 +50,9 @@ DMAStream& DMADriver::acquireStream(DMAStreamId id) {
         cv.wait(l);
 
     // Enable the clock if not already done
-    if (streams.size() == 0)
-        RCC->AHB1ENR |= RCC_AHB1ENR_DMA1EN;
+    // TODO: Enable DMA1 or DMA2
+    // if (streams.size() == 0)
+    //     RCC->AHB1ENR |= RCC_AHB1ENR_DMA1EN;
 
     return *(streams[id] = new DMAStream(id));
 }
@@ -66,11 +67,22 @@ void DMADriver::releaseStream(DMAStreamId id) {
     }
 
     // Disable the clock if there are no more channels
-    if (streams.size() == 0)
-        RCC->AHB1ENR &= ~RCC_AHB1ENR_DMA1EN;
+    // TODO: Disable DMA1 or DMA2
+    // if (streams.size() == 0)
+    //     RCC->AHB1ENR &= ~RCC_AHB1ENR_DMA1EN;
 }
 
-DMADriver::DMADriver() {}
+DMADriver::DMADriver() {
+    // For now enable the clock always
+    RCC->AHB1ENR |= RCC_AHB1ENR_DMA1EN;
+    RCC->AHB1ENR |= RCC_AHB1ENR_DMA2EN;
+
+    // Reset interrupts flags
+    DMA1->HIFCR = 0x0f7d0f7d;
+    DMA1->LIFCR = 0x0f7d0f7d;
+    DMA2->HIFCR = 0x0f7d0f7d;
+    DMA2->LIFCR = 0x0f7d0f7d;
+}
 
 void DMAStream::setup(DMATransaction transaction) {
     // Reset the configuration
@@ -112,6 +124,33 @@ void DMAStream::setup(DMATransaction transaction) {
 
         registers->PAR = reinterpret_cast<uint32_t>(transaction.srcAddress);
         registers->M0AR = reinterpret_cast<uint32_t>(transaction.dstAddress);
+    }
+
+    if (transaction.doubleBufferMode) {
+        registers->CR |= DMA_SxCR_DBM;
+        registers->M1AR =
+            reinterpret_cast<uint32_t>(transaction.secondMemoryAddress);
+    }
+
+    if (transaction.enableHalfTransferInterrupt) {
+        DMA1->HIFCR |= DMA_HIFCR_CHTIF5;
+        registers->CR |= DMA_SxCR_HTIE;
+    }
+    if (transaction.enableTransferCompleteInterrupt) {
+        DMA1->HIFCR |= DMA_HIFCR_CTCIF5;
+        registers->CR |= DMA_SxCR_TCIE;
+    }
+    if (transaction.enableTransferErrorInterrupt) {
+        DMA1->HIFCR |= DMA_HIFCR_CTEIF5;
+        registers->CR |= DMA_SxCR_TEIE;
+    }
+    if (transaction.enableFifoErrorInterrupt) {
+        DMA1->HIFCR |= DMA_HIFCR_CFEIF5;
+        registers->CR |= DMA_SxFCR_FEIE;
+    }
+    if (transaction.enableDirectModeErrorInterrupt) {
+        DMA1->HIFCR |= DMA_HIFCR_CDMEIF5;
+        registers->CR |= DMA_SxCR_DMEIE;
     }
 }
 

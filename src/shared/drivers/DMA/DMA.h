@@ -89,10 +89,17 @@ struct DMATransaction {
     DataSize dstSize = DataSize::BIT_32;
     volatile void* srcAddress = nullptr;
     volatile void* dstAddress = nullptr;
+    volatile void* secondMemoryAddress = nullptr;
     uint16_t numberOfDataItems = 0;
     bool sourceIncrement = false;
     bool destinationIncrement = false;
     bool circularMode = false;
+    bool doubleBufferMode = false;
+    bool enableHalfTransferInterrupt = false;
+    bool enableTransferCompleteInterrupt = false;
+    bool enableTransferErrorInterrupt = false;
+    bool enableFifoErrorInterrupt = false;
+    bool enableDirectModeErrorInterrupt = false;
 };
 
 // Forward declaration
