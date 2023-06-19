@@ -21,6 +21,9 @@
 
 "pi"    { return PI; }
 
+"start" { return START; }
+"stop"  { return STOP; }
+
 [0-9]+("."[0-9]+)? {
     yylval.numeric_value = atof(yytext);
     return(NUMBER);

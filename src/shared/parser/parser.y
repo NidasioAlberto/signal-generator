@@ -31,14 +31,22 @@ extern int yylex(void);
 
 %token PI
 
+%token START STOP
+
 %token <numeric_value> NUMBER
 %type <exp> exp
 
 %%
 
 start : exp {
-            (*ret).type = CommandType::MATH_FUNCTION;
-            (*ret).argument.exp = $1;
+            (*ret).type = CommandType::EXPRESSION;
+            (*ret).exp = $1;
+        } |
+        START {
+            (*ret).type = CommandType::START;
+        } |
+        STOP {
+            (*ret).type = CommandType::STOP;
         }
 
 exp : NUMBER {
@@ -67,4 +75,4 @@ exp : NUMBER {
         } |
         PI {
             $$ = new Expression(M_PI);
-        } |
+        }

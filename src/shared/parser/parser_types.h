@@ -2,8 +2,6 @@
 
 #include <memory>
 
-#include "parser.h"
-
 #pragma once
 
 enum class ExpressionType {
@@ -63,18 +61,16 @@ struct Expression {
 enum class CommandType {
     START,
     STOP,
-    MATH_FUNCTION,
+    EXPRESSION,
 };
 
 struct Command {
     CommandType type;
-    union {
-        Expression *exp;
-    } argument;
+    Expression *exp = nullptr;
 
     ~Command() {
-        if (type == CommandType::MATH_FUNCTION) {
-            delete argument.exp;
+        if (type == CommandType::EXPRESSION) {
+            delete exp;
         }
     }
 };

@@ -70,7 +70,9 @@ extern int yydebug;
     MUL_OP = 265,                  /* MUL_OP  */
     DIV_OP = 266,                  /* DIV_OP  */
     PI = 267,                      /* PI  */
-    NUMBER = 268                   /* NUMBER  */
+    START = 268,                   /* START  */
+    STOP = 269,                    /* STOP  */
+    NUMBER = 270                   /* NUMBER  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -84,7 +86,7 @@ union YYSTYPE
     float numeric_value;
     Expression *exp;
 
-#line 88 "/home/alberton/Desktop/signal-generator/src/shared/parser/parser.h"
+#line 90 "/home/alberton/Desktop/signal-generator/src/shared/parser/parser.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

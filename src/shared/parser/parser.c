@@ -118,10 +118,12 @@ enum yysymbol_kind_t
   YYSYMBOL_MUL_OP = 10,                    /* MUL_OP  */
   YYSYMBOL_DIV_OP = 11,                    /* DIV_OP  */
   YYSYMBOL_PI = 12,                        /* PI  */
-  YYSYMBOL_NUMBER = 13,                    /* NUMBER  */
-  YYSYMBOL_YYACCEPT = 14,                  /* $accept  */
-  YYSYMBOL_start = 15,                     /* start  */
-  YYSYMBOL_exp = 16                        /* exp  */
+  YYSYMBOL_START = 13,                     /* START  */
+  YYSYMBOL_STOP = 14,                      /* STOP  */
+  YYSYMBOL_NUMBER = 15,                    /* NUMBER  */
+  YYSYMBOL_YYACCEPT = 16,                  /* $accept  */
+  YYSYMBOL_start = 17,                     /* start  */
+  YYSYMBOL_exp = 18                        /* exp  */
 };
 typedef enum yysymbol_kind_t yysymbol_kind_t;
 
@@ -447,21 +449,21 @@ union yyalloc
 #endif /* !YYCOPY_NEEDED */
 
 /* YYFINAL -- State number of the termination state.  */
-#define YYFINAL  11
+#define YYFINAL  13
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   34
+#define YYLAST   43
 
 /* YYNTOKENS -- Number of terminals.  */
-#define YYNTOKENS  14
+#define YYNTOKENS  16
 /* YYNNTS -- Number of nonterminals.  */
 #define YYNNTS  3
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  12
+#define YYNRULES  13
 /* YYNSTATES -- Number of states.  */
-#define YYNSTATES  26
+#define YYNSTATES  28
 
 /* YYMAXUTOK -- Last valid token kind.  */
-#define YYMAXUTOK   268
+#define YYMAXUTOK   270
 
 
 /* YYTRANSLATE(TOKEN-NUM) -- Symbol number corresponding to TOKEN-NUM
@@ -501,15 +503,16 @@ static const yytype_int8 yytranslate[] =
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     1,     2,     3,     4,
-       5,     6,     7,     8,     9,    10,    11,    12,    13
+       5,     6,     7,     8,     9,    10,    11,    12,    13,    14,
+      15
 };
 
 #if YYDEBUG
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int8 yyrline[] =
 {
-       0,    39,    39,    44,    47,    50,    53,    56,    59,    62,
-      65,    68,    70
+       0,    41,    41,    45,    48,    52,    55,    58,    61,    64,
+      67,    70,    73,    76
 };
 #endif
 
@@ -526,8 +529,8 @@ static const char *yysymbol_name (yysymbol_kind_t yysymbol) YY_ATTRIBUTE_UNUSED;
 static const char *const yytname[] =
 {
   "\"end of file\"", "error", "\"invalid token\"", "SIN", "TRI", "STEP",
-  "LPAR", "RPAR", "ADD_OP", "SUB_OP", "MUL_OP", "DIV_OP", "PI", "NUMBER",
-  "$accept", "start", "exp", YY_NULLPTR
+  "LPAR", "RPAR", "ADD_OP", "SUB_OP", "MUL_OP", "DIV_OP", "PI", "START",
+  "STOP", "NUMBER", "$accept", "start", "exp", YY_NULLPTR
 };
 
 static const char *
@@ -537,7 +540,7 @@ yysymbol_name (yysymbol_kind_t yysymbol)
 }
 #endif
 
-#define YYPACT_NINF (-5)
+#define YYPACT_NINF (-4)
 
 #define yypact_value_is_default(Yyn) \
   ((Yyn) == YYPACT_NINF)
@@ -551,9 +554,9 @@ yysymbol_name (yysymbol_kind_t yysymbol)
    STATE-NUM.  */
 static const yytype_int8 yypact[] =
 {
-      -3,     2,     8,    27,    -5,    -5,    34,    21,    -3,    -3,
-      -3,    -5,    -3,    -3,    -3,    -3,    -4,    12,    17,    21,
-      21,    21,    21,    -5,    -5,    -5
+      -3,     2,     8,     9,    -4,    -4,    -4,    -4,     3,    32,
+       1,     1,     1,    -4,     1,     1,     1,     1,    18,    23,
+      28,    32,    32,    32,    32,    -4,    -4,    -4
 };
 
 /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -561,21 +564,21 @@ static const yytype_int8 yypact[] =
    means the default is an error.  */
 static const yytype_int8 yydefact[] =
 {
-      12,     0,     0,     0,    11,     3,     0,     2,    12,    12,
-      12,     1,    12,    12,    12,    12,     0,     0,     0,     7,
-       8,     9,    10,     4,     5,     6
+       0,     0,     0,     0,    13,     3,     4,     5,     0,     2,
+       0,     0,     0,     1,     0,     0,     0,     0,     0,     0,
+       0,     9,    10,    11,    12,     6,     7,     8
 };
 
 /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-      -5,    -5,     3
+      -4,    -4,     7
 };
 
 /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-       0,     6,     7
+       0,     8,     9
 };
 
 /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
@@ -583,41 +586,43 @@ static const yytype_int8 yydefgoto[] =
    number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_int8 yytable[] =
 {
-       1,     2,     3,    23,    12,    13,    14,    15,     8,     4,
-       5,    16,    17,    18,     9,    19,    20,    21,    22,    24,
-      12,    13,    14,    15,    25,    12,    13,    14,    15,    12,
-      13,    14,    15,    10,    11
+       1,     2,     3,    13,     1,     2,     3,     0,    10,     4,
+       5,     6,     7,     4,    11,    12,     7,    18,    19,    20,
+       0,    21,    22,    23,    24,    25,    14,    15,    16,    17,
+      26,    14,    15,    16,    17,    27,    14,    15,    16,    17,
+      14,    15,    16,    17
 };
 
 static const yytype_int8 yycheck[] =
 {
-       3,     4,     5,     7,     8,     9,    10,    11,     6,    12,
-      13,     8,     9,    10,     6,    12,    13,    14,    15,     7,
-       8,     9,    10,    11,     7,     8,     9,    10,    11,     8,
-       9,    10,    11,     6,     0
+       3,     4,     5,     0,     3,     4,     5,    -1,     6,    12,
+      13,    14,    15,    12,     6,     6,    15,    10,    11,    12,
+      -1,    14,    15,    16,    17,     7,     8,     9,    10,    11,
+       7,     8,     9,    10,    11,     7,     8,     9,    10,    11,
+       8,     9,    10,    11
 };
 
 /* YYSTOS[STATE-NUM] -- The symbol kind of the accessing symbol of
    state STATE-NUM.  */
 static const yytype_int8 yystos[] =
 {
-       0,     3,     4,     5,    12,    13,    15,    16,     6,     6,
-       6,     0,     8,     9,    10,    11,    16,    16,    16,    16,
-      16,    16,    16,     7,     7,     7
+       0,     3,     4,     5,    12,    13,    14,    15,    17,    18,
+       6,     6,     6,     0,     8,     9,    10,    11,    18,    18,
+      18,    18,    18,    18,    18,     7,     7,     7
 };
 
 /* YYR1[RULE-NUM] -- Symbol kind of the left-hand side of rule RULE-NUM.  */
 static const yytype_int8 yyr1[] =
 {
-       0,    14,    15,    16,    16,    16,    16,    16,    16,    16,
-      16,    16,    16
+       0,    16,    17,    17,    17,    18,    18,    18,    18,    18,
+      18,    18,    18,    18
 };
 
 /* YYR2[RULE-NUM] -- Number of symbols on the right-hand side of rule RULE-NUM.  */
 static const yytype_int8 yyr2[] =
 {
-       0,     2,     1,     1,     4,     4,     4,     3,     3,     3,
-       3,     1,     0
+       0,     2,     1,     1,     1,     1,     4,     4,     4,     3,
+       3,     3,     3,     1
 };
 
 
@@ -1083,88 +1088,104 @@ yyreduce:
   switch (yyn)
     {
   case 2: /* start: exp  */
-#line 39 "/home/alberton/Desktop/signal-generator/src/shared/parser/parser.y"
+#line 41 "/home/alberton/Desktop/signal-generator/src/shared/parser/parser.y"
             {
-            (*ret).type = CommandType::MATH_FUNCTION;
-            (*ret).argument.exp = (yyvsp[0].exp);
+            (*ret).type = CommandType::EXPRESSION;
+            (*ret).exp = (yyvsp[0].exp);
         }
-#line 1092 "/home/alberton/Desktop/signal-generator/src/shared/parser/parser.c"
+#line 1097 "/home/alberton/Desktop/signal-generator/src/shared/parser/parser.c"
     break;
 
-  case 3: /* exp: NUMBER  */
-#line 44 "/home/alberton/Desktop/signal-generator/src/shared/parser/parser.y"
+  case 3: /* start: START  */
+#line 45 "/home/alberton/Desktop/signal-generator/src/shared/parser/parser.y"
+              {
+            (*ret).type = CommandType::START;
+        }
+#line 1105 "/home/alberton/Desktop/signal-generator/src/shared/parser/parser.c"
+    break;
+
+  case 4: /* start: STOP  */
+#line 48 "/home/alberton/Desktop/signal-generator/src/shared/parser/parser.y"
+             {
+            (*ret).type = CommandType::STOP;
+        }
+#line 1113 "/home/alberton/Desktop/signal-generator/src/shared/parser/parser.c"
+    break;
+
+  case 5: /* exp: NUMBER  */
+#line 52 "/home/alberton/Desktop/signal-generator/src/shared/parser/parser.y"
              {
             (yyval.exp) = new Expression((yyvsp[0].numeric_value));
         }
-#line 1100 "/home/alberton/Desktop/signal-generator/src/shared/parser/parser.c"
+#line 1121 "/home/alberton/Desktop/signal-generator/src/shared/parser/parser.c"
     break;
 
-  case 4: /* exp: SIN LPAR exp RPAR  */
-#line 47 "/home/alberton/Desktop/signal-generator/src/shared/parser/parser.y"
+  case 6: /* exp: SIN LPAR exp RPAR  */
+#line 55 "/home/alberton/Desktop/signal-generator/src/shared/parser/parser.y"
                           {
             (yyval.exp) = new Expression((yyvsp[-1].exp), ExpressionType::SINUSOIDS);
         }
-#line 1108 "/home/alberton/Desktop/signal-generator/src/shared/parser/parser.c"
+#line 1129 "/home/alberton/Desktop/signal-generator/src/shared/parser/parser.c"
     break;
 
-  case 5: /* exp: TRI LPAR exp RPAR  */
-#line 50 "/home/alberton/Desktop/signal-generator/src/shared/parser/parser.y"
+  case 7: /* exp: TRI LPAR exp RPAR  */
+#line 58 "/home/alberton/Desktop/signal-generator/src/shared/parser/parser.y"
                           {
             (yyval.exp) = new Expression((yyvsp[-1].exp), ExpressionType::TRIANGULAR);
         }
-#line 1116 "/home/alberton/Desktop/signal-generator/src/shared/parser/parser.c"
+#line 1137 "/home/alberton/Desktop/signal-generator/src/shared/parser/parser.c"
     break;
 
-  case 6: /* exp: STEP LPAR exp RPAR  */
-#line 53 "/home/alberton/Desktop/signal-generator/src/shared/parser/parser.y"
+  case 8: /* exp: STEP LPAR exp RPAR  */
+#line 61 "/home/alberton/Desktop/signal-generator/src/shared/parser/parser.y"
                            {
             (yyval.exp) = new Expression((yyvsp[-1].exp), ExpressionType::STEP);
         }
-#line 1124 "/home/alberton/Desktop/signal-generator/src/shared/parser/parser.c"
+#line 1145 "/home/alberton/Desktop/signal-generator/src/shared/parser/parser.c"
     break;
 
-  case 7: /* exp: exp ADD_OP exp  */
-#line 56 "/home/alberton/Desktop/signal-generator/src/shared/parser/parser.y"
+  case 9: /* exp: exp ADD_OP exp  */
+#line 64 "/home/alberton/Desktop/signal-generator/src/shared/parser/parser.y"
                        {
             (yyval.exp) = new Expression((yyvsp[-2].exp), (yyvsp[0].exp), ExpressionType::ADD_OP);
         }
-#line 1132 "/home/alberton/Desktop/signal-generator/src/shared/parser/parser.c"
+#line 1153 "/home/alberton/Desktop/signal-generator/src/shared/parser/parser.c"
     break;
 
-  case 8: /* exp: exp SUB_OP exp  */
-#line 59 "/home/alberton/Desktop/signal-generator/src/shared/parser/parser.y"
+  case 10: /* exp: exp SUB_OP exp  */
+#line 67 "/home/alberton/Desktop/signal-generator/src/shared/parser/parser.y"
                        {
             (yyval.exp) = new Expression((yyvsp[-2].exp), (yyvsp[0].exp), ExpressionType::SUB_OP);
         }
-#line 1140 "/home/alberton/Desktop/signal-generator/src/shared/parser/parser.c"
+#line 1161 "/home/alberton/Desktop/signal-generator/src/shared/parser/parser.c"
     break;
 
-  case 9: /* exp: exp MUL_OP exp  */
-#line 62 "/home/alberton/Desktop/signal-generator/src/shared/parser/parser.y"
+  case 11: /* exp: exp MUL_OP exp  */
+#line 70 "/home/alberton/Desktop/signal-generator/src/shared/parser/parser.y"
                        {
             (yyval.exp) = new Expression((yyvsp[-2].exp), (yyvsp[0].exp), ExpressionType::MUL_OP);
         }
-#line 1148 "/home/alberton/Desktop/signal-generator/src/shared/parser/parser.c"
+#line 1169 "/home/alberton/Desktop/signal-generator/src/shared/parser/parser.c"
     break;
 
-  case 10: /* exp: exp DIV_OP exp  */
-#line 65 "/home/alberton/Desktop/signal-generator/src/shared/parser/parser.y"
+  case 12: /* exp: exp DIV_OP exp  */
+#line 73 "/home/alberton/Desktop/signal-generator/src/shared/parser/parser.y"
                        {
             (yyval.exp) = new Expression((yyvsp[-2].exp), (yyvsp[0].exp), ExpressionType::DIV_OP);
         }
-#line 1156 "/home/alberton/Desktop/signal-generator/src/shared/parser/parser.c"
+#line 1177 "/home/alberton/Desktop/signal-generator/src/shared/parser/parser.c"
     break;
 
-  case 11: /* exp: PI  */
-#line 68 "/home/alberton/Desktop/signal-generator/src/shared/parser/parser.y"
+  case 13: /* exp: PI  */
+#line 76 "/home/alberton/Desktop/signal-generator/src/shared/parser/parser.y"
            {
             (yyval.exp) = new Expression(M_PI);
         }
-#line 1164 "/home/alberton/Desktop/signal-generator/src/shared/parser/parser.c"
+#line 1185 "/home/alberton/Desktop/signal-generator/src/shared/parser/parser.c"
     break;
 
 
-#line 1168 "/home/alberton/Desktop/signal-generator/src/shared/parser/parser.c"
+#line 1189 "/home/alberton/Desktop/signal-generator/src/shared/parser/parser.c"
 
       default: break;
     }
