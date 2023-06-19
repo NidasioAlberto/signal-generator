@@ -61,67 +61,6 @@ public:
     SPI_TypeDef* getSpi();
 
     /**
-     * @brief Resets the peripheral configuration.
-     */
-    void reset();
-
-    /**
-     * @brief Enables the peripheral.
-     */
-    void enable();
-
-    /**
-     * @brief Disables the peripheral.
-     */
-    void disable();
-
-#ifdef _ARCH_CORTEXM7_STM32F7
-    /**
-     * @brief Set the RFFIFO threshold to generate the RXNE event when the FIFO
-     * level is greater than or equal to 8 bit.
-     */
-    void set8bitRXNE();
-
-    /**
-     * @brief Set the RFFIFO threshold to generate the RXNE event when the FIFO
-     * level is greater than or equal to 16 bit.
-     */
-    void set16bitRXNE();
-#endif
-
-    void set8BitFrameFormat();
-
-    void set16BitFrameFormat();
-
-    void enableSoftwareSlaveManagement();
-
-    void disableSoftwareSlaveManagement();
-
-    void enableInternalSlaveSelection();
-
-    void disableInternalSlaveSelection();
-
-    void setBitOrder(SPI::Order bitOrder);
-
-    void setClockDiver(SPI::ClockDivider divider);
-
-    void setSlaveConfiguration();
-
-    void setMasterConfiguration();
-
-    void setMode(SPI::Mode mode);
-
-    void enableTxDMARequest();
-
-    void disableTxDMARequest();
-
-    void enableRxDMARequest();
-
-    void disableRxDMARequest();
-
-    void waitPeripheral();
-
-    /**
      * @brief Configures and enables the bus with the provided configuration.
      *
      * Since this implementation is not synchronized, if configure() is called
@@ -279,7 +218,68 @@ public:
      */
     void transfer16(uint16_t* data, size_t size) override;
 
-private:
+protected:
+    /**
+     * @brief Resets the peripheral configuration.
+     */
+    void reset();
+
+    /**
+     * @brief Enables the peripheral.
+     */
+    void enable();
+
+    /**
+     * @brief Disables the peripheral.
+     */
+    void disable();
+
+#ifdef _ARCH_CORTEXM7_STM32F7
+    /**
+     * @brief Set the RFFIFO threshold to generate the RXNE event when the FIFO
+     * level is greater than or equal to 8 bit.
+     */
+    void set8bitRXNE();
+
+    /**
+     * @brief Set the RFFIFO threshold to generate the RXNE event when the FIFO
+     * level is greater than or equal to 16 bit.
+     */
+    void set16bitRXNE();
+#endif
+
+    void set8BitFrameFormat();
+
+    void set16BitFrameFormat();
+
+    void enableSoftwareSlaveManagement();
+
+    void disableSoftwareSlaveManagement();
+
+    void enableInternalSlaveSelection();
+
+    void disableInternalSlaveSelection();
+
+    void setBitOrder(SPI::Order bitOrder);
+
+    void setClockDiver(SPI::ClockDivider divider);
+
+    void setSlaveConfiguration();
+
+    void setMasterConfiguration();
+
+    void setMode(SPI::Mode mode);
+
+    void enableTxDMARequest();
+
+    void disableTxDMARequest();
+
+    void enableRxDMARequest();
+
+    void disableRxDMARequest();
+
+    void waitPeripheral();
+
     SPI_TypeDef* spi;
     SPIBusConfig config{};
     bool firstConfigApplied = false;
@@ -297,106 +297,6 @@ inline SPIBus::SPIBus(SPI_TypeDef* spi) : spi(spi) {
 }
 
 inline SPI_TypeDef* SPIBus::getSpi() { return spi; }
-
-inline void SPIBus::reset() {
-    spi->CR1 = 0;
-    spi->CR2 = 0;
-    spi->DR = 0;
-    spi->RXCRCR = 0;
-    spi->TXCRCR = 0;
-}
-
-inline void SPIBus::enable() { spi->CR1 |= SPI_CR1_SPE; }
-
-inline void SPIBus::disable() { spi->CR1 &= ~SPI_CR1_SPE; }
-
-/**
- * The SPI peripheral differs on stm32f7 micro controllers. Refer to AN4660 for
- * a comprehensive differences list between different peripherals versions.
- *
- * The main difference here is that on the f7 you can transmit between 4 and 16.
- * There is also a 32bit fifo and a threshold that generates the RXNE event.
- * For this reason, on f7s we need to configure the 16 bit frame format
- * differently and change the fifo threshold level.
- */
-#ifndef _ARCH_CORTEXM7_STM32F7
-
-inline void SPIBus::set8BitFrameFormat() { spi->CR1 &= ~SPI_CR1_DFF; }
-
-inline void SPIBus::set16BitFrameFormat() { spi->CR1 |= SPI_CR1_DFF; }
-
-#else
-
-inline void SPIBus::set8bitRXNE() { spi->CR2 |= SPI_CR2_FRXTH; }
-
-inline void SPIBus::set16bitRXNE() { spi->CR2 &= ~SPI_CR2_FRXTH; }
-
-inline void SPIBus::set8BitFrameFormat() {
-    spi->CR2 &= ~SPI_CR2_DS;
-    set8bitRXNE();
-}
-
-inline void SPIBus::set16BitFrameFormat() {
-    spi->CR2 |= SPI_CR2_DS;
-    set16bitRXNE();
-}
-
-#endif
-
-inline void SPIBus::enableSoftwareSlaveManagement() { spi->CR1 |= SPI_CR1_SSM; }
-
-inline void SPIBus::disableSoftwareSlaveManagement() {
-    spi->CR1 &= ~SPI_CR1_SSM;
-}
-
-inline void SPIBus::enableInternalSlaveSelection() { spi->CR1 |= SPI_CR1_SSI; }
-
-inline void SPIBus::disableInternalSlaveSelection() {
-    spi->CR1 &= ~SPI_CR1_SSI;
-}
-
-inline void SPIBus::setBitOrder(SPI::Order bitOrder) {
-    // First clear the configuration
-    spi->CR1 &= ~SPI_CR1_LSBFIRST;
-
-    // Set the new value
-    spi->CR1 |= static_cast<uint32_t>(bitOrder);
-}
-
-inline void SPIBus::setClockDiver(SPI::ClockDivider divider) {
-    // First clear the configuration
-    spi->CR1 &= ~SPI_CR1_BR;
-
-    // Set the new value
-    spi->CR1 |= static_cast<uint32_t>(divider);
-}
-
-inline void SPIBus::setSlaveConfiguration() { spi->CR1 &= ~SPI_CR1_MSTR; }
-
-inline void SPIBus::setMasterConfiguration() { spi->CR1 |= SPI_CR1_MSTR; }
-
-inline void SPIBus::setMode(SPI::Mode mode) {
-    // First clear the configuration
-    spi->CR1 &= ~(SPI_CR1_CPOL | SPI_CR1_CPHA);
-
-    // Set the new value
-    spi->CR1 |= static_cast<uint32_t>(mode);
-}
-
-inline void SPIBus::enableTxDMARequest() { spi->CR2 |= SPI_CR2_TXDMAEN; }
-
-inline void SPIBus::disableTxDMARequest() { spi->CR2 &= ~SPI_CR2_TXDMAEN; }
-
-inline void SPIBus::enableRxDMARequest() { spi->CR2 |= SPI_CR2_RXDMAEN; }
-
-inline void SPIBus::disableRxDMARequest() { spi->CR2 &= ~SPI_CR2_RXDMAEN; }
-
-inline void SPIBus::waitPeripheral() {
-    while ((spi->SR & SPI_SR_TXE) == 0)
-        ;
-    while ((spi->SR & SPI_SR_BSY) > 0)
-        ;
-}
 
 inline void SPIBus::configure(SPIBusConfig newConfig) {
     // Do not reconfigure if already in the correct configuration.
@@ -502,58 +402,28 @@ inline void SPIBus::write(const uint8_t* data, size_t nBytes) {
         transfer(data[i]);
 }
 
-// inline void SPIBus::write16(const uint16_t* data, size_t nBytes) {
-//     // Set 16 bit frame format
-//     set16BitFrameFormat();
-
-//     for (size_t i = 0; i < nBytes / 2; i++) {
-//         // Wait until the peripheral is ready to transmit
-//         while ((spi->SR & SPI_SR_TXE) == 0)
-//             ;
-
-//         // Write the data item to transmit
-//         spi->DR = static_cast<uint16_t>(data[i]);
-
-//         // Wait until data is received
-//         while ((spi->SR & SPI_SR_RXNE) == 0)
-//             ;
-
-//         // Read the received data item
-//         (void)spi->DR;
-//     }
-
-//     // Go back to 8 bit frame format
-//     set8BitFrameFormat();
-// }
-
 inline void SPIBus::write16(const uint16_t* data, size_t nBytes) {
     // Set 16 bit frame format
     set16BitFrameFormat();
 
-    // Write the first data item in the Tx buffer
-    spi->DR = data[0];
-
-    // Wait for TXE=1 and write the next data item
-    for (size_t i = 1; i < nBytes / 2; i++) {
-        // Wait until Tx buffer is empty
+    for (size_t i = 0; i < nBytes / 2; i++) {
+        // Wait until the peripheral is ready to transmit
         while ((spi->SR & SPI_SR_TXE) == 0)
             ;
 
-        // Write the next data item
-        spi->DR = data[i];
-    }
+        // Write the data item to transmit
+        spi->DR = static_cast<uint16_t>(data[i]);
 
-    // Wait until Tx buffer is empty and until the peripheral is still busy
-    while ((spi->SR & SPI_SR_TXE) == 0)
-        ;
-    while (spi->SR & SPI_SR_BSY)
-        ;
+        // Wait until data is received
+        while ((spi->SR & SPI_SR_RXNE) == 0)
+            ;
+
+        // Read the received data item
+        (void)spi->DR;
+    }
 
     // Go back to 8 bit frame format
     set8BitFrameFormat();
-
-    // Ensures the Rx buffer is empty
-    (void)spi->DR;
 }
 
 inline uint8_t SPIBus::transfer(uint8_t data) {
@@ -635,4 +505,104 @@ inline void SPIBus::transfer16(uint16_t* data, size_t nBytes) {
 
     // Go back to 8 bit frame format
     set8BitFrameFormat();
+}
+
+inline void SPIBus::reset() {
+    spi->CR1 = 0;
+    spi->CR2 = 0;
+    spi->DR = 0;
+    spi->RXCRCR = 0;
+    spi->TXCRCR = 0;
+}
+
+inline void SPIBus::enable() { spi->CR1 |= SPI_CR1_SPE; }
+
+inline void SPIBus::disable() { spi->CR1 &= ~SPI_CR1_SPE; }
+
+/**
+ * The SPI peripheral differs on stm32f7 micro controllers. Refer to AN4660 for
+ * a comprehensive differences list between different peripherals versions.
+ *
+ * The main difference here is that on the f7 you can transmit between 4 and 16.
+ * There is also a 32bit fifo and a threshold that generates the RXNE event.
+ * For this reason, on f7s we need to configure the 16 bit frame format
+ * differently and change the fifo threshold level.
+ */
+#ifndef _ARCH_CORTEXM7_STM32F7
+
+inline void SPIBus::set8BitFrameFormat() { spi->CR1 &= ~SPI_CR1_DFF; }
+
+inline void SPIBus::set16BitFrameFormat() { spi->CR1 |= SPI_CR1_DFF; }
+
+#else
+
+inline void SPIBus::set8bitRXNE() { spi->CR2 |= SPI_CR2_FRXTH; }
+
+inline void SPIBus::set16bitRXNE() { spi->CR2 &= ~SPI_CR2_FRXTH; }
+
+inline void SPIBus::set8BitFrameFormat() {
+    spi->CR2 &= ~SPI_CR2_DS;
+    set8bitRXNE();
+}
+
+inline void SPIBus::set16BitFrameFormat() {
+    spi->CR2 |= SPI_CR2_DS;
+    set16bitRXNE();
+}
+
+#endif
+
+inline void SPIBus::enableSoftwareSlaveManagement() { spi->CR1 |= SPI_CR1_SSM; }
+
+inline void SPIBus::disableSoftwareSlaveManagement() {
+    spi->CR1 &= ~SPI_CR1_SSM;
+}
+
+inline void SPIBus::enableInternalSlaveSelection() { spi->CR1 |= SPI_CR1_SSI; }
+
+inline void SPIBus::disableInternalSlaveSelection() {
+    spi->CR1 &= ~SPI_CR1_SSI;
+}
+
+inline void SPIBus::setBitOrder(SPI::Order bitOrder) {
+    // First clear the configuration
+    spi->CR1 &= ~SPI_CR1_LSBFIRST;
+
+    // Set the new value
+    spi->CR1 |= static_cast<uint32_t>(bitOrder);
+}
+
+inline void SPIBus::setClockDiver(SPI::ClockDivider divider) {
+    // First clear the configuration
+    spi->CR1 &= ~SPI_CR1_BR;
+
+    // Set the new value
+    spi->CR1 |= static_cast<uint32_t>(divider);
+}
+
+inline void SPIBus::setSlaveConfiguration() { spi->CR1 &= ~SPI_CR1_MSTR; }
+
+inline void SPIBus::setMasterConfiguration() { spi->CR1 |= SPI_CR1_MSTR; }
+
+inline void SPIBus::setMode(SPI::Mode mode) {
+    // First clear the configuration
+    spi->CR1 &= ~(SPI_CR1_CPOL | SPI_CR1_CPHA);
+
+    // Set the new value
+    spi->CR1 |= static_cast<uint32_t>(mode);
+}
+
+inline void SPIBus::enableTxDMARequest() { spi->CR2 |= SPI_CR2_TXDMAEN; }
+
+inline void SPIBus::disableTxDMARequest() { spi->CR2 &= ~SPI_CR2_TXDMAEN; }
+
+inline void SPIBus::enableRxDMARequest() { spi->CR2 |= SPI_CR2_RXDMAEN; }
+
+inline void SPIBus::disableRxDMARequest() { spi->CR2 &= ~SPI_CR2_RXDMAEN; }
+
+inline void SPIBus::waitPeripheral() {
+    while ((spi->SR & SPI_SR_TXE) == 0)
+        ;
+    while ((spi->SR & SPI_SR_BSY) > 0)
+        ;
 }

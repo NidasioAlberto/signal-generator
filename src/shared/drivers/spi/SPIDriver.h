@@ -37,4 +37,5 @@
 
 #include "SPIBus.h"
 #include "SPIBusInterface.h"
+#include "SPIDMABus.h"
 #include "SPITransaction.h"
