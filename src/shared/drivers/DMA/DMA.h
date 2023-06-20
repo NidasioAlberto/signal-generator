@@ -131,17 +131,45 @@ class DMAStream {
     friend DMADriver;
 
 public:
+    struct InterruptStatus {
+        bool halfTransfer;
+        bool transferComplete;
+        bool transferError;
+        bool fifoError;
+        bool directModeError;
+
+        void print();
+    };
+
     void setup(DMATransaction transaction);
 
     void enable();
 
     void disable();
 
+    void clearHalfTransferInterrupt();
+
+    void clearTransferCompleteInterrupt();
+
+    void clearTransferErrorInterrupt();
+
+    void clearFifoErrorInterrupt();
+
+    void clearDirectModeErrorInterrupt();
+
+    void clearAllInterrupts();
+
+    InterruptStatus getInterruptsStatus();
+
 private:
     DMAStream(DMAStreamId id);
 
     DMAStreamId id;
     DMA_Stream_TypeDef* registers;
+
+    volatile uint32_t* ISR;   ///< Interrupt status register
+    volatile uint32_t* IFCR;  ///< Interrupt flags clear register
+    int IFindex;              ///< Interrupt flags index
 
 public:
     DMAStream(const DMAStream&) = delete;

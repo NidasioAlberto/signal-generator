@@ -84,9 +84,21 @@ DMADriver::DMADriver() {
     DMA2->LIFCR = 0x0f7d0f7d;
 }
 
+void DMAStream::InterruptStatus::print() {
+    printf("Half transfer:     %d\n", halfTransfer);
+    printf("Transfer complete: %d\n", transferComplete);
+    printf("Transfer error:    %d\n", transferError);
+    printf("Fifo error:        %d\n", fifoError);
+    printf("Direct mode error: %d\n", directModeError);
+}
+
 void DMAStream::setup(DMATransaction transaction) {
     // Reset the configuration
     registers->CR = 0;
+
+    // Wait for the stream to actually be disabled
+    while (registers->CR & DMA_SxCR_EN)
+        ;
 
     registers->CR |= static_cast<uint32_t>(transaction.channel);
     registers->CR |= static_cast<uint32_t>(transaction.direction);
@@ -99,8 +111,10 @@ void DMAStream::setup(DMATransaction transaction) {
         // In memory to peripheral mode, the source address is the memory
         // address
 
-        registers->CR |= static_cast<uint32_t>(transaction.srcSize) << 13;
-        registers->CR |= static_cast<uint32_t>(transaction.dstSize) << 11;
+        registers->CR |= static_cast<uint32_t>(transaction.srcSize)
+                         << DMA_SxCR_MSIZE_Pos;
+        registers->CR |= static_cast<uint32_t>(transaction.dstSize)
+                         << DMA_SxCR_PSIZE_Pos;
 
         if (transaction.sourceIncrement)
             registers->CR |= DMA_SxCR_MINC;
@@ -114,8 +128,10 @@ void DMAStream::setup(DMATransaction transaction) {
         // In peripheral to memory or memory to memory mode, the source address
         // goes into the peripheral address register
 
-        registers->CR |= static_cast<uint32_t>(transaction.srcSize) << 11;
-        registers->CR |= static_cast<uint32_t>(transaction.dstSize) << 13;
+        registers->CR |= static_cast<uint32_t>(transaction.srcSize)
+                         << DMA_SxCR_PSIZE_Pos;
+        registers->CR |= static_cast<uint32_t>(transaction.dstSize)
+                         << DMA_SxCR_MSIZE_Pos;
 
         if (transaction.sourceIncrement)
             registers->CR |= DMA_SxCR_PINC;
@@ -133,23 +149,23 @@ void DMAStream::setup(DMATransaction transaction) {
     }
 
     if (transaction.enableHalfTransferInterrupt) {
-        DMA1->HIFCR |= DMA_HIFCR_CHTIF5;
+        clearHalfTransferInterrupt();
         registers->CR |= DMA_SxCR_HTIE;
     }
     if (transaction.enableTransferCompleteInterrupt) {
-        DMA1->HIFCR |= DMA_HIFCR_CTCIF5;
+        clearTransferCompleteInterrupt();
         registers->CR |= DMA_SxCR_TCIE;
     }
     if (transaction.enableTransferErrorInterrupt) {
-        DMA1->HIFCR |= DMA_HIFCR_CTEIF5;
+        clearTransferErrorInterrupt();
         registers->CR |= DMA_SxCR_TEIE;
     }
     if (transaction.enableFifoErrorInterrupt) {
-        DMA1->HIFCR |= DMA_HIFCR_CFEIF5;
+        clearFifoErrorInterrupt();
         registers->CR |= DMA_SxFCR_FEIE;
     }
     if (transaction.enableDirectModeErrorInterrupt) {
-        DMA1->HIFCR |= DMA_HIFCR_CDMEIF5;
+        clearDirectModeErrorInterrupt();
         registers->CR |= DMA_SxCR_DMEIE;
     }
 }
@@ -158,13 +174,71 @@ void DMAStream::enable() { registers->CR |= DMA_SxCR_EN; }
 
 void DMAStream::disable() { registers->CR &= ~DMA_SxCR_EN; }
 
+void DMAStream::clearHalfTransferInterrupt() {
+    *IFCR |= DMA_LIFCR_CHTIF0 << IFindex;
+}
+
+void DMAStream::clearTransferCompleteInterrupt() {
+    *IFCR |= DMA_LIFCR_CTCIF0 << IFindex;
+}
+
+void DMAStream::clearTransferErrorInterrupt() {
+    *IFCR |= DMA_LIFCR_CTEIF0 << IFindex;
+}
+
+void DMAStream::clearFifoErrorInterrupt() {
+    *IFCR |= DMA_LIFCR_CFEIF0 << IFindex;
+}
+
+void DMAStream::clearDirectModeErrorInterrupt() {
+    *IFCR |= DMA_LIFCR_CDMEIF0 << IFindex;
+}
+
+void DMAStream::clearAllInterrupts() {
+    *IFCR |= (DMA_LIFCR_CHTIF0 | DMA_LIFCR_CTCIF0 | DMA_LIFCR_CTEIF0 |
+              DMA_LIFCR_CFEIF0 | DMA_LIFCR_CDMEIF0)
+             << IFindex;
+}
+
+DMAStream::InterruptStatus DMAStream::getInterruptsStatus() {
+    return {
+        (*ISR & (DMA_LISR_HTIF0 << IFindex)) != 0,
+        (*ISR & (DMA_LISR_TCIF0 << IFindex)) != 0,
+        (*ISR & (DMA_LISR_TEIF0 << IFindex)) != 0,
+        (*ISR & (DMA_LISR_FEIF0 << IFindex)) != 0,
+        (*ISR & (DMA_LISR_DMEIF0 << IFindex)) != 0,
+    };
+}
+
 DMAStream::DMAStream(DMAStreamId id) {
     // Get the channel registers base address
+    // and the interrupt flags clear register address
     if (id < DMAStreamId::DMA2_Str0) {
         registers = reinterpret_cast<DMA_Stream_TypeDef*>(
             DMA1_BASE + 0x10 + 0x18 * static_cast<int>(id));
+
+        if (id < DMAStreamId::DMA1_Str4) {
+            IFCR = &DMA1->LIFCR;
+            ISR = &DMA1->LISR;
+        } else {
+            IFCR = &DMA1->HIFCR;
+            ISR = &DMA1->HISR;
+        }
     } else {
         registers = reinterpret_cast<DMA_Stream_TypeDef*>(
             DMA2_BASE + 0x10 + 0x18 * (static_cast<int>(id) - 8));
+
+        if (id < DMAStreamId::DMA2_Str4) {
+            IFCR = &DMA2->LIFCR;
+            ISR = &DMA2->LISR;
+        } else {
+            IFCR = &DMA2->HIFCR;
+            ISR = &DMA2->HISR;
+        }
     }
+
+    // Compute the index for the interrupt flags clear register
+    // Refer to reference manual for the register bits structure
+    int offset = static_cast<int>(id) % 4;
+    IFindex = (offset % 2) * 6 + (offset / 2) * 16;
 }

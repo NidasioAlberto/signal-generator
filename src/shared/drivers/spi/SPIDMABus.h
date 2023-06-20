@@ -78,25 +78,13 @@ void SPIDMABus::write(const uint8_t* data, size_t nBytes) {
     };
     txStream.setup(txTrn);
 
-    // printf("--------\n");
-    // printf("CR: %lx\n", DMA1_Stream4->CR);
-    // printf("NDTR: %lx\n", DMA1_Stream4->NDTR);
-    // printf("CR1: %lx\n", SPI2->CR1);
-    // printf("CR2: %lx\n", SPI2->CR2);
-    // printf("SR: %lx\n", SPI2->SR);
-
     enableTxDMARequest();
-    // printf("HISR: %lx\n", DMA1->HISR);
-    DMA1->HIFCR = 0x0f7d0f7d;
-    // printf("HISR: %lx\n", DMA1->HISR);
     txStream.enable();
 
-    // printf("CR: %lx\n", DMA1_Stream4->CR);
-
-    miosix::delayMs(100);
+    miosix::delayMs(250);
 
     disableTxDMARequest();
     txStream.disable();
-
-    // printf("HISR: %lx\n", DMA1->HISR);
+    txStream.getInterruptsStatus().print();
+    txStream.clearAllInterrupts();
 }

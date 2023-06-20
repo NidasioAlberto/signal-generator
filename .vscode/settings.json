@@ -109,6 +109,7 @@
         "gpios",
         "HCLK",
         "iprintf",
+        "LIFCR",
         "MAMP",
         "microcontroller",
         "microcontrollers",
