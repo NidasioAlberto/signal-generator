@@ -9,12 +9,10 @@
 using namespace miosix;
 
 int main() {
-    printf("Starting...\n");
+    std::thread profThread(CPUProfiler::thread, 1e9);
 
     RGBLed led;
     led.init();
-
-    std::thread profThread(CPUProfiler::thread, 1e9);
 
     while (true) {
         for (int i = 0; i < 256; i++) {
