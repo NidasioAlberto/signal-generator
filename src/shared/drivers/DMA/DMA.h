@@ -30,6 +30,7 @@
 #include <interfaces/arch_registers.h>
 #include <kernel/sync.h>
 
+#include <functional>
 #include <map>
 
 enum class DMAStreamId {
@@ -107,6 +108,8 @@ class DMAStream;
 
 class DMADriver {
 public:
+    void IRQhandleInterrupt(DMAStreamId id);
+
     static DMADriver& instance();
 
     bool tryChannel(DMAStreamId id);
@@ -117,6 +120,8 @@ public:
 
 private:
     DMADriver();
+
+    void IRQwakeupThread(DMAStream* stream);
 
     miosix::FastMutex mutex;
     miosix::ConditionVariable cv;
@@ -131,21 +136,27 @@ class DMAStream {
     friend DMADriver;
 
 public:
-    struct InterruptStatus {
-        bool halfTransfer;
-        bool transferComplete;
-        bool transferError;
-        bool fifoError;
-        bool directModeError;
-
-        void print();
-    };
-
     void setup(DMATransaction transaction);
 
     void enable();
 
     void disable();
+
+    void waitForHalfTransfer();
+
+    void waitForTransferComplete();
+
+    bool timedWaitForHalfTransfer(uint64_t timeout_ns);
+
+    bool timedWaitForTransferComplete(uint64_t timeout_ns);
+
+    void setHalfTransferCallback(std::function<void()> callback);
+
+    void resetHalfTransferCallback();
+
+    void setTransferCompleteCallback(std::function<void()> callback);
+
+    void resetTransferCompleteCallback();
 
     void clearHalfTransferInterrupt();
 
@@ -159,12 +170,30 @@ public:
 
     void clearAllInterrupts();
 
-    InterruptStatus getInterruptsStatus();
+    bool getHalfTransferInterruptStatus();
+
+    bool getTransferCompleteInterruptStatus();
+
+    bool getTransferErrorInterruptStatus();
+
+    bool getFifoErrorInterruptStatus();
+
+    bool getDirectModeErrorInterruptStatus();
 
 private:
     DMAStream(DMAStreamId id);
 
+    DMATransaction currentSetup;
+    miosix::Thread* waitingThread = nullptr;
+    bool waitingForHalfTransfer = false;
+    bool halfTransferTriggered = false;
+    bool waitingForTransferComplete = false;
+    bool transferCompleteTriggered = false;
+    std::function<void()> halfTransferCallback;
+    std::function<void()> transferCompleteCallback;
+
     DMAStreamId id;
+    IRQn_Type irqNumber;
     DMA_Stream_TypeDef* registers;
 
     volatile uint32_t* ISR;   ///< Interrupt status register

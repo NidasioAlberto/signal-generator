@@ -2,6 +2,9 @@
 #include <drivers/spi/SPIDriver.h>
 #include <interfaces/endianness.h>
 #include <miosix.h>
+#include <util/util.h>
+
+#include <thread>
 
 using namespace miosix;
 
@@ -10,6 +13,8 @@ int main() {
 
     RGBLed led;
     led.init();
+
+    std::thread profThread(CPUProfiler::thread, 1e9);
 
     while (true) {
         for (int i = 0; i < 256; i++) {

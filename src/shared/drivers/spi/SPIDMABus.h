@@ -75,16 +75,16 @@ void SPIDMABus::write(const uint8_t* data, size_t nBytes) {
         .dstAddress = &(spi->DR),
         .numberOfDataItems = 20,
         .sourceIncrement = true,
+        .enableTransferCompleteInterrupt = true,
     };
     txStream.setup(txTrn);
 
     enableTxDMARequest();
     txStream.enable();
 
-    miosix::delayMs(250);
+    txStream.waitForTransferComplete();
 
     disableTxDMARequest();
     txStream.disable();
-    txStream.getInterruptsStatus().print();
     txStream.clearAllInterrupts();
 }

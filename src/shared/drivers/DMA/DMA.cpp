@@ -27,7 +27,227 @@
 
 #include "DMA.h"
 
+#include <kernel/logging.h>
+#include <kernel/scheduler/scheduler.h>
+#include <kernel/sync.h>
+#include <utils/OtherUtils.h>
+
+#include <map>
+
 using namespace miosix;
+
+void __attribute__((naked)) DMA1_Stream0_IRQHandler() {
+    saveContext();
+    asm volatile("bl _Z20DMA1_Stream0_IRQImplv");
+    restoreContext();
+}
+
+void __attribute__((used)) DMA1_Stream0_IRQImpl() {
+    DMADriver::instance().IRQhandleInterrupt(DMAStreamId::DMA1_Str0);
+}
+
+void __attribute__((naked)) DMA1_Stream1_IRQHandler() {
+    saveContext();
+    asm volatile("bl _Z20DMA1_Stream1_IRQImplv");
+    restoreContext();
+}
+
+void __attribute__((used)) DMA1_Stream1_IRQImpl() {
+    DMADriver::instance().IRQhandleInterrupt(DMAStreamId::DMA1_Str1);
+}
+
+void __attribute__((naked)) DMA1_Stream2_IRQHandler() {
+    saveContext();
+    asm volatile("bl _Z20DMA1_Stream2_IRQImplv");
+    restoreContext();
+}
+
+void __attribute__((used)) DMA1_Stream2_IRQImpl() {
+    DMADriver::instance().IRQhandleInterrupt(DMAStreamId::DMA1_Str2);
+}
+
+void __attribute__((naked)) DMA1_Stream3_IRQHandler() {
+    saveContext();
+    asm volatile("bl _Z20DMA1_Stream3_IRQImplv");
+    restoreContext();
+}
+
+void __attribute__((used)) DMA1_Stream3_IRQImpl() {
+    DMADriver::instance().IRQhandleInterrupt(DMAStreamId::DMA1_Str3);
+}
+
+void __attribute__((naked)) DMA1_Stream4_IRQHandler() {
+    saveContext();
+    asm volatile("bl _Z20DMA1_Stream4_IRQImplv");
+    restoreContext();
+}
+
+void __attribute__((used)) DMA1_Stream4_IRQImpl() {
+    DMADriver::instance().IRQhandleInterrupt(DMAStreamId::DMA1_Str4);
+}
+
+void __attribute__((naked)) DMA1_Stream5_IRQHandler() {
+    saveContext();
+    asm volatile("bl _Z20DMA1_Stream5_IRQImplv");
+    restoreContext();
+}
+
+void __attribute__((used)) DMA1_Stream5_IRQImpl() {
+    DMADriver::instance().IRQhandleInterrupt(DMAStreamId::DMA1_Str5);
+}
+
+void __attribute__((naked)) DMA1_Stream6_IRQHandler() {
+    saveContext();
+    asm volatile("bl _Z20DMA1_Stream6_IRQImplv");
+    restoreContext();
+}
+
+void __attribute__((used)) DMA1_Stream6_IRQImpl() {
+    DMADriver::instance().IRQhandleInterrupt(DMAStreamId::DMA1_Str6);
+}
+
+void __attribute__((naked)) DMA1_Stream7_IRQHandler() {
+    saveContext();
+    asm volatile("bl _Z20DMA1_Stream7_IRQImplv");
+    restoreContext();
+}
+
+void __attribute__((used)) DMA1_Stream7_IRQImpl() {
+    DMADriver::instance().IRQhandleInterrupt(DMAStreamId::DMA1_Str7);
+}
+
+void __attribute__((naked)) DMA2_Stream0_IRQHandler() {
+    saveContext();
+    asm volatile("bl _Z20DMA2_Stream0_IRQImplv");
+    restoreContext();
+}
+
+void __attribute__((used)) DMA2_Stream0_IRQImpl() {
+    DMADriver::instance().IRQhandleInterrupt(DMAStreamId::DMA2_Str0);
+}
+
+void __attribute__((naked)) DMA2_Stream1_IRQHandler() {
+    saveContext();
+    asm volatile("bl _Z20DMA2_Stream1_IRQImplv");
+    restoreContext();
+}
+
+void __attribute__((used)) DMA2_Stream1_IRQImpl() {
+    DMADriver::instance().IRQhandleInterrupt(DMAStreamId::DMA2_Str1);
+}
+
+void __attribute__((naked)) DMA2_Stream2_IRQHandler() {
+    saveContext();
+    asm volatile("bl _Z20DMA2_Stream2_IRQImplv");
+    restoreContext();
+}
+
+void __attribute__((used)) DMA2_Stream2_IRQImpl() {
+    DMADriver::instance().IRQhandleInterrupt(DMAStreamId::DMA2_Str2);
+}
+
+// void __attribute__((naked)) DMA2_Stream3_IRQHandler() {
+//     saveContext();
+//     asm volatile("bl _Z20DMA2_Stream3_IRQImplv");
+//     restoreContext();
+// }
+
+// void __attribute__((used)) DMA2_Stream3_IRQImpl() {
+//     DMADriver::instance().IRQhandleInterrupt(DMAStreamId::DMA2_Str3);
+// }
+
+void __attribute__((naked)) DMA2_Stream4_IRQHandler() {
+    saveContext();
+    asm volatile("bl _Z20DMA2_Stream4_IRQImplv");
+    restoreContext();
+}
+
+void __attribute__((used)) DMA2_Stream4_IRQImpl() {
+    DMADriver::instance().IRQhandleInterrupt(DMAStreamId::DMA2_Str4);
+}
+
+// void __attribute__((naked)) DMA2_Stream5_IRQHandler() {
+//     saveContext();
+//     asm volatile("bl _Z20DMA2_Stream5_IRQImplv");
+//     restoreContext();
+// }
+
+// void __attribute__((used)) DMA2_Stream5_IRQImpl() {
+//     DMADriver::instance().IRQhandleInterrupt(DMAStreamId::DMA2_Str5);
+// }
+
+void __attribute__((naked)) DMA2_Stream6_IRQHandler() {
+    saveContext();
+    asm volatile("bl _Z20DMA2_Stream6_IRQImplv");
+    restoreContext();
+}
+
+void __attribute__((used)) DMA2_Stream6_IRQImpl() {
+    DMADriver::instance().IRQhandleInterrupt(DMAStreamId::DMA2_Str6);
+}
+
+// void __attribute__((naked)) DMA2_Stream7_IRQHandler() {
+//     saveContext();
+//     asm volatile("bl _Z20DMA2_Stream7_IRQImplv");
+//     restoreContext();
+// }
+
+// void __attribute__((used)) DMA2_Stream7_IRQImpl() {
+//     DMADriver::instance().IRQhandleInterrupt(DMAStreamId::DMA2_Str7);
+// }
+
+void DMADriver::IRQhandleInterrupt(DMAStreamId id) {
+    auto stream = streams[id];
+
+    // Check if the interrupt was triggered by an half transfer event
+    if (stream->getHalfTransferInterruptStatus()) {
+        stream->halfTransferTriggered = true;
+
+        // Run the callback if defined
+        if (stream->halfTransferCallback) {
+            stream->halfTransferCallback();
+        }
+
+        // Wakeup the waiting thread if it is waiting
+        if (stream->waitingThread && stream->waitingForTransferComplete) {
+            IRQwakeupThread(stream);
+        }
+    }
+
+    // Check if the interrupt was triggered by a transfer complete event
+    if (stream->getTransferCompleteInterruptStatus()) {
+        stream->transferCompleteTriggered = true;
+
+        // Run the callback if defined
+        if (stream->transferCompleteCallback) {
+            stream->transferCompleteCallback();
+        }
+
+        // Wakeup the waiting thread if it is waiting
+        if (stream->waitingThread && stream->waitingForTransferComplete) {
+            IRQwakeupThread(stream);
+        }
+    }
+
+    // Make sure to clear the interrupt flags
+    stream->clearAllInterrupts();
+}
+
+void DMADriver::IRQwakeupThread(DMAStream* stream) {
+    // Wakeup the waiting thread
+    stream->waitingThread->wakeup();
+
+    // If the waiting thread has a higher priority than the current
+    // thread then reschedule
+    if (stream->waitingThread->IRQgetPriority() >
+        miosix::Thread::IRQgetCurrentThread()->IRQgetPriority()) {
+        miosix::Scheduler::IRQfindNextThread();
+    }
+
+    // Clear the thread pointer, this way the thread will be sure it is
+    // not a spurious wakeup
+    stream->waitingThread = nullptr;
+}
 
 DMADriver& DMADriver::instance() {
     static DMADriver instance;
@@ -84,15 +304,9 @@ DMADriver::DMADriver() {
     DMA2->LIFCR = 0x0f7d0f7d;
 }
 
-void DMAStream::InterruptStatus::print() {
-    printf("Half transfer:     %d\n", halfTransfer);
-    printf("Transfer complete: %d\n", transferComplete);
-    printf("Transfer error:    %d\n", transferError);
-    printf("Fifo error:        %d\n", fifoError);
-    printf("Direct mode error: %d\n", directModeError);
-}
-
 void DMAStream::setup(DMATransaction transaction) {
+    currentSetup = transaction;
+
     // Reset the configuration
     registers->CR = 0;
 
@@ -148,31 +362,141 @@ void DMAStream::setup(DMATransaction transaction) {
             reinterpret_cast<uint32_t>(transaction.secondMemoryAddress);
     }
 
+    bool enableInterrupt = false;
     if (transaction.enableHalfTransferInterrupt) {
         clearHalfTransferInterrupt();
         registers->CR |= DMA_SxCR_HTIE;
+        enableInterrupt = true;
     }
     if (transaction.enableTransferCompleteInterrupt) {
         clearTransferCompleteInterrupt();
         registers->CR |= DMA_SxCR_TCIE;
+        enableInterrupt = true;
     }
     if (transaction.enableTransferErrorInterrupt) {
         clearTransferErrorInterrupt();
         registers->CR |= DMA_SxCR_TEIE;
+        enableInterrupt = true;
     }
     if (transaction.enableFifoErrorInterrupt) {
         clearFifoErrorInterrupt();
         registers->CR |= DMA_SxFCR_FEIE;
+        enableInterrupt = true;
     }
     if (transaction.enableDirectModeErrorInterrupt) {
         clearDirectModeErrorInterrupt();
         registers->CR |= DMA_SxCR_DMEIE;
+        enableInterrupt = true;
+    }
+
+    if (enableInterrupt) {
+        NVIC_SetPriority(irqNumber, 8);
+        NVIC_ClearPendingIRQ(irqNumber);
+        NVIC_EnableIRQ(irqNumber);
+    } else {
+        NVIC_DisableIRQ(irqNumber);
     }
 }
 
-void DMAStream::enable() { registers->CR |= DMA_SxCR_EN; }
+void DMAStream::enable() {
+    // Reset the flags
+    transferCompleteTriggered = false;
+
+    // Enable the peripheral
+    registers->CR |= DMA_SxCR_EN;
+}
 
 void DMAStream::disable() { registers->CR &= ~DMA_SxCR_EN; }
+
+#define waitForInterruptEventImpl(enableEvent, getEventStatus, eventTriggered, \
+                                  waitForEvent)                                \
+    if (!enableEvent) {                                                        \
+        /* Pool the flag if the user did not enabled the interrupt */          \
+        while (!getEventStatus())                                              \
+            ;                                                                  \
+    } else {                                                                   \
+        /* Check flag and return if it is set */                               \
+        if (getEventStatus() || eventTriggered)                                \
+            return;                                                            \
+                                                                               \
+        /* Save the current thread pointer and wait condition */               \
+        waitingThread = Thread::getCurrentThread();                            \
+        waitForEvent = true;                                                   \
+                                                                               \
+        /* Wait until the thread is woken up and the pointer is cleared */     \
+        FastInterruptDisableLock dLock;                                        \
+        do {                                                                   \
+            Thread::IRQenableIrqAndWait(dLock);                                \
+        } while (waitingThread);                                               \
+    }
+
+void DMAStream::waitForHalfTransfer() {
+    waitForInterruptEventImpl(currentSetup.enableHalfTransferInterrupt,
+                              getHalfTransferInterruptStatus,
+                              halfTransferTriggered, waitingForHalfTransfer)
+}
+
+void DMAStream::waitForTransferComplete() {
+    waitForInterruptEventImpl(currentSetup.enableTransferCompleteInterrupt,
+                              getTransferCompleteInterruptStatus,
+                              transferCompleteTriggered,
+                              waitingForTransferComplete)
+}
+
+#define timedWaitForInterruptEventImpl(                                    \
+    enableEvent, getEventStatus, eventTriggered, waitForEvent, timeout_ns) \
+    if (!currentSetup.enableHalfTransferInterrupt) {                       \
+        /* Pool the flag if the user did not enabled the interrupt */      \
+        return OtherUtils::timedWaitFlag(                                  \
+            std::bind(&DMAStream::getHalfTransferInterruptStatus, this),   \
+            timeout_ns);                                                   \
+    } else {                                                               \
+        /* Check flag and return if it is set */                           \
+        if (getHalfTransferInterruptStatus() || halfTransferTriggered)     \
+            return true;                                                   \
+                                                                           \
+        /* Save the current thread pointer and wait condition */           \
+        waitingThread = Thread::getCurrentThread();                        \
+        waitingForHalfTransfer = true;                                     \
+                                                                           \
+        /* Wait until the thread is woken up and the pointer is cleared */ \
+        FastInterruptDisableLock dLock;                                    \
+        do {                                                               \
+            if (Thread::IRQenableIrqAndTimedWait(dLock, timeout_ns) ==     \
+                TimedWaitResult::Timeout)                                  \
+                return false;                                              \
+        } while (waitingThread);                                           \
+    }                                                                      \
+                                                                           \
+    return true;
+
+bool DMAStream::timedWaitForHalfTransfer(uint64_t timeout_ns) {
+    timedWaitForInterruptEventImpl(currentSetup.enableHalfTransferInterrupt,
+                                   getHalfTransferInterruptStatus,
+                                   halfTransferTriggered,
+                                   waitingForHalfTransfer, timeout_ns)
+}
+
+bool DMAStream::timedWaitForTransferComplete(uint64_t timeout_ns) {
+    timedWaitForInterruptEventImpl(currentSetup.enableTransferCompleteInterrupt,
+                                   getTransferCompleteInterruptStatus,
+                                   transferCompleteTriggered,
+                                   waitingForTransferComplete, timeout_ns)
+}
+
+void DMAStream::setHalfTransferCallback(std::function<void()> callback) {
+    halfTransferCallback = callback;
+}
+
+void DMAStream::resetHalfTransferCallback() { halfTransferCallback = nullptr; }
+
+void DMAStream::setTransferCompleteCallback(std::function<void()> callback) {
+    transferCompleteCallback = callback;
+}
+
+void DMAStream::resetTransferCompleteCallback() {
+    transferCompleteCallback = nullptr;
+}
 
 void DMAStream::clearHalfTransferInterrupt() {
     *IFCR |= DMA_LIFCR_CHTIF0 << IFindex;
@@ -200,17 +524,27 @@ void DMAStream::clearAllInterrupts() {
              << IFindex;
 }
 
-DMAStream::InterruptStatus DMAStream::getInterruptsStatus() {
-    return {
-        (*ISR & (DMA_LISR_HTIF0 << IFindex)) != 0,
-        (*ISR & (DMA_LISR_TCIF0 << IFindex)) != 0,
-        (*ISR & (DMA_LISR_TEIF0 << IFindex)) != 0,
-        (*ISR & (DMA_LISR_FEIF0 << IFindex)) != 0,
-        (*ISR & (DMA_LISR_DMEIF0 << IFindex)) != 0,
-    };
+bool DMAStream::getHalfTransferInterruptStatus() {
+    return (*ISR & (DMA_LISR_HTIF0 << IFindex)) != 0;
 }
 
-DMAStream::DMAStream(DMAStreamId id) {
+bool DMAStream::getTransferCompleteInterruptStatus() {
+    return (*ISR & (DMA_LISR_TCIF0 << IFindex)) != 0;
+}
+
+bool DMAStream::getTransferErrorInterruptStatus() {
+    return (*ISR & (DMA_LISR_TEIF0 << IFindex)) != 0;
+}
+
+bool DMAStream::getFifoErrorInterruptStatus() {
+    return (*ISR & (DMA_LISR_FEIF0 << IFindex)) != 0;
+}
+
+bool DMAStream::getDirectModeErrorInterruptStatus() {
+    return (*ISR & (DMA_LISR_DMEIF0 << IFindex)) != 0;
+}
+
+DMAStream::DMAStream(DMAStreamId id) : id(id) {
     // Get the channel registers base address
     // and the interrupt flags clear register address
     if (id < DMAStreamId::DMA2_Str0) {
@@ -241,4 +575,8 @@ DMAStream::DMAStream(DMAStreamId id) {
     // Refer to reference manual for the register bits structure
     int offset = static_cast<int>(id) % 4;
     IFindex = (offset % 2) * 6 + (offset / 2) * 16;
+
+    // Select the interrupt
+    irqNumber = static_cast<IRQn_Type>(
+        static_cast<int>(IRQn_Type::DMA1_Stream0_IRQn) + static_cast<int>(id));
 }
