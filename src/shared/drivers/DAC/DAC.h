@@ -39,14 +39,16 @@ public:
         CH2,
     };
 
+    // TODO: Different stm32 families have different trigger sources
     enum class TriggerSource : uint32_t {
-        TIM6_TRGO = 0,
-        TIM3_TRGO = DAC_CR_TSEL1_0,
-        TIM7_TRGO = DAC_CR_TSEL1_1,
-        TIM15_TRGO = DAC_CR_TSEL1_1 | DAC_CR_TSEL1_0,
-        TIM2_TRGO = DAC_CR_TSEL1_2,
-        EXTI_line_9 = DAC_CR_TSEL1_2 | DAC_CR_TSEL1_1,
-        SWTRIG = DAC_CR_TSEL1
+        TIM6_TRGO = 0x0 << DAC_CR_TSEL1_Pos,
+        TIM8_TRGO = 0x1 << DAC_CR_TSEL1_Pos,
+        TIM7_TRGO = 0x2 << DAC_CR_TSEL1_Pos,
+        TIM5_TRGO = 0x3 << DAC_CR_TSEL1_Pos,
+        TIM2_TRGO = 0x4 << DAC_CR_TSEL1_Pos,
+        TIM4_TRGO = 0x5 << DAC_CR_TSEL1_Pos,
+        EXTI_line_9 = 0x6 << DAC_CR_TSEL1_Pos,
+        SWTRIG = 0x7 << DAC_CR_TSEL1_Pos
     };
 
     /**
