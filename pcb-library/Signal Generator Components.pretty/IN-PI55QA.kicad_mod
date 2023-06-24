@@ -33,9 +33,9 @@
   (pad "2" smd rect (at -2.2 1.6) (size 1.6 1.1) (layers "F.Cu" "F.Paste" "F.Mask") (tstamp 6bd41321-d49e-4b65-ba27-9b1df5d35370))
   (pad "3" smd rect (at 2.2 1.6) (size 1.6 1.1) (layers "F.Cu" "F.Paste" "F.Mask") (tstamp 2b7ab591-a740-4c63-8fcb-8b2f09d1dd1f))
   (pad "4" smd rect (at 2.2 -1.6) (size 1.6 1.1) (layers "F.Cu" "F.Paste" "F.Mask") (tstamp 3ab5ed53-4563-4b8d-a247-6c9b75efe4e3))
-  (model "${KICAD6_3DMODEL_DIR}/LED_SMD.3dshapes/LED_Inolux_IN-PI554FCH_PLCC4_5.0x5.0mm_P3.2mm.wrl"
+  (model "${SIGNAL_GENERATOR}/pcb-library/3D Models/IN-PI55QA.step"
     (offset (xyz 0 0 0))
     (scale (xyz 1 1 1))
-    (rotate (xyz 0 0 0))
+    (rotate (xyz -90 0 0))
   )
 )
