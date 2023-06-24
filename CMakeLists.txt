@@ -1,6 +1,11 @@
 cmake_minimum_required(VERSION 3.21)
 include(miosix-kernel/miosix/cmake/mbs.cmake)
-find_package(BISON)
+
+if(CMAKE_HOST_SYSTEM_NAME MATCHES "Darwin")
+    set(BISON_EXECUTABLE "/usr/local/opt/bison/bin/bison" CACHE PATH "Bison executable")
+endif()
+
+find_package(BISON 3.0.0 REQUIRED)
 find_package(FLEX)
 
 project(SignalGenerator)
