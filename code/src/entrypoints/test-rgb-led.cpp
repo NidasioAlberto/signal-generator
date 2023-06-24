@@ -16,22 +16,22 @@ int main() {
 
     while (true) {
         for (int i = 0; i < 256; i++) {
-            led.setColor(i, 0, 0, 0);
+            led.setColor({i, 0, 0, 0});
             Thread::sleep(5);
         }
 
         for (int i = 0; i < 256; i++) {
-            led.setColor(0x00, i, 0x00, 0x00);
+            led.setColor({0x00, i, 0x00, 0x00});
             Thread::sleep(5);
         }
 
         for (int i = 0; i < 256; i++) {
-            led.setColor(0x00, 0x00, i, 0x00);
+            led.setColor({0x00, 0x00, i, 0x00});
             Thread::sleep(5);
         }
 
         for (int i = 0; i < 256; i++) {
-            led.setColor(0x00, 0x00, 0x00, i);
+            led.setColor({0x00, 0x00, 0x00, i});
             Thread::sleep(5);
         }
     }

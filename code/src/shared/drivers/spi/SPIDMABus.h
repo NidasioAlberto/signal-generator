@@ -62,9 +62,7 @@ inline SPIDMABus::SPIDMABus(SPI_TypeDef* spi, DMAStreamId txStreamId,
       rxStream(DMADriver::instance().acquireStream(rxStreamId)),
       rxStreamChannel(rxStreamChannel) {}
 
-// inline void SPIDMABus::configure(SPIBusConfig newConfig) {}
-
-void SPIDMABus::write(const uint8_t* data, size_t nBytes) {
+inline void SPIDMABus::write(const uint8_t* data, size_t nBytes) {
     DMATransaction txTrn{
         .channel = txStreamChannel,
         .direction = DMATransaction::Direction::MEM_TO_PER,

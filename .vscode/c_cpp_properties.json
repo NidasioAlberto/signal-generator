@@ -6,9 +6,9 @@
             "__cplusplus=201402L"
         ],
         "defaultIncludePaths": [
-            "${workspaceFolder}/miosix-kernel/miosix",
-            "${workspaceFolder}/miosix-kernel/miosix/arch/common",
-            "${workspaceFolder}/src/shared"
+            "${workspaceFolder}/code/miosix-kernel/miosix",
+            "${workspaceFolder}/code/miosix-kernel/miosix/arch/common",
+            "${workspaceFolder}/code/src/shared"
         ]
     },
     "configurations": [
@@ -28,9 +28,9 @@
             ],
             "includePath": [
                 "${defaultIncludePaths}",
-                "${workspaceFolder}/miosix-kernel/miosix/arch/cortexM0_stm32f0/common",
-                "${workspaceFolder}/miosix-kernel/miosix/arch/cortexM0_stm32f0/stm32f072rb_stm32f0discovery",
-                "${workspaceFolder}/miosix-kernel/miosix/config/arch/cortexM0_stm32f0/stm32f072rb_stm32f0discovery"
+                "${workspaceFolder}/code/miosix-kernel/miosix/arch/cortexM0_stm32f0/common",
+                "${workspaceFolder}/code/miosix-kernel/miosix/arch/cortexM0_stm32f0/stm32f072rb_stm32f0discovery",
+                "${workspaceFolder}/code/miosix-kernel/miosix/config/arch/cortexM0_stm32f0/stm32f072rb_stm32f0discovery"
             ]
         },
         {
@@ -48,9 +48,9 @@
             ],
             "includePath": [
                 "${defaultIncludePaths}",
-                "${workspaceFolder}/miosix-kernel/miosix/arch/cortexM3_stm32f1/common",
-                "${workspaceFolder}/miosix-kernel/miosix/arch/cortexM3_stm32f1/stm32f100rb_stm32vldiscovery",
-                "${workspaceFolder}/miosix-kernel/miosix/config/arch/cortexM3_stm32f1/stm32f100rb_stm32vldiscovery"
+                "${workspaceFolder}/code/miosix-kernel/miosix/arch/cortexM3_stm32f1/common",
+                "${workspaceFolder}/code/miosix-kernel/miosix/arch/cortexM3_stm32f1/stm32f100rb_stm32vldiscovery",
+                "${workspaceFolder}/code/miosix-kernel/miosix/config/arch/cortexM3_stm32f1/stm32f100rb_stm32vldiscovery"
             ]
         },
         {
@@ -69,9 +69,9 @@
             ],
             "includePath": [
                 "${defaultIncludePaths}",
-                "${workspaceFolder}/miosix-kernel/miosix/arch/cortexM3_stm32f2/common",
-                "${workspaceFolder}/miosix-kernel/miosix/arch/cortexM3_stm32f2/stm32f205rc_signal_generator",
-                "${workspaceFolder}/miosix-kernel/miosix/config/arch/cortexM3_stm32f2/stm32f205rc_signal_generator"
+                "${workspaceFolder}/code/miosix-kernel/miosix/arch/cortexM3_stm32f2/common",
+                "${workspaceFolder}/code/miosix-kernel/miosix/arch/cortexM3_stm32f2/stm32f205rc_signal_generator",
+                "${workspaceFolder}/code/miosix-kernel/miosix/config/arch/cortexM3_stm32f2/stm32f205rc_signal_generator"
             ]
         },
         {
@@ -91,9 +91,9 @@
             ],
             "includePath": [
                 "${defaultIncludePaths}",
-                "${workspaceFolder}/miosix-kernel/miosix/arch/cortexM4_stm32f4/common",
-                "${workspaceFolder}/miosix-kernel/miosix/arch/cortexM4_stm32f4/stm32f407vg_stm32f4discovery",
-                "${workspaceFolder}/miosix-kernel/miosix/config/arch/cortexM4_stm32f4/stm32f407vg_stm32f4discovery",
+                "${workspaceFolder}/code/miosix-kernel/miosix/arch/cortexM4_stm32f4/common",
+                "${workspaceFolder}/code/miosix-kernel/miosix/arch/cortexM4_stm32f4/stm32f407vg_stm32f4discovery",
+                "${workspaceFolder}/code/miosix-kernel/miosix/config/arch/cortexM4_stm32f4/stm32f407vg_stm32f4discovery",
             ]
         },
         {
@@ -114,9 +114,9 @@
             ],
             "includePath": [
                 "${defaultIncludePaths}",
-                "${workspaceFolder}/miosix-kernel/miosix/arch/cortexM4_stm32f4/common",
-                "${workspaceFolder}/miosix-kernel/miosix/arch/cortexM4_stm32f4/stm32f429zi_stm32f4discovery",
-                "${workspaceFolder}/miosix-kernel/miosix/config/arch/cortexM4_stm32f4/stm32f429zi_stm32f4discovery"
+                "${workspaceFolder}/code/miosix-kernel/miosix/arch/cortexM4_stm32f4/common",
+                "${workspaceFolder}/code/miosix-kernel/miosix/arch/cortexM4_stm32f4/stm32f429zi_stm32f4discovery",
+                "${workspaceFolder}/code/miosix-kernel/miosix/config/arch/cortexM4_stm32f4/stm32f429zi_stm32f4discovery"
             ]
         },
         {
@@ -137,9 +137,9 @@
             ],
             "includePath": [
                 "${defaultIncludePaths}",
-                "${workspaceFolder}/miosix-kernel/miosix/arch/cortexM7_stm32f7/common",
-                "${workspaceFolder}/miosix-kernel/miosix/arch/cortexM7_stm32f7/stm32f767zi_nucleo",
-                "${workspaceFolder}/miosix-kernel/miosix/config/arch/cortexM7_stm32f7/stm32f767zi_nucleo"
+                "${workspaceFolder}/code/miosix-kernel/miosix/arch/cortexM7_stm32f7/common",
+                "${workspaceFolder}/code/miosix-kernel/miosix/arch/cortexM7_stm32f7/stm32f767zi_nucleo",
+                "${workspaceFolder}/code/miosix-kernel/miosix/config/arch/cortexM7_stm32f7/stm32f767zi_nucleo"
             ]
         },
         {
@@ -160,9 +160,9 @@
             ],
             "includePath": [
                 "${defaultIncludePaths}",
-                "${workspaceFolder}/miosix-kernel/miosix/arch/cortexM7_stm32f7/common",
-                "${workspaceFolder}/miosix-kernel/miosix/arch/cortexM7_stm32f7/stm32f769ni_discovery",
-                "${workspaceFolder}/miosix-kernel/miosix/config/arch/cortexM7_stm32f7/stm32f769ni_discovery"
+                "${workspaceFolder}/code/miosix-kernel/miosix/arch/cortexM7_stm32f7/common",
+                "${workspaceFolder}/code/miosix-kernel/miosix/arch/cortexM7_stm32f7/stm32f769ni_discovery",
+                "${workspaceFolder}/code/miosix-kernel/miosix/config/arch/cortexM7_stm32f7/stm32f769ni_discovery"
             ]
         }
     ],
