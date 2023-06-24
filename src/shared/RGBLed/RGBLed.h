@@ -6,6 +6,13 @@
 
 class RGBLed {
 public:
+    struct Color {
+        uint8_t red;
+        uint8_t green;
+        uint8_t blue;
+        uint8_t white;
+    };
+
     RGBLed()
         : spi(SPI2, DMAStreamId::DMA1_Str4, DMATransaction::Channel::CHANNEL0,
               DMAStreamId::DMA1_Str3, DMATransaction::Channel::CHANNEL0),
@@ -19,12 +26,12 @@ public:
         spi.configure(config);
     }
 
-    void setColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t white) {
+    void setColor(Color color) {
         uint32_t data[] = {
-            computeIntensity(green),
-            computeIntensity(red),
-            computeIntensity(blue),
-            computeIntensity(white),
+            computeIntensity(color.green),
+            computeIntensity(color.red),
+            computeIntensity(color.blue),
+            computeIntensity(color.white),
             0x0,
         };
 
