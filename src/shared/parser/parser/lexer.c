@@ -1,7 +1,7 @@
-#line 2 "/home/alberton/Desktop/signal-generator/src/shared/parser/lexer.c"
+#line 1 "/Users/alberton/Desktop/signal-generator/src/shared/parser/parser/lexer.c"
     #include "parser.h"
 
-#line 5 "/home/alberton/Desktop/signal-generator/src/shared/parser/lexer.c"
+#line 4 "/Users/alberton/Desktop/signal-generator/src/shared/parser/parser/lexer.c"
 
 #define  YY_INT_ALIGNED short int
 
@@ -48,6 +48,7 @@ typedef int16_t flex_int16_t;
 typedef uint16_t flex_uint16_t;
 typedef int32_t flex_int32_t;
 typedef uint32_t flex_uint32_t;
+typedef uint64_t flex_uint64_t;
 #else
 typedef signed char flex_int8_t;
 typedef short int flex_int16_t;
@@ -156,7 +157,7 @@ typedef struct yy_buffer_state *YY_BUFFER_STATE;
 typedef size_t yy_size_t;
 #endif
 
-extern int yyleng;
+extern yy_size_t yyleng;
 
 extern FILE *yyin, *yyout;
 
@@ -199,7 +200,7 @@ struct yy_buffer_state
 	/* Number of characters read into yy_ch_buf, not including EOB
 	 * characters.
 	 */
-	int yy_n_chars;
+	yy_size_t yy_n_chars;
 
 	/* Whether we "own" the buffer - i.e., we know we created it,
 	 * and can realloc() it to grow it, and should free() it to
@@ -268,8 +269,8 @@ static YY_BUFFER_STATE * yy_buffer_stack = NULL; /**< Stack as an array. */
 
 /* yy_hold_char holds the character lost when yytext is formed. */
 static char yy_hold_char;
-static int yy_n_chars;		/* number of characters read into yy_ch_buf */
-int yyleng;
+static yy_size_t yy_n_chars;		/* number of characters read into yy_ch_buf */
+yy_size_t yyleng;
 
 /* Points to current character in buffer. */
 static char *yy_c_buf_p = NULL;
@@ -296,7 +297,7 @@ static void yy_init_buffer ( YY_BUFFER_STATE b, FILE *file  );
 
 YY_BUFFER_STATE yy_scan_buffer ( char *base, yy_size_t size  );
 YY_BUFFER_STATE yy_scan_string ( const char *yy_str  );
-YY_BUFFER_STATE yy_scan_bytes ( const char *bytes, int len  );
+YY_BUFFER_STATE yy_scan_bytes ( const char *bytes, yy_size_t len  );
 
 void *yyalloc ( yy_size_t  );
 void *yyrealloc ( void *, yy_size_t  );
@@ -350,12 +351,12 @@ static void yynoreturn yy_fatal_error ( const char* msg  );
  */
 #define YY_DO_BEFORE_ACTION \
 	(yytext_ptr) = yy_bp; \
-	yyleng = (int) (yy_cp - yy_bp); \
+	yyleng = (yy_size_t) (yy_cp - yy_bp); \
 	(yy_hold_char) = *yy_cp; \
 	*yy_cp = '\0'; \
 	(yy_c_buf_p) = yy_cp;
-#define YY_NUM_RULES 14
-#define YY_END_OF_BUFFER 15
+#define YY_NUM_RULES 15
+#define YY_END_OF_BUFFER 16
 /* This struct is not used in this scanner,
    but its presence is necessary. */
 struct yy_trans_info
@@ -363,12 +364,12 @@ struct yy_trans_info
 	flex_int32_t yy_verify;
 	flex_int32_t yy_nxt;
 	};
-static const flex_int16_t yy_accept[32] =
+static const flex_int16_t yy_accept[33] =
     {   0,
-        0,    0,   15,   14,    4,    5,    8,    6,    7,    9,
-       13,   14,   14,   14,    0,   13,   10,    0,    0,    0,
-       13,    1,    0,    0,    0,    2,    0,    3,   12,   11,
-        0
+        0,    0,   16,   15,    4,    5,    8,    6,    7,    9,
+       14,   10,   15,   15,   15,    0,   14,   11,    0,    0,
+        0,   14,    1,    0,    0,    0,    2,    0,    3,   13,
+       12,    0
     } ;
 
 static const YY_CHAR yy_ec[256] =
@@ -379,13 +380,13 @@ static const YY_CHAR yy_ec[256] =
         1,    1,    1,    1,    1,    1,    1,    1,    1,    2,
         3,    4,    5,    1,    6,    7,    8,    9,    9,    9,
         9,    9,    9,    9,    9,    9,    9,    1,    1,    1,
-        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    1,    1,    1,    1,    1,   10,    1,    1,    1,
+       10,    1,    1,    1,   11,    1,    1,    1,   12,    1,
+        1,    1,   13,    1,    1,    1,    1,   14,   15,   16,
+        1,   17,   18,   19,    1,    1,    1,    1,    1,    1,
+        1,    1,    1,    1,    1,    1,   20,    1,    1,    1,
 
-       11,    1,    1,    1,   12,    1,    1,    1,    1,   13,
-       14,   15,    1,   16,   17,   18,    1,    1,    1,    1,
+       21,    1,    1,    1,   22,    1,    1,    1,    1,   23,
+       24,   25,    1,   26,   27,   28,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
@@ -403,46 +404,57 @@ static const YY_CHAR yy_ec[256] =
         1,    1,    1,    1,    1
     } ;
 
-static const YY_CHAR yy_meta[19] =
+static const YY_CHAR yy_meta[29] =
     {   0,
+        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1
     } ;
 
-static const flex_int16_t yy_base[32] =
+static const flex_int16_t yy_base[33] =
     {   0,
-        0,    0,   38,   39,   39,   39,   39,   39,   39,   39,
-       12,   25,    8,   20,   26,   15,   39,   21,   17,   21,
-       23,   39,   14,   14,   10,   39,    5,   39,   39,   39,
-       39
+        0,    0,   55,   63,   63,   63,   63,   63,   63,   63,
+       22,   63,   17,   19,   16,   34,   27,   63,   21,   37,
+       24,   31,   63,   28,   34,   35,   63,   34,   63,   63,
+       63,   63
     } ;
 
-static const flex_int16_t yy_def[32] =
+static const flex_int16_t yy_def[33] =
     {   0,
-       31,    1,   31,   31,   31,   31,   31,   31,   31,   31,
-       31,   31,   31,   31,   31,   31,   31,   31,   31,   31,
-       31,   31,   31,   31,   31,   31,   31,   31,   31,   31,
-        0
+       32,    1,   32,   32,   32,   32,   32,   32,   32,   32,
+       32,   32,   32,   32,   32,   32,   32,   32,   32,   32,
+       32,   32,   32,   32,   32,   32,   32,   32,   32,   32,
+       32,    0
     } ;
 
-static const flex_int16_t yy_nxt[58] =
+static const flex_int16_t yy_nxt[92] =
     {   0,
-        4,    5,    6,    7,    8,    9,    4,   10,   11,    4,
-        4,    4,    4,    4,   12,    4,   13,   14,   15,   18,
-       16,   15,   30,   16,   29,   19,   23,   24,   28,   27,
-       25,   21,   26,   22,   21,   20,   17,   31,    3,   31,
-       31,   31,   31,   31,   31,   31,   31,   31,   31,   31,
-       31,   31,   31,   31,   31,   31,   31
+        4,    5,    6,    7,    8,    9,    4,   10,   11,   12,
+        4,    4,    4,    4,    4,   13,    4,   14,   15,    4,
+        4,    4,    4,    4,   13,    4,   14,   15,   16,   18,
+       17,   19,   21,   16,   23,   17,   27,   20,   18,   22,
+       19,   21,   22,   23,   28,   27,   20,   24,   25,   29,
+       30,   26,   31,   28,   32,   32,   24,   25,   29,   30,
+       26,   31,    3,   32,   32,   32,   32,   32,   32,   32,
+       32,   32,   32,   32,   32,   32,   32,   32,   32,   32,
+       32,   32,   32,   32,   32,   32,   32,   32,   32,   32,
+       32
+
     } ;
 
-static const flex_int16_t yy_chk[58] =
+static const flex_int16_t yy_chk[92] =
     {   0,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
+        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,   11,   13,
-       11,   16,   27,   16,   25,   13,   19,   19,   24,   23,
-       19,   21,   20,   18,   15,   14,   12,    3,   31,   31,
-       31,   31,   31,   31,   31,   31,   31,   31,   31,   31,
-       31,   31,   31,   31,   31,   31,   31
+       11,   14,   15,   17,   19,   17,   21,   14,   13,   22,
+       14,   15,   16,   19,   24,   21,   14,   20,   20,   25,
+       26,   20,   28,   24,    3,    0,   20,   20,   25,   26,
+       20,   28,   32,   32,   32,   32,   32,   32,   32,   32,
+       32,   32,   32,   32,   32,   32,   32,   32,   32,   32,
+       32,   32,   32,   32,   32,   32,   32,   32,   32,   32,
+       32
+
     } ;
 
 static yy_state_type yy_last_accepting_state;
@@ -459,10 +471,10 @@ int yy_flex_debug = 0;
 #define YY_MORE_ADJ 0
 #define YY_RESTORE_YY_MORE_OFFSET
 char *yytext;
-#line 1 "/home/alberton/Desktop/signal-generator/src/shared/parser/lexer.l"
+#line 1 "/Users/alberton/Desktop/signal-generator/src/shared/parser/lexer.l"
 /* Flex file */
 
-#line 466 "/home/alberton/Desktop/signal-generator/src/shared/parser/lexer.c"
+#line 477 "/Users/alberton/Desktop/signal-generator/src/shared/parser/parser/lexer.c"
 
 #define INITIAL 0
 
@@ -501,7 +513,7 @@ FILE *yyget_out ( void );
 
 void yyset_out  ( FILE * _out_str  );
 
-			int yyget_leng ( void );
+			yy_size_t yyget_leng ( void );
 
 char *yyget_text ( void );
 
@@ -570,7 +582,7 @@ static int input ( void );
 	if ( YY_CURRENT_BUFFER_LVALUE->yy_is_interactive ) \
 		{ \
 		int c = '*'; \
-		int n; \
+		yy_size_t n; \
 		for ( n = 0; n < max_size && \
 			     (c = getc( yyin )) != EOF && c != '\n'; ++n ) \
 			buf[n] = (char) c; \
@@ -679,10 +691,10 @@ YY_DECL
 		}
 
 	{
-#line 8 "/home/alberton/Desktop/signal-generator/src/shared/parser/lexer.l"
+#line 9 "/Users/alberton/Desktop/signal-generator/src/shared/parser/lexer.l"
 
 
-#line 686 "/home/alberton/Desktop/signal-generator/src/shared/parser/lexer.c"
+#line 697 "/Users/alberton/Desktop/signal-generator/src/shared/parser/parser/lexer.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -709,13 +721,13 @@ yy_match:
 			while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 				{
 				yy_current_state = (int) yy_def[yy_current_state];
-				if ( yy_current_state >= 32 )
+				if ( yy_current_state >= 33 )
 					yy_c = yy_meta[yy_c];
 				}
 			yy_current_state = yy_nxt[yy_base[yy_current_state] + yy_c];
 			++yy_cp;
 			}
-		while ( yy_base[yy_current_state] != 39 );
+		while ( yy_base[yy_current_state] != 63 );
 
 yy_find_action:
 		yy_act = yy_accept[yy_current_state];
@@ -741,78 +753,83 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 10 "/home/alberton/Desktop/signal-generator/src/shared/parser/lexer.l"
+#line 11 "/Users/alberton/Desktop/signal-generator/src/shared/parser/lexer.l"
 { return SIN; }
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 11 "/home/alberton/Desktop/signal-generator/src/shared/parser/lexer.l"
+#line 12 "/Users/alberton/Desktop/signal-generator/src/shared/parser/lexer.l"
 { return TRI; }
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 12 "/home/alberton/Desktop/signal-generator/src/shared/parser/lexer.l"
+#line 13 "/Users/alberton/Desktop/signal-generator/src/shared/parser/lexer.l"
 { return STEP; }
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 14 "/home/alberton/Desktop/signal-generator/src/shared/parser/lexer.l"
+#line 15 "/Users/alberton/Desktop/signal-generator/src/shared/parser/lexer.l"
 { return LPAR; }
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 15 "/home/alberton/Desktop/signal-generator/src/shared/parser/lexer.l"
+#line 16 "/Users/alberton/Desktop/signal-generator/src/shared/parser/lexer.l"
 { return RPAR; }
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 17 "/home/alberton/Desktop/signal-generator/src/shared/parser/lexer.l"
+#line 18 "/Users/alberton/Desktop/signal-generator/src/shared/parser/lexer.l"
 { return ADD_OP; }
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 18 "/home/alberton/Desktop/signal-generator/src/shared/parser/lexer.l"
+#line 19 "/Users/alberton/Desktop/signal-generator/src/shared/parser/lexer.l"
 { return SUB_OP; }
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 19 "/home/alberton/Desktop/signal-generator/src/shared/parser/lexer.l"
+#line 20 "/Users/alberton/Desktop/signal-generator/src/shared/parser/lexer.l"
 { return MUL_OP; }
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 20 "/home/alberton/Desktop/signal-generator/src/shared/parser/lexer.l"
+#line 21 "/Users/alberton/Desktop/signal-generator/src/shared/parser/lexer.l"
 { return DIV_OP; }
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 22 "/home/alberton/Desktop/signal-generator/src/shared/parser/lexer.l"
-{ return PI; }
+#line 23 "/Users/alberton/Desktop/signal-generator/src/shared/parser/lexer.l"
+{ return ASSIGN; }
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 24 "/home/alberton/Desktop/signal-generator/src/shared/parser/lexer.l"
-{ return START; }
+#line 25 "/Users/alberton/Desktop/signal-generator/src/shared/parser/lexer.l"
+{ return PI; }
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 25 "/home/alberton/Desktop/signal-generator/src/shared/parser/lexer.l"
-{ return STOP; }
+#line 27 "/Users/alberton/Desktop/signal-generator/src/shared/parser/lexer.l"
+{ return START; }
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 27 "/home/alberton/Desktop/signal-generator/src/shared/parser/lexer.l"
+#line 28 "/Users/alberton/Desktop/signal-generator/src/shared/parser/lexer.l"
+{ return STOP; }
+	YY_BREAK
+case 14:
+YY_RULE_SETUP
+#line 30 "/Users/alberton/Desktop/signal-generator/src/shared/parser/lexer.l"
 {
     yylval.numeric_value = atof(yytext);
     return(NUMBER);
 }
 	YY_BREAK
-case 14:
+case 15:
 YY_RULE_SETUP
-#line 31 "/home/alberton/Desktop/signal-generator/src/shared/parser/lexer.l"
+#line 34 "/Users/alberton/Desktop/signal-generator/src/shared/parser/lexer.l"
 ECHO;
 	YY_BREAK
-#line 816 "/home/alberton/Desktop/signal-generator/src/shared/parser/lexer.c"
+#line 832 "/Users/alberton/Desktop/signal-generator/src/shared/parser/parser/lexer.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -999,7 +1016,7 @@ static int yy_get_next_buffer (void)
 
 	else
 		{
-			int num_to_read =
+			yy_size_t num_to_read =
 			YY_CURRENT_BUFFER_LVALUE->yy_buf_size - number_to_move - 1;
 
 		while ( num_to_read <= 0 )
@@ -1013,7 +1030,7 @@ static int yy_get_next_buffer (void)
 
 			if ( b->yy_is_our_buffer )
 				{
-				int new_size = b->yy_buf_size * 2;
+				yy_size_t new_size = b->yy_buf_size * 2;
 
 				if ( new_size <= 0 )
 					b->yy_buf_size += b->yy_buf_size / 8;
@@ -1071,7 +1088,7 @@ static int yy_get_next_buffer (void)
 
 	if (((yy_n_chars) + number_to_move) > YY_CURRENT_BUFFER_LVALUE->yy_buf_size) {
 		/* Extend the array by 50%, plus the number we really need. */
-		int new_size = (yy_n_chars) + number_to_move + ((yy_n_chars) >> 1);
+		yy_size_t new_size = (yy_n_chars) + number_to_move + ((yy_n_chars) >> 1);
 		YY_CURRENT_BUFFER_LVALUE->yy_ch_buf = (char *) yyrealloc(
 			(void *) YY_CURRENT_BUFFER_LVALUE->yy_ch_buf, (yy_size_t) new_size  );
 		if ( ! YY_CURRENT_BUFFER_LVALUE->yy_ch_buf )
@@ -1109,7 +1126,7 @@ static int yy_get_next_buffer (void)
 		while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 			{
 			yy_current_state = (int) yy_def[yy_current_state];
-			if ( yy_current_state >= 32 )
+			if ( yy_current_state >= 33 )
 				yy_c = yy_meta[yy_c];
 			}
 		yy_current_state = yy_nxt[yy_base[yy_current_state] + yy_c];
@@ -1137,11 +1154,11 @@ static int yy_get_next_buffer (void)
 	while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 		{
 		yy_current_state = (int) yy_def[yy_current_state];
-		if ( yy_current_state >= 32 )
+		if ( yy_current_state >= 33 )
 			yy_c = yy_meta[yy_c];
 		}
 	yy_current_state = yy_nxt[yy_base[yy_current_state] + yy_c];
-	yy_is_jam = (yy_current_state == 31);
+	yy_is_jam = (yy_current_state == 32);
 
 		return yy_is_jam ? 0 : yy_current_state;
 }
@@ -1160,7 +1177,7 @@ static int yy_get_next_buffer (void)
 	if ( yy_cp < YY_CURRENT_BUFFER_LVALUE->yy_ch_buf + 2 )
 		{ /* need to shift things up to make room */
 		/* +2 for EOB chars. */
-		int number_to_move = (yy_n_chars) + 2;
+		yy_size_t number_to_move = (yy_n_chars) + 2;
 		char *dest = &YY_CURRENT_BUFFER_LVALUE->yy_ch_buf[
 					YY_CURRENT_BUFFER_LVALUE->yy_buf_size + 2];
 		char *source =
@@ -1211,7 +1228,7 @@ static int yy_get_next_buffer (void)
 
 		else
 			{ /* need more input */
-			int offset = (int) ((yy_c_buf_p) - (yytext_ptr));
+			yy_size_t offset = (yy_c_buf_p) - (yytext_ptr);
 			++(yy_c_buf_p);
 
 			switch ( yy_get_next_buffer(  ) )
@@ -1580,12 +1597,12 @@ YY_BUFFER_STATE yy_scan_string (const char * yystr )
  * 
  * @return the newly allocated buffer state object.
  */
-YY_BUFFER_STATE yy_scan_bytes  (const char * yybytes, int  _yybytes_len )
+YY_BUFFER_STATE yy_scan_bytes  (const char * yybytes, yy_size_t  _yybytes_len )
 {
 	YY_BUFFER_STATE b;
 	char *buf;
 	yy_size_t n;
-	int i;
+	yy_size_t i;
     
 	/* Get memory for full buffer, including space for trailing EOB's. */
 	n = (yy_size_t) (_yybytes_len + 2);
@@ -1627,7 +1644,7 @@ static void yynoreturn yy_fatal_error (const char* msg )
 	do \
 		{ \
 		/* Undo effects of setting up yytext. */ \
-        int yyless_macro_arg = (n); \
+        yy_size_t yyless_macro_arg = (n); \
         YY_LESS_LINENO(yyless_macro_arg);\
 		yytext[yyleng] = (yy_hold_char); \
 		(yy_c_buf_p) = yytext + yyless_macro_arg; \
@@ -1667,7 +1684,7 @@ FILE *yyget_out  (void)
 /** Get the length of the current token.
  * 
  */
-int yyget_leng  (void)
+yy_size_t yyget_leng  (void)
 {
         return yyleng;
 }
@@ -1817,4 +1834,4 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 31 "/home/alberton/Desktop/signal-generator/src/shared/parser/lexer.l"
+#line 34 "/Users/alberton/Desktop/signal-generator/src/shared/parser/lexer.l"

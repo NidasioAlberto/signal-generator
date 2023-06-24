@@ -35,10 +35,21 @@ function(mbs_custom_target TARGET OPT_BOARD)
         $<$<STREQUAL:${ARCH},cortexM3_stm32f2>:src/shared/drivers/spi/SPITransaction.cpp>
         $<$<STREQUAL:${ARCH},cortexM4_stm32f4>:src/shared/drivers/spi/SPITransaction.cpp>
         $<$<STREQUAL:${ARCH},cortexM4_stm32f7>:src/shared/drivers/spi/SPITransaction.cpp>
-            
+
+        src/shared/parser/Parser.cpp    
     )
     mbs_target(${TARGET} ${OPT_BOARD})
 endfunction()
+
+#-----------------------------------------------------------------------------#
+#                               Flex and Bison                                #
+#-----------------------------------------------------------------------------#
+
+set(PARSER_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/parser)
+flex_target(LEXER src/shared/parser/lexer.l ${PARSER_DIR}/parser/lexer.c DEFINES_FILE ${PARSER_DIR}/parser/lexer.h)
+bison_target(PARSER src/shared/parser/parser.y ${PARSER_DIR}/parser/parser.c DEFINES_FILE ${PARSER_DIR}/parser/parser.h)
+set_source_files_properties(${PARSER_DIR}/parser/lexer.c PROPERTIES LANGUAGE CXX)
+set_source_files_properties(${PARSER_DIR}/parser/parser.c PROPERTIES LANGUAGE CXX)
 
 #-----------------------------------------------------------------------------#
 #                                   Tests                                     #
@@ -59,14 +70,9 @@ mbs_custom_target(hello-world stm32f205rc_signal_generator)
 add_executable(test-rgb-led src/entrypoints/test-rgb-led.cpp)
 mbs_custom_target(test-rgb-led stm32f205rc_signal_generator)
 
-set(PARSER_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/parser)
-flex_target(LEXER src/shared/parser/lexer.l ${PARSER_DIR}/lexer.c DEFINES_FILE ${PARSER_DIR}/lexer.h)
-bison_target(PARSER src/shared/parser/parser.y ${PARSER_DIR}/parser.c DEFINES_FILE ${PARSER_DIR}/parser.h)
-set_source_files_properties(${PARSER_DIR}/lexer.c PROPERTIES LANGUAGE CXX)
-set_source_files_properties(${PARSER_DIR}/parser.c PROPERTIES LANGUAGE CXX)
-add_executable(parser
-    src/entrypoints/parser.cpp
-    ${PARSER_DIR}/lexer.c
-    ${PARSER_DIR}/parser.c
+add_executable(signal-generator
+    src/entrypoints/signal-generator.cpp
+    ${PARSER_DIR}/parser/lexer.c
+    ${PARSER_DIR}/parser/parser.c
 )
-mbs_custom_target(parser stm32f205rc_signal_generator)
+mbs_custom_target(signal-generator stm32f205rc_signal_generator)

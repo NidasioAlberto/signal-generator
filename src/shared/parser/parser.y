@@ -1,7 +1,7 @@
 /* Bison file */
 
 %code requires {
-#include "parser_types.h"
+#include "parser/parser_types.h"
 }
 
 %{
@@ -29,24 +29,38 @@ extern int yylex(void);
 
 %token ADD_OP SUB_OP MUL_OP DIV_OP
 
+%token ASSIGN
+
 %token PI
 
 %token START STOP
 
 %token <numeric_value> NUMBER
 %type <exp> exp
+%type <numeric_value> start_cmd stop_cmd
 
 %%
 
-start : exp {
+start : NUMBER ASSIGN exp {
             (*ret).type = CommandType::EXPRESSION;
-            (*ret).exp = $1;
+            (*ret).exp = $3;
+            (*ret).channel = $1;
         } |
-        START {
+        start_cmd {
             (*ret).type = CommandType::START;
+            (*ret).channel = $1;
         } |
-        STOP {
+        stop_cmd {
             (*ret).type = CommandType::STOP;
+            (*ret).channel = $1;
+        }
+
+start_cmd : START NUMBER {
+            $$ = $2;
+        }
+
+stop_cmd : STOP NUMBER {
+            $$ = $2;
         }
 
 exp : NUMBER {

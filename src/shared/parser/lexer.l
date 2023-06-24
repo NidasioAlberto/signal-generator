@@ -1,5 +1,6 @@
 /* Flex file */
 %option noyywrap
+%option caseless
 
 %top{
     #include "parser.h"
@@ -18,6 +19,8 @@
 "-"     { return SUB_OP; }
 "*"     { return MUL_OP; }
 "/"     { return DIV_OP; }
+
+"="     { return ASSIGN; }
 
 "pi"    { return PI; }
 

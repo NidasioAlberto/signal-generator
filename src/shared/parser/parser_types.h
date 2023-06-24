@@ -67,6 +67,7 @@ enum class CommandType {
 struct Command {
     CommandType type;
     Expression *exp = nullptr;
+    int channel = -1;
 
     ~Command() {
         if (type == CommandType::EXPRESSION) {
