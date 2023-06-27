@@ -80,20 +80,20 @@ struct DMATransaction {
     enum class DataSize : uint8_t {
         BITS_8,
         BITS_16,
-        BIT_32,
+        BITS_32,
     };
 
     Channel channel = Channel::CHANNEL0;
     Direction direction = Direction::MEM_TO_MEM;
     Priority priority = Priority::LOW;
-    DataSize srcSize = DataSize::BIT_32;
-    DataSize dstSize = DataSize::BIT_32;
+    DataSize srcSize = DataSize::BITS_32;
+    DataSize dstSize = DataSize::BITS_32;
     volatile void* srcAddress = nullptr;
     volatile void* dstAddress = nullptr;
     volatile void* secondMemoryAddress = nullptr;
     uint16_t numberOfDataItems = 0;
-    bool sourceIncrement = false;
-    bool destinationIncrement = false;
+    bool srcIncrement = false;
+    bool dstIncrement = false;
     bool circularMode = false;
     bool doubleBufferMode = false;
     bool enableHalfTransferInterrupt = false;

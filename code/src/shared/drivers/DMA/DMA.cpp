@@ -330,9 +330,9 @@ void DMAStream::setup(DMATransaction transaction) {
         registers->CR |= static_cast<uint32_t>(transaction.dstSize)
                          << DMA_SxCR_PSIZE_Pos;
 
-        if (transaction.sourceIncrement)
+        if (transaction.srcIncrement)
             registers->CR |= DMA_SxCR_MINC;
-        if (transaction.destinationIncrement)
+        if (transaction.dstIncrement)
             registers->CR |= DMA_SxCR_PINC;
 
         registers->M0AR = reinterpret_cast<uint32_t>(transaction.srcAddress);
@@ -347,9 +347,9 @@ void DMAStream::setup(DMATransaction transaction) {
         registers->CR |= static_cast<uint32_t>(transaction.dstSize)
                          << DMA_SxCR_MSIZE_Pos;
 
-        if (transaction.sourceIncrement)
+        if (transaction.srcIncrement)
             registers->CR |= DMA_SxCR_PINC;
-        if (transaction.destinationIncrement)
+        if (transaction.dstIncrement)
             registers->CR |= DMA_SxCR_MINC;
 
         registers->PAR = reinterpret_cast<uint32_t>(transaction.srcAddress);

@@ -87,15 +87,10 @@ void DACDriver::disableBuffer(Channel channel) {
 }
 
 void DACDriver::enableTrigger(Channel channel, TriggerSource source) {
-    // Prevent other threads or interrupts to access the DAC registers while
-    // configuring
-    FastInterruptDisableLock l;
-
     // We need to:
     // - First disable the trigger before changing the TSEL bits
     // - Change the trigger source (TSEL bits)
     // - Enable the trigger source
-
     if (channel == Channel::CH1) {
         DAC->CR &= ~DAC_CR_TEN1;
         DAC->CR &= ~DAC_CR_TSEL1;

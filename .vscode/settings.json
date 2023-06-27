@@ -165,6 +165,7 @@
         "TSEL",
         "TXSR",
         "USBEN",
+        "Vbat",
         "WWDG",
         "XRAM"
     ]

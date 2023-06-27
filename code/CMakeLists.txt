@@ -58,6 +58,9 @@ set_source_files_properties(${PARSER_DIR}/parser/parser.c PROPERTIES LANGUAGE CX
 add_executable(adc-dac src/entrypoints/adc-dac.cpp)
 mbs_custom_target(adc-dac stm32f205rc_signal_generator)
 
+add_executable(adc-dma src/entrypoints/adc-dma.cpp)
+mbs_custom_target(adc-dma stm32f205rc_signal_generator)
+
 add_executable(dac-dma-timer src/entrypoints/dac-dma-timer.cpp)
 mbs_custom_target(dac-dma-timer stm32f205rc_signal_generator)
 

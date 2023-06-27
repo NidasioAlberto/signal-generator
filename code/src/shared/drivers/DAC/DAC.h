@@ -30,7 +30,9 @@
 #include <interfaces/arch_registers.h>
 
 /**
- * Driver for the DAC peripheral in STM32F4 microcontrollers.
+ * @brief Driver for the DAC peripheral in STM32 microcontrollers.
+ *
+ * @warning The driver have been tested on f205 only.
  */
 class DACDriver {
 public:
@@ -51,43 +53,38 @@ public:
         SWTRIG = 0x7 << DAC_CR_TSEL1_Pos
     };
 
-    /**
-     * @brief Enables one channel of the DAC.
-     *
-     * @param channel Channel number, must be either 1 or 2.
-     * @return True if the channel was enabled.
-     */
     void enableChannel(Channel channel);
 
-    /**
-     * @brief Disables one channel of the DAC.
-     *
-     * @param channel Channel number, must be either 1 or 2.
-     * @return True if the channel was disabled.
-     */
     void disableChannel(Channel channel);
 
     /**
-     * @brief Set the channel output voltage
+     * @brief Set the channel output voltage.
      *
-     * @param voltage On most boards the output is between 0V and 3V
-     * @param channel Channel number, must be either 1 or 2.
-     * @return True if the output voltage was changed.
+     * This internally accounts for the board's analog power supply voltage.
+     * The user need to provide the voltage in Volts.
+     *
+     * @param voltage On most boards the output is between 0V and 3V.
+     * @param channel Channel number.
      */
     void setChannel(Channel channel, float voltage);
 
     /**
      * @brief Enables the internal output buffer.
      *
-     * @param channel Channel number, must be either 1 or 2.
-     * @return True if the output buffer was enabled.
+     * The DAC provide two output buffer, one on each channel. The buffer allows
+     * to reduce the output impedance and drive higher loads directly without
+     * having to add an external op-amp.
+     *
+     * @param channel Channel number.
      */
     void enableBuffer(Channel channel);
 
     /**
      * @brief Disables the internal output buffer.
      *
-     * @param channel Channel number, must be either 1 or 2.
+     * See enableBuffer() for more details.
+     *
+     * @param channel Channel number.
      * @return True if the output buffer was disabled.
      */
     void disableBuffer(Channel channel);
@@ -98,7 +95,7 @@ public:
      * This function allows to set and change the trigger source. It first
      * disables the trigger, changes the source and then re-enables it.
      *
-     * @param channel Channel number, must be either 1 or 2.
+     * @param channel Channel number.
      * @param source Trigger source to be set.
      * @return True if the output buffer was disabled.
      */
@@ -108,7 +105,7 @@ public:
     /**
      * @brief Disables the external trigger.
      *
-     * @param channel Channel number, must be either 1 or 2.
+     * @param channel Channel number.
      * @return True if the output buffer was disabled.
      */
     void disableTrigger(Channel channel);
@@ -118,7 +115,7 @@ public:
      *
      * The new DAC conversion starts one APB clock cycle after the trigger.
      *
-     * @param channel Channel number, must be either 1 or 2.
+     * @param channel Channel number.
      * @return True if the output buffer was disabled.
      */
     void dispatchSoftwareTrigger(Channel channel);
@@ -143,7 +140,7 @@ public:
      * @see DACDriver::enableTrigger to change the trigger source.
      * @see DACDriver::dispatchSoftwareTrigger to trigger an event.
      *
-     * @param channel Channel number, must be either 1 or 2.
+     * @param channel Channel number.
      * @param source Trigger source to be set. Software trigger by default.
      * @return True if the output buffer was disabled.
      */
@@ -171,9 +168,8 @@ public:
      * @see DACDriver::enableTrigger to change the trigger source.
      * @see DACDriver::dispatchSoftwareTrigger to trigger an event.
      *
-     * @param channel Channel number, must be either 1 or 2.
+     * @param channel Channel number.
      * @param source Trigger source to be set. Software trigger by default.
-     * @return True if the output buffer was disabled.
      */
     void enableTriangularWaveGeneration(
         Channel channel, TriggerSource source = TriggerSource::SWTRIG);
@@ -183,8 +179,7 @@ public:
      *
      * @warning Also disables the trigger source.
      *
-     * @param channel Channel number, must be either 1 or 2.
-     * @return True if the output buffer was disabled.
+     * @param channel Channel number.
      */
     void disableWaveGenerator(Channel channel);
 
@@ -198,7 +193,7 @@ public:
      * - ...
      * - bits =  1: Only the first bit is masked -> Amplitude = V_DDA / 4096
      *
-     * @param channel Channel number, must be either 1 or 2.
+     * @param channel Channel number.
      * @param bits Bits to mask, must be between 1 and 12.
      * @return True if the output buffer was disabled.
      */
@@ -215,9 +210,8 @@ public:
      * @warning If you measure the wave non correctly center, measure your V_DDA
      * actual value.
      *
-     * @param channel Channel number, must be either 1 or 2.
+     * @param channel Channel number.
      * @param voltage Voltage value to center the wave output.
-     * @return True if the output buffer was disabled.
      */
     void centerWaveOutput(Channel channel, float voltage);
 
@@ -227,16 +221,14 @@ public:
      * When the DMA is enabled, a new DMA request is generated when an external
      * trigger (but not a software trigger) occurs.
      *
-     * @param channel Channel number, must be either 1 or 2.
-     * @return True if the output buffer was enabled.
+     * @param channel Channel number.
      */
     void enableDMA(Channel channel);
 
     /**
      * @brief Disables DMA on the specified channel.
      *
-     * @param channel Channel number, must be either 1 or 2.
-     * @return True if the output buffer was enabled.
+     * @param channel Channel number.
      */
     void disableDMA(Channel channel);
 };

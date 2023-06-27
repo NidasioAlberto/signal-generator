@@ -121,7 +121,7 @@ public:
             .dstAddress = dacDstAddress,
             .secondMemoryAddress = ctrlData.buffer2,
             .numberOfDataItems = buffersSize,
-            .sourceIncrement = true,
+            .srcIncrement = true,
             .circularMode = true,
             .doubleBufferMode = true,
             .enableTransferCompleteInterrupt = true,

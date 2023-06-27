@@ -67,7 +67,7 @@
 
 
 /* First part of user prologue.  */
-#line 7 "/home/alberton/Desktop/signal-generator/code/src/shared/parser/parser.y"
+#line 7 "/Users/alberton/Desktop/signal-generator/code/src/shared/parser/parser.y"
 
 #include "parser.h"
 #include <stdio.h>
@@ -77,7 +77,7 @@
 extern void yyerror(Command *command, char *message);
 extern int yylex(void);
 
-#line 81 "/home/alberton/Desktop/signal-generator/code/src/shared/parser/parser/parser.c"
+#line 81 "/Users/alberton/Desktop/signal-generator/code/src/shared/parser/parser/parser.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -1095,123 +1095,123 @@ yyreduce:
   switch (yyn)
     {
   case 2: /* start: NUMBER ASSIGN exp  */
-#line 44 "/home/alberton/Desktop/signal-generator/code/src/shared/parser/parser.y"
+#line 44 "/Users/alberton/Desktop/signal-generator/code/src/shared/parser/parser.y"
                           {
             (*ret).type = CommandType::EXPRESSION;
             (*ret).exp = (yyvsp[0].exp);
             (*ret).channel = (yyvsp[-2].numeric_value);
         }
-#line 1105 "/home/alberton/Desktop/signal-generator/code/src/shared/parser/parser/parser.c"
+#line 1105 "/Users/alberton/Desktop/signal-generator/code/src/shared/parser/parser/parser.c"
     break;
 
   case 3: /* start: start_cmd  */
-#line 49 "/home/alberton/Desktop/signal-generator/code/src/shared/parser/parser.y"
+#line 49 "/Users/alberton/Desktop/signal-generator/code/src/shared/parser/parser.y"
                   {
             (*ret).type = CommandType::START;
             (*ret).channel = (yyvsp[0].numeric_value);
         }
-#line 1114 "/home/alberton/Desktop/signal-generator/code/src/shared/parser/parser/parser.c"
+#line 1114 "/Users/alberton/Desktop/signal-generator/code/src/shared/parser/parser/parser.c"
     break;
 
   case 4: /* start: stop_cmd  */
-#line 53 "/home/alberton/Desktop/signal-generator/code/src/shared/parser/parser.y"
+#line 53 "/Users/alberton/Desktop/signal-generator/code/src/shared/parser/parser.y"
                  {
             (*ret).type = CommandType::STOP;
             (*ret).channel = (yyvsp[0].numeric_value);
         }
-#line 1123 "/home/alberton/Desktop/signal-generator/code/src/shared/parser/parser/parser.c"
+#line 1123 "/Users/alberton/Desktop/signal-generator/code/src/shared/parser/parser/parser.c"
     break;
 
   case 5: /* start_cmd: START NUMBER  */
-#line 58 "/home/alberton/Desktop/signal-generator/code/src/shared/parser/parser.y"
+#line 58 "/Users/alberton/Desktop/signal-generator/code/src/shared/parser/parser.y"
                          {
             (yyval.numeric_value) = (yyvsp[0].numeric_value);
         }
-#line 1131 "/home/alberton/Desktop/signal-generator/code/src/shared/parser/parser/parser.c"
+#line 1131 "/Users/alberton/Desktop/signal-generator/code/src/shared/parser/parser/parser.c"
     break;
 
   case 6: /* stop_cmd: STOP NUMBER  */
-#line 62 "/home/alberton/Desktop/signal-generator/code/src/shared/parser/parser.y"
+#line 62 "/Users/alberton/Desktop/signal-generator/code/src/shared/parser/parser.y"
                        {
             (yyval.numeric_value) = (yyvsp[0].numeric_value);
         }
-#line 1139 "/home/alberton/Desktop/signal-generator/code/src/shared/parser/parser/parser.c"
+#line 1139 "/Users/alberton/Desktop/signal-generator/code/src/shared/parser/parser/parser.c"
     break;
 
   case 7: /* exp: NUMBER  */
-#line 66 "/home/alberton/Desktop/signal-generator/code/src/shared/parser/parser.y"
+#line 66 "/Users/alberton/Desktop/signal-generator/code/src/shared/parser/parser.y"
              {
             (yyval.exp) = new Expression((yyvsp[0].numeric_value));
         }
-#line 1147 "/home/alberton/Desktop/signal-generator/code/src/shared/parser/parser/parser.c"
+#line 1147 "/Users/alberton/Desktop/signal-generator/code/src/shared/parser/parser/parser.c"
     break;
 
   case 8: /* exp: SIN LPAR exp RPAR  */
-#line 69 "/home/alberton/Desktop/signal-generator/code/src/shared/parser/parser.y"
+#line 69 "/Users/alberton/Desktop/signal-generator/code/src/shared/parser/parser.y"
                           {
             (yyval.exp) = new Expression((yyvsp[-1].exp), ExpressionType::SINUSOIDS);
         }
-#line 1155 "/home/alberton/Desktop/signal-generator/code/src/shared/parser/parser/parser.c"
+#line 1155 "/Users/alberton/Desktop/signal-generator/code/src/shared/parser/parser/parser.c"
     break;
 
   case 9: /* exp: TRI LPAR exp RPAR  */
-#line 72 "/home/alberton/Desktop/signal-generator/code/src/shared/parser/parser.y"
+#line 72 "/Users/alberton/Desktop/signal-generator/code/src/shared/parser/parser.y"
                           {
             (yyval.exp) = new Expression((yyvsp[-1].exp), ExpressionType::TRIANGULAR);
         }
-#line 1163 "/home/alberton/Desktop/signal-generator/code/src/shared/parser/parser/parser.c"
+#line 1163 "/Users/alberton/Desktop/signal-generator/code/src/shared/parser/parser/parser.c"
     break;
 
   case 10: /* exp: STEP LPAR exp RPAR  */
-#line 75 "/home/alberton/Desktop/signal-generator/code/src/shared/parser/parser.y"
+#line 75 "/Users/alberton/Desktop/signal-generator/code/src/shared/parser/parser.y"
                            {
             (yyval.exp) = new Expression((yyvsp[-1].exp), ExpressionType::STEP);
         }
-#line 1171 "/home/alberton/Desktop/signal-generator/code/src/shared/parser/parser/parser.c"
+#line 1171 "/Users/alberton/Desktop/signal-generator/code/src/shared/parser/parser/parser.c"
     break;
 
   case 11: /* exp: exp ADD_OP exp  */
-#line 78 "/home/alberton/Desktop/signal-generator/code/src/shared/parser/parser.y"
+#line 78 "/Users/alberton/Desktop/signal-generator/code/src/shared/parser/parser.y"
                        {
             (yyval.exp) = new Expression((yyvsp[-2].exp), (yyvsp[0].exp), ExpressionType::ADD_OP);
         }
-#line 1179 "/home/alberton/Desktop/signal-generator/code/src/shared/parser/parser/parser.c"
+#line 1179 "/Users/alberton/Desktop/signal-generator/code/src/shared/parser/parser/parser.c"
     break;
 
   case 12: /* exp: exp SUB_OP exp  */
-#line 81 "/home/alberton/Desktop/signal-generator/code/src/shared/parser/parser.y"
+#line 81 "/Users/alberton/Desktop/signal-generator/code/src/shared/parser/parser.y"
                        {
             (yyval.exp) = new Expression((yyvsp[-2].exp), (yyvsp[0].exp), ExpressionType::SUB_OP);
         }
-#line 1187 "/home/alberton/Desktop/signal-generator/code/src/shared/parser/parser/parser.c"
+#line 1187 "/Users/alberton/Desktop/signal-generator/code/src/shared/parser/parser/parser.c"
     break;
 
   case 13: /* exp: exp MUL_OP exp  */
-#line 84 "/home/alberton/Desktop/signal-generator/code/src/shared/parser/parser.y"
+#line 84 "/Users/alberton/Desktop/signal-generator/code/src/shared/parser/parser.y"
                        {
             (yyval.exp) = new Expression((yyvsp[-2].exp), (yyvsp[0].exp), ExpressionType::MUL_OP);
         }
-#line 1195 "/home/alberton/Desktop/signal-generator/code/src/shared/parser/parser/parser.c"
+#line 1195 "/Users/alberton/Desktop/signal-generator/code/src/shared/parser/parser/parser.c"
     break;
 
   case 14: /* exp: exp DIV_OP exp  */
-#line 87 "/home/alberton/Desktop/signal-generator/code/src/shared/parser/parser.y"
+#line 87 "/Users/alberton/Desktop/signal-generator/code/src/shared/parser/parser.y"
                        {
             (yyval.exp) = new Expression((yyvsp[-2].exp), (yyvsp[0].exp), ExpressionType::DIV_OP);
         }
-#line 1203 "/home/alberton/Desktop/signal-generator/code/src/shared/parser/parser/parser.c"
+#line 1203 "/Users/alberton/Desktop/signal-generator/code/src/shared/parser/parser/parser.c"
     break;
 
   case 15: /* exp: PI  */
-#line 90 "/home/alberton/Desktop/signal-generator/code/src/shared/parser/parser.y"
+#line 90 "/Users/alberton/Desktop/signal-generator/code/src/shared/parser/parser.y"
            {
             (yyval.exp) = new Expression(M_PI);
         }
-#line 1211 "/home/alberton/Desktop/signal-generator/code/src/shared/parser/parser/parser.c"
+#line 1211 "/Users/alberton/Desktop/signal-generator/code/src/shared/parser/parser/parser.c"
     break;
 
 
-#line 1215 "/home/alberton/Desktop/signal-generator/code/src/shared/parser/parser/parser.c"
+#line 1215 "/Users/alberton/Desktop/signal-generator/code/src/shared/parser/parser/parser.c"
 
       default: break;
     }

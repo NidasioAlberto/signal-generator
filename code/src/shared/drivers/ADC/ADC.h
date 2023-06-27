@@ -30,7 +30,7 @@
 #endif
 
 /**
- * @brief Driver for stm32 internal ADC
+ * @brief Driver for the ADC peripheral in STM32 microcontrollers.
  *
  * Allows conversions on multiple channels with per-channel sample time.
  *
@@ -117,12 +117,62 @@ public:
 
     float getVbatVoltage();
 
+    /**
+     * @brief Loads all enabled channels in the regular sequence.
+     *
+     * This is useful when using the DMA and you want to sample multiple
+     * channels. The channels will be ordered by their number.
+     */
+    void loadEnabledChannelsInRegularSequence();
+
+    void startRegularSequence();
+
+    /**
+     * @brief Enables DMA request generation.
+     *
+     * When the DMA is enabled, a new DMA request is generated after each
+     * conversion of a regular channel. This allows the transfer of the
+     * converted data from the ADC_DR register to the destination location
+     * selected by the software.
+     *
+     * If data are lost (overrun), the OVR bit in the ADC_SR register is set and
+     * an interrupt is generated (if enabled). DMA transfers are then disabled.
+     *
+     * If an overrun event occurred, follow this steps:
+     * 1. Reconfigure the DMA stream (the destination address and data count)
+     * 2. Clear the overrun flag
+     * 3. Trigger again the ADC to start a new conversion
+     *
+     * At the end of a DMA transfer (when the number of items configured in the
+     * DMA has been sent), the ADC can continue to generate new requests if the
+     * dds option is set.
+     *
+     * @param dds If true, DMA requests continue to be generated.
+     */
+    void enableDMA(bool dds = false);
+
+    /**
+     * @brief Disables DMA request generation.
+     *
+     * See enableDMA() for more detail on how the DMA request is generated.
+     */
+    void disableDMA();
+
+    bool getOverrunFlag();
+
+    void clearOverrunFlag();
+
 private:
     void resetRegisters();
 
     void setChannelSampleTime(Channel channel, SampleTime sampleTime);
 
     uint16_t readChannel(Channel channel);
+
+    /**
+     * @brief Adds the channel the the regular sequence at the given position.
+     */
+    bool addRegularChannel(Channel channel, uint8_t position);
 
     ADC_TypeDef *adc;
 

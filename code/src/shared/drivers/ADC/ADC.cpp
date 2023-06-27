@@ -97,14 +97,12 @@ void ADCDriver::sample() {
         }
     }
 
-    /**
-     * Quirk: the temperature and vbat sensors are enabled and then disabled. If
-     * left enabled they somehow disrupt other channels measurements. I did not
-     * find description of this behaviour anywhere but observed it during
-     * testing. Also the temperature sensors has a startup time of 10us. 12us is
-     * used because during test 10us were not enough.
-     * The startup time is the same for all supported micros.
-     */
+    // Quirk: the temperature and Vbat sensors are enabled and then disabled. If
+    // left enabled they somehow disrupt other channels measurements. I did not
+    // find description of this behaviour anywhere but observed it during
+    // testing. Also the temperature sensors has a startup time of 10us. 12us is
+    // used because during test 10us were not enough.
+    // The startup time is the same for all supported micros.
 
     if (tempEnabled) {
         ADC->CCR |= ADC_CCR_TSVREFE;
@@ -184,6 +182,37 @@ float ADCDriver::getTemperature() { return temperature; }
 
 float ADCDriver::getVbatVoltage() { return vBat; }
 
+void ADCDriver::loadEnabledChannelsInRegularSequence() {
+    int position = 0;
+    for (int i = 0; i < static_cast<uint8_t>(Channel::CH16); i++) {
+        if (channelsEnabled[i]) {
+            addRegularChannel(static_cast<Channel>(i), position);
+            position++;
+        }
+    }
+
+    // Update the regular channels number
+    adc->SQR1 &= ~ADC_SQR1_L;
+    adc->SQR1 |= (position - 1) << ADC_SQR1_L_Pos;
+
+    printf("adc->SQR1: %lx\n", adc->SQR1);
+    printf("adc->SQR2: %lx\n", adc->SQR2);
+    printf("adc->SQR3: %lx\n", adc->SQR3);
+}
+void ADCDriver::startRegularSequence() { adc->CR2 |= ADC_CR2_SWSTART; }
+
+void ADCDriver::enableDMA(bool dds) {
+    // Rewrite the DMA bit in ADC CR2 to ensure a proper restart
+    adc->CR2 &= ~(ADC_CR2_DMA | ADC_CR2_DDS);
+    adc->CR2 |= ADC_CR2_DMA | (dds ? ADC_CR2_DDS : 0);
+}
+
+void ADCDriver::disableDMA() { adc->CR2 &= ~(ADC_CR2_DMA | ADC_CR2_DDS); }
+
+bool ADCDriver::getOverrunFlag() { return adc->SR & ADC_SR_OVR != 0; }
+
+void ADCDriver::clearOverrunFlag() { adc->SR &= ~ADC_SR_OVR; }
+
 inline void ADCDriver::resetRegisters() {
     // Reset the ADC configuration
     adc->CR1 = 0;
@@ -216,18 +245,46 @@ inline void ADCDriver::setChannelSampleTime(Channel channel,
 }
 
 uint16_t ADCDriver::readChannel(Channel channel) {
-    // Assuming that ADC_SQR1_L remains 0 (1 conversion)
+    // Reset the number of active regular channels
+    adc->SQR1 &= ~ADC_SQR1_L;
+
+    // The driver performs multiple regular sequence conversions to keep the
+    // code simple
 
     // Select channel
     adc->SQR3 = static_cast<uint8_t>(channel);
 
     // Start conversion
-    adc->CR2 |= ADC_CR2_SWSTART;
+    startRegularSequence();
 
     while (!(adc->SR & ADC_SR_EOC))
         ;
 
     return static_cast<uint16_t>(adc->DR);
+}
+
+bool ADCDriver::addRegularChannel(Channel channel, uint8_t position) {
+    // Check the position
+    if (position >= 16) {
+        return false;
+    }
+
+    // Add the channel to the sequence
+    volatile uint32_t *sqrPtr;
+    switch (position / 6) {
+        case 1:
+            sqrPtr = &(adc->SQR2);
+            break;
+        case 2:
+            sqrPtr = &(adc->SQR1);
+            break;
+        default:
+            sqrPtr = &(adc->SQR3);
+    }
+    *sqrPtr &= ~(ADC_SQR3_SQ1 << ((position % 6) * 5));
+    *sqrPtr |= static_cast<int>(channel) << ((position % 6) * 5);
+
+    return true;
 }
 
 #ifndef INTERNAL_ADC_WITHOUT_CALIBRATION

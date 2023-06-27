@@ -35,8 +35,8 @@
    especially those whose name start with YY_ or yy_.  They are
    private implementation details that can be changed or removed.  */
 
-#ifndef YY_YY_HOME_ALBERTON_DESKTOP_SIGNAL_GENERATOR_CODE_SRC_SHARED_PARSER_PARSER_PARSER_H_INCLUDED
-# define YY_YY_HOME_ALBERTON_DESKTOP_SIGNAL_GENERATOR_CODE_SRC_SHARED_PARSER_PARSER_PARSER_H_INCLUDED
+#ifndef YY_YY_USERS_ALBERTON_DESKTOP_SIGNAL_GENERATOR_CODE_SRC_SHARED_PARSER_PARSER_PARSER_H_INCLUDED
+# define YY_YY_USERS_ALBERTON_DESKTOP_SIGNAL_GENERATOR_CODE_SRC_SHARED_PARSER_PARSER_PARSER_H_INCLUDED
 /* Debug traces.  */
 #ifndef YYDEBUG
 # define YYDEBUG 0
@@ -45,11 +45,11 @@
 extern int yydebug;
 #endif
 /* "%code requires" blocks.  */
-#line 3 "/home/alberton/Desktop/signal-generator/code/src/shared/parser/parser.y"
+#line 3 "/Users/alberton/Desktop/signal-generator/code/src/shared/parser/parser.y"
 
 #include "parser/parser_types.h"
 
-#line 53 "/home/alberton/Desktop/signal-generator/code/src/shared/parser/parser/parser.h"
+#line 53 "/Users/alberton/Desktop/signal-generator/code/src/shared/parser/parser/parser.h"
 
 /* Token kinds.  */
 #ifndef YYTOKENTYPE
@@ -82,12 +82,12 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 19 "/home/alberton/Desktop/signal-generator/code/src/shared/parser/parser.y"
+#line 19 "/Users/alberton/Desktop/signal-generator/code/src/shared/parser/parser.y"
 
     float numeric_value;
     Expression *exp;
 
-#line 91 "/home/alberton/Desktop/signal-generator/code/src/shared/parser/parser/parser.h"
+#line 91 "/Users/alberton/Desktop/signal-generator/code/src/shared/parser/parser/parser.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
@@ -102,4 +102,4 @@ extern YYSTYPE yylval;
 int yyparse (Command *ret);
 
 
-#endif /* !YY_YY_HOME_ALBERTON_DESKTOP_SIGNAL_GENERATOR_CODE_SRC_SHARED_PARSER_PARSER_PARSER_H_INCLUDED  */
+#endif /* !YY_YY_USERS_ALBERTON_DESKTOP_SIGNAL_GENERATOR_CODE_SRC_SHARED_PARSER_PARSER_PARSER_H_INCLUDED  */

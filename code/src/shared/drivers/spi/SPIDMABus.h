@@ -72,7 +72,7 @@ inline void SPIDMABus::write(const uint8_t* data, size_t nBytes) {
         .srcAddress = const_cast<uint8_t*>(data),
         .dstAddress = &(spi->DR),
         .numberOfDataItems = 20,
-        .sourceIncrement = true,
+        .srcIncrement = true,
         .enableTransferCompleteInterrupt = true,
     };
     txStream.setup(txTrn);
