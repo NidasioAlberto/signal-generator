@@ -28,7 +28,7 @@
   (pad "3" smd rect (at -1.3 0.95 90) (size 0.55 1.05) (layers "F.Cu" "F.Paste" "F.Mask") (tstamp b84f0f3d-e4b2-47e2-9366-32c5e24706e1))
   (pad "4" smd rect (at 1.3 0.95 90) (size 0.55 1.05) (layers "F.Cu" "F.Paste" "F.Mask") (tstamp 0265f19e-1a3c-4077-a2a7-bae9a9fa0a0b))
   (pad "5" smd rect (at 1.3 -0.95 90) (size 0.55 1.05) (layers "F.Cu" "F.Paste" "F.Mask") (tstamp 91cad156-90c5-42a7-ac41-cc7e64624e1f))
-  (model "${SIGNAL_GENERATOR}/pcb-library/3D Models/LDLN030G33R.step"
+  (model "${SIGNAL_GENERATOR}/3D Models/LDLN030G33R.step"
     (offset (xyz 0 0 0))
     (scale (xyz 1 1 1))
     (rotate (xyz 0 0 0))

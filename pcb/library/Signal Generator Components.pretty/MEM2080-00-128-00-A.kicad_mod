@@ -71,7 +71,7 @@
       )
     )
   )
-  (model ":SIGNAL_GENERATOR:pcb-library/3D Models/MEM2080-00-128-00-A.step"
+  (model "${SIGNAL_GENERATOR}/3D Models/MEM2080-00-128-00-A.step"
     (offset (xyz 7.875 7 0))
     (scale (xyz 1 1 1))
     (rotate (xyz -90 0 180))

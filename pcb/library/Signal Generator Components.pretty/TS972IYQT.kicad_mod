@@ -33,7 +33,7 @@
   (pad "7" smd rect (at 1.5 -0.25 90) (size 0.3 0.85) (layers "F.Cu" "F.Paste" "F.Mask") (tstamp 90042556-1acf-4fd8-a111-e2d67c600861))
   (pad "8" smd rect (at 1.5 -0.75 90) (size 0.3 0.85) (layers "F.Cu" "F.Paste" "F.Mask") (tstamp 99a5e3f3-3876-4700-a9bc-6daad1a343b2))
   (pad "9" smd rect (at 0 0) (size 1.75 2.7) (layers "F.Cu" "F.Paste" "F.Mask") (tstamp 52597b86-a20a-4cdc-b890-9f9a899607f1))
-  (model "${SIGNAL_GENERATOR}/pcb-library/3D Models/TS972IYQT.step"
+  (model "${SIGNAL_GENERATOR}/3D Models/TS972IYQT.step"
     (offset (xyz 0 0 0))
     (scale (xyz 1 1 1))
     (rotate (xyz 0 0 0))

@@ -41,7 +41,7 @@
   (pad "S1" thru_hole oval (at -4.32 0) (size 1 1.8) (drill oval 0.6 1.4) (layers "*.Cu" "*.Mask") (tstamp e149e0b1-47fa-4b20-b36e-2d51ee1e85c3))
   (pad "S1" thru_hole oval (at 4.32 -4.18) (size 1 2.1) (drill oval 0.6 1.7) (layers "*.Cu" "*.Mask") (tstamp 92e8f8c3-0985-4c0d-8e38-92cbbf365409))
   (pad "S1" thru_hole oval (at 4.32 0) (size 1 1.8) (drill oval 0.6 1.4) (layers "*.Cu" "*.Mask") (tstamp 81c041f3-483e-477d-9475-d108280de2a9))
-  (model "${SIGNAL_GENERATOR}/pcb-library/3D Models/USB4105-GF-A.step"
+  (model "${SIGNAL_GENERATOR}/3D Models/USB4105-GF-A.step"
     (offset (xyz 0 0 0))
     (scale (xyz 1 1 1))
     (rotate (xyz -90 0 0))

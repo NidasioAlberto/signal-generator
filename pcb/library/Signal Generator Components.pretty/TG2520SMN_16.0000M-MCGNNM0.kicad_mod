@@ -27,7 +27,7 @@
   (pad "2" smd rect (at 1.05 0.7) (size 0.8 1) (layers "F.Cu" "F.Paste" "F.Mask") (tstamp e2dd10e6-7b9d-461d-a2c4-8a59b1f6037d))
   (pad "3" smd rect (at 1.05 -0.7) (size 0.8 1) (layers "F.Cu" "F.Paste" "F.Mask") (tstamp 06e095ab-db5e-4a5c-ad27-40a749e9c9d2))
   (pad "4" smd rect (at -1.05 -0.7) (size 0.8 1) (layers "F.Cu" "F.Paste" "F.Mask") (tstamp 631e8ea1-2bf0-4b50-bbca-8ec00ae5bb9c))
-  (model "${SIGNAL_GENERATOR}/pcb-library/3D Models/TG2520SMN.step"
+  (model "${SIGNAL_GENERATOR}/3D Models/TG2520SMN.step"
     (offset (xyz 0 0 0))
     (scale (xyz 1 1 1))
     (rotate (xyz 0 0 0))

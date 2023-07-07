@@ -17,7 +17,7 @@
     (thermal_bridge_angle 45) (tstamp 8857acb3-d0b0-438a-bea1-271b8624d920))
   (pad "2" smd rect (at 1.185 0) (size 0.98 3.4) (layers "F.Cu" "F.Paste" "F.Mask")
     (thermal_bridge_angle 45) (tstamp c1e194a6-b0fa-4fa0-9d9f-e6888d0a813d))
-  (model ":SIGNAL_GENERATOR:pcb-library/3D Models/XAL4030.step"
+  (model "${SIGNAL_GENERATOR}/3D Models/XAL4030.step"
     (offset (xyz 0 0 0.05))
     (scale (xyz 1 1 1))
     (rotate (xyz -90 0 0))

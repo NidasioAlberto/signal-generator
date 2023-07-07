@@ -19,7 +19,7 @@
   (pad "2" thru_hole circle (at 6 3.5) (size 1.524 1.524) (drill 0.762) (layers "*.Cu" "*.Mask") (tstamp e55c476b-a492-426d-907a-df3b73d9a628))
   (pad "3" thru_hole circle (at 1 5.5) (size 1.524 1.524) (drill 0.762) (layers "*.Cu" "*.Mask") (tstamp bafe2d5e-f1fc-4e28-a5cd-e8569080c6c3))
   (pad "3" thru_hole circle (at 6 5.5) (size 1.524 1.524) (drill 0.762) (layers "*.Cu" "*.Mask") (tstamp dd60cc4f-2889-4aec-8a04-bb8a3f148dc3))
-  (model ":SIGNAL_GENERATOR:pcb-library/3D Models/TL2230.STEP"
+  (model "${SIGNAL_GENERATOR}/3D Models/TL2230.STEP"
     (offset (xyz 3.5 -3.5 0))
     (scale (xyz 1 1 1))
     (rotate (xyz -90 0 90))

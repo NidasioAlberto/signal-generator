@@ -33,7 +33,7 @@
   (pad "6" smd rect (at 2.712 0.635 90) (size 0.65 1.525) (layers "F.Cu" "F.Paste" "F.Mask") (tstamp 5f29b0ec-5e77-4e49-a320-d0a848a08175))
   (pad "7" smd rect (at 2.712 -0.635 90) (size 0.65 1.525) (layers "F.Cu" "F.Paste" "F.Mask") (tstamp 0441bf41-9f0b-484d-b454-7e6db6913b6b))
   (pad "8" smd rect (at 2.712 -1.905 90) (size 0.65 1.525) (layers "F.Cu" "F.Paste" "F.Mask") (tstamp fcf7af52-e40a-4c7a-a555-9dbe400a47a6))
-  (model "${SIGNAL_GENERATOR}/pcb-library/3D Models/TSH82IDT.step"
+  (model "${SIGNAL_GENERATOR}/3D Models/TSH82IDT.step"
     (offset (xyz 0 0 0))
     (scale (xyz 1 1 1))
     (rotate (xyz 0 0 0))

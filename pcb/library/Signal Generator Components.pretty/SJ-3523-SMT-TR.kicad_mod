@@ -33,7 +33,7 @@
   (pad "R" smd rect (at 4.4 -3.7) (size 2.2 2.8) (layers "F.Cu" "F.Paste" "F.Mask") (tstamp b3ab11e6-bdeb-4353-b5b9-2e7d57aecebe))
   (pad "S" smd rect (at 2.4 3.7) (size 2.2 2.8) (layers "F.Cu" "F.Paste" "F.Mask") (tstamp d2a776c9-40b1-41c8-8764-616761c6d9f2))
   (pad "T" smd rect (at 11.8 3.8 90) (size 2.6 2.8) (layers "F.Cu" "F.Paste" "F.Mask") (tstamp eeee0e6c-2ced-4fb6-a563-93c14b40ce73))
-  (model ":SIGNAL_GENERATOR:pcb-library/3D Models/SJ-3523-SMT-TR.stp"
+  (model "${SIGNAL_GENERATOR}/3D Models/SJ-3523-SMT-TR.stp"
     (offset (xyz 7.35 0 2.55))
     (scale (xyz 1 1 1))
     (rotate (xyz 90 0 -90))

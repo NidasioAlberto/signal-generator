@@ -33,7 +33,7 @@
     (stroke (width 0.1) (type solid)) (layer "F.Fab") (tstamp c3b643f9-2469-4d1c-8d7c-2c6ecf86cee1))
   (pad "1" smd rect (at -3.35 0 90) (size 2.05 3.8) (layers "F.Cu" "F.Paste" "F.Mask") (tstamp bc7537c6-7259-49bb-a050-23ddb2dfedda))
   (pad "2" smd rect (at 3.35 0 90) (size 2.05 3.8) (layers "F.Cu" "F.Paste" "F.Mask") (tstamp bd032897-87a7-4bee-9059-d2d8988b9dfa))
-  (model ":SIGNAL_GENERATOR:pcb-library/3D Models/WCAP-PSHP.step"
+  (model "${SIGNAL_GENERATOR}/3D Models/WCAP-PSHP.step"
     (offset (xyz 0 0 0))
     (scale (xyz 1 1 1))
     (rotate (xyz 0 0 0))
