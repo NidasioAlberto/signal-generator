@@ -74,7 +74,7 @@ public:
      *
      * CYCLES_3 is not exposed because in 12-bit mode the minimum is 15
      */
-    enum SampleTime : uint8_t {
+    enum class SampleTime : uint8_t {
         // CYCLES_3   = 0x0,
         CYCLES_15 = 0x1,
         CYCLES_28 = 0x2,
@@ -83,6 +83,34 @@ public:
         CYCLES_112 = 0x5,
         CYCLES_144 = 0x6,
         CYCLES_480 = 0x7
+    };
+
+    enum class TriggerPolarity : uint32_t {
+        RISING_EDGE = 0x1 << ADC_CR2_EXTEN_Pos,
+        FALLING_EDGE = 0x2 << ADC_CR2_EXTEN_Pos,
+        BOTH_EDGES = 0x3 << ADC_CR2_EXTEN_Pos
+    };
+
+    /**
+     * @brief Trigger sources for regular channels.
+     */
+    enum class RegularTriggerSource : uint32_t {
+        TIM1_CH1 = 0x0 << ADC_CR2_EXTSEL_Pos,
+        TIM1_CH2 = 0x1 << ADC_CR2_EXTSEL_Pos,
+        TIM1_CH3 = 0x2 << ADC_CR2_EXTSEL_Pos,
+        TIM2_CH2 = 0x3 << ADC_CR2_EXTSEL_Pos,
+        TIM2_CH3 = 0x4 << ADC_CR2_EXTSEL_Pos,
+        TIM2_CH4 = 0x5 << ADC_CR2_EXTSEL_Pos,
+        TIM2_TRGO = 0x6 << ADC_CR2_EXTSEL_Pos,
+        TIM3_CH1 = 0x7 << ADC_CR2_EXTSEL_Pos,
+        TIM3_TRGO = 0x8 << ADC_CR2_EXTSEL_Pos,
+        TIM4_CH4 = 0x9 << ADC_CR2_EXTSEL_Pos,
+        TIM5_CH1 = 0xa << ADC_CR2_EXTSEL_Pos,
+        TIM5_CH2 = 0xb << ADC_CR2_EXTSEL_Pos,
+        TIM5_CH3 = 0xc << ADC_CR2_EXTSEL_Pos,
+        TIM8_CH1 = 0xd << ADC_CR2_EXTSEL_Pos,
+        TIM8_TRGO = 0xe << ADC_CR2_EXTSEL_Pos,
+        EXTI_line_11 = 0xf << ADC_CR2_EXTSEL_Pos,
     };
 
     /**
@@ -99,15 +127,22 @@ public:
 
     void sample();
 
-    void enableChannel(Channel channel, SampleTime sampleTime = CYCLES_480);
+    void enableChannel(Channel channel,
+                       SampleTime sampleTime = SampleTime::CYCLES_480);
 
     void disableChannel(Channel channel);
 
-    void enableTemperature(SampleTime sampleTime = CYCLES_480);
+    void enableRegularSequenceTrigger(
+        RegularTriggerSource triggerSource,
+        TriggerPolarity triggerPolarity = TriggerPolarity::RISING_EDGE);
+
+    void disableRegularSequenceTrigger();
+
+    void enableTemperature(SampleTime sampleTime = SampleTime::CYCLES_480);
 
     void disableTemperature();
 
-    void enableVbat(SampleTime sampleTime = CYCLES_480);
+    void enableVbat(SampleTime sampleTime = SampleTime::CYCLES_480);
 
     void disableVbat();
 

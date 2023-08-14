@@ -27,6 +27,7 @@
 
 #include <drivers/ADC/ADC.h>
 #include <drivers/DMA/DMA.h>
+#include <drivers/timer/GeneralPurposeTimer.h>
 #include <math.h>
 #include <miosix.h>
 
@@ -55,24 +56,25 @@ int main() {
     ADCDriver adc(ADC1);
     adc.enableChannel(ADCDriver::Channel::CH1);
     adc.enableChannel(ADCDriver::Channel::CH2);
-    adc.enableChannel(ADCDriver::Channel::CH3);
     adc.loadEnabledChannelsInRegularSequence();
+    adc.enableRegularSequenceTrigger(
+        ADCDriver::RegularTriggerSource::TIM2_TRGO);
     adc.enableDMA(true);
     adc.enable();
 
-    ADC1->CR1 |= ADC_CR1_SCAN;
-    ADC1->CR2 |= ADC_CR2_CONT;
-    adc.startRegularSequence();
+    GP32bitTimer tim(TIM2);
+    tim.setMasterMode(TimerUtils::MasterMode::UPDATE);
+    tim.setFrequency(2 * 1e3);
+    tim.setAutoReloadRegister(5);
+    tim.enable();
 
-    // for (int i = 0; i < 10; i++)
-    //     printf("DR: %ld, buff[0]: %d, buff[1]: %d, OVR: %d\n", ADC1->DR,
-    //            adcBuffer[0], adcBuffer[1], adc.getOverrunFlag());
+    adc.enable();
 
-    delayMs(100);
+    printf("TIM2 frequency: %d\n", tim.getFrequency());
 
-    for (int i = 0; i < ARRAY_SIZE; i++) {
-        printf("%d: %d\n", i, adcBuffer[i]);
-    }
+    for (int i = 0; i < 10; i++)
+        printf("DR: %ld, buff[0]: %d, buff[1]: %d, OVR: %d\n", ADC1->DR,
+               adcBuffer[0], adcBuffer[1], adc.getOverrunFlag());
 
     adcStream.waitForTransferComplete();
 

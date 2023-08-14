@@ -152,6 +152,16 @@ void ADCDriver::disableChannel(Channel channel) {
     channelsEnabled[static_cast<uint8_t>(channel)] = false;
 }
 
+void ADCDriver::enableRegularSequenceTrigger(RegularTriggerSource triggerSource,
+                                             TriggerPolarity triggerPolarity) {
+    adc->CR2 |= static_cast<uint32_t>(triggerSource) |
+                static_cast<uint32_t>(triggerPolarity);
+}
+
+void ADCDriver::disableRegularSequenceTrigger() {
+    adc->CR2 &= ~(ADC_CR2_EXTEN | ADC_CR2_EXTSEL);
+}
+
 void ADCDriver::enableTemperature(SampleTime sampleTime) {
     tempEnabled = true;
     enableChannel(TEMP_CH, sampleTime);
@@ -194,10 +204,6 @@ void ADCDriver::loadEnabledChannelsInRegularSequence() {
     // Update the regular channels number
     adc->SQR1 &= ~ADC_SQR1_L;
     adc->SQR1 |= (position - 1) << ADC_SQR1_L_Pos;
-
-    printf("adc->SQR1: %lx\n", adc->SQR1);
-    printf("adc->SQR2: %lx\n", adc->SQR2);
-    printf("adc->SQR3: %lx\n", adc->SQR3);
 }
 void ADCDriver::startRegularSequence() { adc->CR2 |= ADC_CR2_SWSTART; }
 
@@ -209,7 +215,7 @@ void ADCDriver::enableDMA(bool dds) {
 
 void ADCDriver::disableDMA() { adc->CR2 &= ~(ADC_CR2_DMA | ADC_CR2_DDS); }
 
-bool ADCDriver::getOverrunFlag() { return adc->SR & ADC_SR_OVR != 0; }
+bool ADCDriver::getOverrunFlag() { return (adc->SR & ADC_SR_OVR) != 0; }
 
 void ADCDriver::clearOverrunFlag() { adc->SR &= ~ADC_SR_OVR; }
 
@@ -237,10 +243,10 @@ inline void ADCDriver::setChannelSampleTime(Channel channel,
 
     if (chNo <= 9) {
         adc->SMPR2 &= ~(0x7 << (chNo * 3));
-        adc->SMPR2 |= sampleTime << (chNo * 3);
+        adc->SMPR2 |= static_cast<uint32_t>(sampleTime) << (chNo * 3);
     } else {
         adc->SMPR1 &= ~(0x7 << ((chNo - 10) * 3));
-        adc->SMPR1 |= sampleTime << ((chNo - 10) * 3);
+        adc->SMPR1 |= static_cast<uint32_t>(sampleTime) << ((chNo - 10) * 3);
     }
 }
 
