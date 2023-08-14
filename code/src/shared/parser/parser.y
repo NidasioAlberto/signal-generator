@@ -33,11 +33,10 @@ extern int yylex(void);
 
 %token PI
 
-%token START STOP
+%token START STOP HELP
 
 %token <numeric_value> NUMBER
 %type <exp> exp
-%type <numeric_value> start_cmd stop_cmd
 
 %%
 
@@ -46,21 +45,16 @@ start : NUMBER ASSIGN exp {
             (*ret).exp = $3;
             (*ret).channel = $1;
         } |
-        start_cmd {
+        START NUMBER {
             (*ret).type = CommandType::START;
-            (*ret).channel = $1;
+            (*ret).channel = $2;
         } |
-        stop_cmd {
+        STOP NUMBER {
             (*ret).type = CommandType::STOP;
-            (*ret).channel = $1;
-        }
-
-start_cmd : START NUMBER {
-            $$ = $2;
-        }
-
-stop_cmd : STOP NUMBER {
-            $$ = $2;
+            (*ret).channel = $2;
+        } |
+        HELP {
+            (*ret).type = CommandType::HELP;
         }
 
 exp : NUMBER {

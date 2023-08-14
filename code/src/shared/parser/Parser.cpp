@@ -27,6 +27,8 @@
 
 #include "Parser.h"
 
+#include <filesystem/console/console_device.h>
+
 using namespace miosix;
 using namespace std;
 
@@ -42,9 +44,11 @@ void Parser::start() {
 }
 
 void Parser::run() {
+    char expr[256];
+
     while (true) {
         fflush(stdin);
-        char expr[256];
+        printf("> ");
 
         fgets(expr, sizeof(expr), stdin);
         auto size = strcspn(expr, "\n");
@@ -69,9 +73,11 @@ void Parser::run() {
                 // Check if the command is valid
                 if (command.type == CommandType::EXPRESSION &&
                     command.exp == nullptr) {
-                    printf("ERROR: Expression not valid\n");
+                    // printf("ERROR: Expression not valid\n");
                     onError();
-                } else if (!checkChannel(command.channel)) {
+                } else if ((command.type == CommandType::START ||
+                            command.type == CommandType::STOP) &&
+                           !checkChannel(command.channel)) {
                     printf(
                         "ERROR: Channel not recognized, only 0 or 1 are valid "
                         "channel numbers\n");
@@ -80,7 +86,6 @@ void Parser::run() {
                     onCommand(command);
                 }
             } else {
-                printf("ERROR: Command not recognized\n");
                 onError();
             }
         }

@@ -83,6 +83,7 @@
         "DBGERR",
         "DIER",
         "DMAEN",
+        "entrypoints",
         "EXTI",
         "FMCEN",
         "Gpio",

@@ -33,9 +33,12 @@
 
 using namespace miosix;
 
-RGBLed::Color errorColor = {64, 0, 0, 0};
-RGBLed::Color runningColor = {0, 64, 0, 0};
-RGBLed::Color idleColor = {0, 64, 64, 0};
+RGB errorColor(64, 0, 0);
+RGB runningColor(0, 64, 0);
+RGB idleColor(0, 64, 64);
+
+void printWelcomeMessage();
+void printHelpMessage();
 
 int main() {
     // Start the CPU profiler and print every second the CPU usage
@@ -43,35 +46,42 @@ int main() {
 
     RGBLed led;
     led.init();
+    led.setColor(idleColor);
 
-    Generator generator;
-    generator.init();
+    // Generator generator;
+    // generator.init();
+
+    // Print a welcome messege
+    printWelcomeMessage();
 
     std::function<void(const Command &)> onCommand =
         [&](const Command &command) {
-            // TODO: Check also if the expression set before start
+            // TODO: Check also if the expression is set before start
             switch (command.type) {
                 case CommandType::START:
-                    printf("Starting channel %d...\n",
+                    // generator.start(
+                    //     static_cast<DACDriver::Channel>(command.channel));
+                    printf("Started channel %d...\n",
                            static_cast<int>(command.channel));
-                    generator.start(
-                        static_cast<DACDriver::Channel>(command.channel));
                     led.setColor(runningColor);
                     break;
                 case CommandType::STOP:
-                    printf("Stopping channel %d...\n",
+                    // generator.stop(
+                    //     static_cast<DACDriver::Channel>(command.channel));
+                    printf("Stopped channel %d...\n",
                            static_cast<int>(command.channel));
-                    generator.stop(
-                        static_cast<DACDriver::Channel>(command.channel));
                     led.setColor(idleColor);
                     break;
                 case CommandType::EXPRESSION:
-                    printf("Loading expression for channel %d\n",
+                    // generator.setExpression(
+                    //     static_cast<DACDriver::Channel>(command.channel),
+                    //     command.exp);
+                    printf("Channel %d updated with new expression\n",
                            static_cast<int>(command.channel));
-                    generator.setExpression(
-                        static_cast<DACDriver::Channel>(command.channel),
-                        command.exp);
                     led.setColor(idleColor);
+                    break;
+                case CommandType::HELP:
+                    printHelpMessage();
                     break;
             }
         };
@@ -83,4 +93,40 @@ int main() {
 
     while (true)
         Thread::sleep(1000);
+}
+
+void printWelcomeMessage() {
+    printf(
+        "  ____  _                   _    ____                           _     "
+        "        \n");
+    printf(
+        " / ___|(_) __ _ _ __   __ _| |  / ___| ___ _ __   ___ _ __ __ _| |_ "
+        "___  _ __ \n");
+    printf(
+        " \\___ \\| |/ _` | '_ \\ / _` | | | |  _ / _ \\ '_ \\ / _ \\ '__/ _` "
+        "| __/ _ \\| '__|\n");
+    printf(
+        "  ___) | | (_| | | | | (_| | | | |_| |  __/ | | |  __/ | | (_| | || "
+        "(_) | |   \n");
+    printf(
+        " |____/|_|\\__, |_| |_|\\__,_|_|  \\____|\\___|_| |_|\\___|_|  "
+        "\\__,_|\\__\\___/|_|   \n");
+    printf(
+        "          |___/                                                       "
+        "        \n");
+}
+
+void printHelpMessage() {
+    printf(
+        "Type \"<channel number> = <expression>\" to set an expression for a "
+        "channel\n");
+    printf(
+        "\tAn expression can be composed by operations (+, -, *, /), between "
+        "numbers or functions (sin, tri, step)\n");
+    printf("\tsin is a classic sinusoid\n");
+    printf("\ttri is a triangle wave\n");
+    printf("\tstep is a step function that starts at the given time\n");
+    printf(
+        "Type \"<start|stop> <channel number>\" to start or stop a channel\n");
+    printf("Type \"help\" to show this message\n");
 }

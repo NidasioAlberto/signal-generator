@@ -7,6 +7,9 @@ build/
 # VS-Code Cortex Debug extension
 **/.cortex-debug**
 
+# Exclude Flex and Bison generated files
+code/src/shared/parser/parser
+
 # KiCad
 
 ## Temporary files

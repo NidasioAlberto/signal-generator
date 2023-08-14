@@ -26,8 +26,11 @@
 
 "start" { return START; }
 "stop"  { return STOP; }
+"help"  { return HELP; }
 
 [0-9]+("."[0-9]+)? {
     yylval.numeric_value = atof(yytext);
     return(NUMBER);
 }
+
+. /* suppress unrecognized characters */
