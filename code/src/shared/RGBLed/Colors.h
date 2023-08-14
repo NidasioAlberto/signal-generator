@@ -25,44 +25,81 @@
  *   along with this program; if not, see <http://www.gnu.org/licenses/>   *
  ***************************************************************************/
 
-#include <RGBLed/RGBLed.h>
-#include <miosix.h>
+#include <assert.h>
+#include <math.h>
+#include <stdint.h>
 
-using namespace miosix;
+struct RGB {
+    uint8_t red;
+    uint8_t green;
+    uint8_t blue;
+    uint8_t white;
 
-int main() {
-    RGBLed led;
-    led.init();
+    RGB() : red(0), green(0), blue(0), white(0) {}
 
-    while (true) {
-        printf("Red swipe\n");
-        for (uint8_t i = 0; i < 255; i++) {
-            led.setColor(RGB(i, 0, 0));
-            Thread::sleep(20);
-        }
+    RGB(uint8_t red, uint8_t green, uint8_t blue, uint8_t white = 0)
+        : red(red), green(green), blue(blue), white(white) {}
+};
 
-        printf("Green swipe\n");
-        for (uint8_t i = 0; i < 255; i++) {
-            led.setColor(RGB(0, i, 0));
-            Thread::sleep(20);
-        }
+struct HSV {
+    uint16_t hue;
+    float saturation;
+    float value;
 
-        printf("Blue swipe\n");
-        for (uint8_t i = 0; i < 255; i++) {
-            led.setColor(RGB(0, 0, i));
-            Thread::sleep(20);
-        }
-
-        printf("White swipe\n");
-        for (uint8_t i = 0; i < 255; i++) {
-            led.setColor(RGB(0, 0, 0, i));
-            Thread::sleep(20);
-        }
-
-        printf("Hue swipe\n");
-        for (uint16_t i = 0; i < 360; i++) {
-            led.setColor(HSV(i, 1, 0.1));
-            Thread::sleep(10);
-        }
+    HSV(uint16_t hue = 0, float saturation = 1, float value = 1)
+        : hue(hue), saturation(saturation), value(value) {
+        assert(hue <= 360);
+        assert(saturation >= 0);
+        assert(saturation <= 1);
+        assert(value >= 0);
+        assert(value <= 1);
     }
-}
+
+    operator RGB() const {
+        // Chroma
+        float C = saturation * value;
+
+        float H_prime = hue / 60.0f;
+        float X = C * (1 - abs(fmod(H_prime, 2) - 1));
+
+        float red;
+        float green;
+        float blue;
+
+        switch (static_cast<int>(H_prime) % 6) {
+            case 0:
+                red = C;
+                green = X;
+                break;
+            case 1:
+                red = X;
+                green = C;
+                break;
+            case 2:
+                green = C;
+                blue = X;
+                break;
+            case 3:
+                green = X;
+                blue = C;
+                break;
+            case 4:
+                red = X;
+                blue = C;
+                break;
+            case 5:
+                red = C;
+                blue = X;
+                break;
+            default:
+                assert(false);
+        }
+
+        float m = value - C;
+        red += m;
+        green += m;
+        blue += m;
+
+        return RGB(red * 255, green * 255, blue * 255);
+    }
+};

@@ -29,17 +29,12 @@
 #include <interfaces/gpio.h>
 #include <miosix.h>
 
+#include "Colors.h"
+
 #pragma once
 
 class RGBLed {
 public:
-    struct Color {
-        uint8_t red;
-        uint8_t green;
-        uint8_t blue;
-        uint8_t white;
-    };
-
     RGBLed()
         : spi(SPI2, DMAStreamId::DMA1_Str4, DMATransaction::Channel::CHANNEL0,
               DMAStreamId::DMA1_Str3, DMATransaction::Channel::CHANNEL0),
@@ -53,7 +48,7 @@ public:
         spi.configure(config);
     }
 
-    void setColor(Color color) {
+    void setColor(RGB color) {
         uint32_t data[] = {
             computeIntensity(color.green),
             computeIntensity(color.red),
@@ -67,10 +62,6 @@ public:
                 (data[i] & 0xff000000) >> 24 | (data[i] & 0x00ff0000) >> 8 |
                 (data[i] & 0x0000ff00) << 8 | (data[i] & 0x000000ff) << 24;
         }
-
-        // for (int i = 0; i < 4; i++) {
-        //     printf("%08lx\n", data[i]);
-        // }
 
         spi.write((uint8_t *)data, sizeof(data));
     }
