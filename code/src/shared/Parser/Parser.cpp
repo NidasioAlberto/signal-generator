@@ -27,6 +27,7 @@
 
 #include "Parser.h"
 
+#include <drivers/DAC/DAC.h>
 #include <filesystem/console/console_device.h>
 
 using namespace miosix;

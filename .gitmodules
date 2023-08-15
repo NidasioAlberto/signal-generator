@@ -1,3 +1,3 @@
-[submodule "code/miosix-kernel"]
+[submodule "Miosix Kernel"]
 	path = code/miosix-kernel
 	url = ../miosix-kernel.git
