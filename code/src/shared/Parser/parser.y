@@ -1,7 +1,7 @@
 /* Bison file */
 
 %code requires {
-#include "parser/parser_types.h"
+#include "Parser/parser_types.h"
 }
 
 %{

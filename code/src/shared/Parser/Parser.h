@@ -25,11 +25,10 @@
  *   along with this program; if not, see <http://www.gnu.org/licenses/>   *
  ***************************************************************************/
 
+#include <Parser/parser/lexer.h>
+#include <Parser/parser/parser.h>
 #include <RGBLed/RGBLed.h>
-#include <generator/Generator.h>
 #include <miosix.h>
-#include <parser/parser/lexer.h>
-#include <parser/parser/parser.h>
 
 #include <atomic>
 #include <functional>

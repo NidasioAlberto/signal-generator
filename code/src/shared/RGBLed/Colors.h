@@ -62,9 +62,9 @@ struct HSV {
         float H_prime = hue / 60.0f;
         float X = C * (1 - abs(fmod(H_prime, 2) - 1));
 
-        float red;
-        float green;
-        float blue;
+        float red = 0;
+        float green = 0;
+        float blue = 0;
 
         switch (static_cast<int>(H_prime) % 6) {
             case 0:

@@ -37,7 +37,7 @@ function(mbs_custom_target TARGET OPT_BOARD)
         $<$<STREQUAL:${ARCH},cortexM7_stm32f7>:src/shared/drivers/spi/SPITransaction.cpp>
 
         src/shared/Generator/Generator.cpp
-        src/shared/Parser/Parser.cpp    
+        src/shared/Parser/Parser.cpp
     )
     mbs_target(${TARGET} ${OPT_BOARD})
 endfunction()
@@ -46,9 +46,9 @@ endfunction()
 #                               Flex and Bison                                #
 #-----------------------------------------------------------------------------#
 
-set(PARSER_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/parser)
-flex_target(LEXER src/shared/parser/lexer.l ${PARSER_DIR}/parser/lexer.c DEFINES_FILE ${PARSER_DIR}/parser/lexer.h)
-bison_target(PARSER src/shared/parser/parser.y ${PARSER_DIR}/parser/parser.c DEFINES_FILE ${PARSER_DIR}/parser/parser.h)
+set(PARSER_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/Parser)
+flex_target(LEXER  ${PARSER_DIR}/lexer.l ${PARSER_DIR}/parser/lexer.c DEFINES_FILE ${PARSER_DIR}/parser/lexer.h)
+bison_target(PARSER  ${PARSER_DIR}/parser.y ${PARSER_DIR}/parser/parser.c DEFINES_FILE ${PARSER_DIR}/parser/parser.h)
 set_source_files_properties(${PARSER_DIR}/parser/lexer.c PROPERTIES LANGUAGE CXX)
 set_source_files_properties(${PARSER_DIR}/parser/parser.c PROPERTIES LANGUAGE CXX)
 
@@ -76,7 +76,7 @@ mbs_custom_target(test-rgb-led stm32f205rc_signal_generator)
 
 add_executable(signal-generator
     src/entrypoints/signal-generator.cpp
-    ${PARSER_DIR}/parser/lexer.c
-    ${PARSER_DIR}/parser/parser.c
+    ${BISON_LEXER_OUTPUTS}
+    ${BISON_PARSER_OUTPUTS}
 )
 mbs_custom_target(signal-generator stm32f205rc_signal_generator)
