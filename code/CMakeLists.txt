@@ -36,7 +36,8 @@ function(mbs_custom_target TARGET OPT_BOARD)
         $<$<STREQUAL:${ARCH},cortexM4_stm32f4>:src/shared/drivers/spi/SPITransaction.cpp>
         $<$<STREQUAL:${ARCH},cortexM7_stm32f7>:src/shared/drivers/spi/SPITransaction.cpp>
 
-        src/shared/parser/Parser.cpp    
+        src/shared/Generator/Generator.cpp
+        src/shared/Parser/Parser.cpp    
     )
     mbs_target(${TARGET} ${OPT_BOARD})
 endfunction()
