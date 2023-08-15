@@ -90,6 +90,7 @@ enum class CommandType {
     STOP,
     EXPRESSION,
     HELP,
+    CPU,
 };
 
 struct Command {

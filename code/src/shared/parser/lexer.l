@@ -27,6 +27,7 @@
 "start" { return START; }
 "stop"  { return STOP; }
 "help"  { return HELP; }
+"cpu"   { return CPU; }
 
 [0-9]+("."[0-9]+)? {
     yylval.numeric_value = atof(yytext);

@@ -33,7 +33,7 @@ extern int yylex(void);
 
 %token PI
 
-%token START STOP HELP
+%token START STOP HELP CPU
 
 %token <numeric_value> NUMBER
 %type <exp> exp
@@ -55,6 +55,9 @@ start : NUMBER ASSIGN exp {
         } |
         HELP {
             (*ret).type = CommandType::HELP;
+        } |
+        CPU {
+            (*ret).type = CommandType::CPU;
         }
 
 exp : NUMBER {

@@ -25,10 +25,10 @@
  *   along with this program; if not, see <http://www.gnu.org/licenses/>   *
  ***************************************************************************/
 
+#include <Parser/Parser.h>
 #include <RGBLed/RGBLed.h>
 #include <generator/Generator.h>
 #include <miosix.h>
-#include <parser/Parser.h>
 #include <util/util.h>
 
 using namespace miosix;
@@ -37,19 +37,19 @@ RGB errorColor(64, 0, 0);
 RGB runningColor(0, 64, 0);
 RGB idleColor(0, 64, 64);
 
+CPUProfiler profiler;
+
 void printWelcomeMessage();
 void printHelpMessage();
+void printCPUUsage();
 
 int main() {
-    // Start the CPU profiler and print every second the CPU usage
-    // CPUProfiler::thread(1e9);
-
     RGBLed led;
     led.init();
     led.setColor(idleColor);
 
-    // Generator generator;
-    // generator.init();
+    Generator generator;
+    generator.init();
 
     // Print a welcome messege
     printWelcomeMessage();
@@ -59,23 +59,23 @@ int main() {
             // TODO: Check also if the expression is set before start
             switch (command.type) {
                 case CommandType::START:
-                    // generator.start(
-                    //     static_cast<DACDriver::Channel>(command.channel));
+                    generator.start(
+                        static_cast<DACDriver::Channel>(command.channel));
                     printf("Started channel %d...\n",
                            static_cast<int>(command.channel));
                     led.setColor(runningColor);
                     break;
                 case CommandType::STOP:
-                    // generator.stop(
-                    //     static_cast<DACDriver::Channel>(command.channel));
+                    generator.stop(
+                        static_cast<DACDriver::Channel>(command.channel));
                     printf("Stopped channel %d...\n",
                            static_cast<int>(command.channel));
                     led.setColor(idleColor);
                     break;
                 case CommandType::EXPRESSION:
-                    // generator.setExpression(
-                    //     static_cast<DACDriver::Channel>(command.channel),
-                    //     command.exp);
+                    generator.setExpression(
+                        static_cast<DACDriver::Channel>(command.channel),
+                        command.exp);
                     printf("Channel %d updated with new expression\n",
                            static_cast<int>(command.channel));
                     led.setColor(idleColor);
@@ -83,6 +83,8 @@ int main() {
                 case CommandType::HELP:
                     printHelpMessage();
                     break;
+                case CommandType::CPU:
+                    printCPUUsage();
             }
         };
 
@@ -129,4 +131,9 @@ void printHelpMessage() {
     printf(
         "Type \"<start|stop> <channel number>\" to start or stop a channel\n");
     printf("Type \"help\" to show this message\n");
+}
+
+void printCPUUsage() {
+    profiler.update();
+    profiler.print();
 }
