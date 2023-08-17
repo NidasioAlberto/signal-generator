@@ -1,3 +1,6 @@
 [submodule "Miosix Kernel"]
-	path = code/miosix-kernel
-	url = ../miosix-kernel.git
+	path = code/libs/miosix-kernel
+	url = https://github.com/NidasioAlberto/miosix-kernel.git
+[submodule "Fixed-Point Math"]
+	path = code/libs/fpm
+	url = https://github.com/MikeLankamp/fpm.git

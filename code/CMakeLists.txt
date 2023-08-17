@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.21)
-include(miosix-kernel/miosix/cmake/mbs.cmake)
+include(libs/miosix-kernel/miosix/cmake/mbs.cmake)
+add_subdirectory(libs/fpm)
 
 if(CMAKE_HOST_SYSTEM_NAME MATCHES "Darwin")
     set(BISON_EXECUTABLE "/usr/local/opt/bison/bin/bison" CACHE PATH "Bison executable")
@@ -58,6 +59,7 @@ function(mbs_custom_target TARGET OPT_BOARD)
         src/shared/Parser/Parser.cpp
     )
     mbs_target(${TARGET} ${OPT_BOARD})
+    target_link_libraries(${TARGET} PUBLIC fpm)
 endfunction()
 
 #-----------------------------------------------------------------------------#
