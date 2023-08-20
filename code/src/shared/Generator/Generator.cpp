@@ -70,14 +70,14 @@ void Generator::start(DACDriver::Channel channel) {
         channel == DACDriver::Channel::CH1 ? &(DAC->DHR12R1) : &(DAC->DHR12R2);
 
     // Benchmark the function to check maximum freq for wave generation
-    auto maxFreq = benchmarkComputation(ctrlData);
-    printf("Maximum frequency: %f\n", static_cast<float>(maxFreq));
+    float maxFreq = benchmarkComputation(ctrlData);
+    // printf("Maximum frequency: %f\n", static_cast<float>(maxFreq));
 
     // Make the wave start at time 0
-    ctrlData.nextStartTime = fixed{0};
+    ctrlData.nextStartTime = 0;
 
     // Prefill both buffers
-    generateWave(ctrlData.buffer1, ctrlData.func, fixed{0}, 1 / waveFrequency);
+    generateWave(ctrlData.buffer1, ctrlData.func, 0, 1 / waveFrequency);
     generateWave(ctrlData.buffer2, ctrlData.func, buffersSize / waveFrequency,
                  1 / waveFrequency);
     ctrlData.nextStartTime = 2 * buffersSize / waveFrequency;
@@ -120,7 +120,7 @@ void Generator::start(DACDriver::Channel channel) {
     stream.enable();
 
     timer.setMasterMode(TimerUtils::MasterMode::UPDATE);
-    timer.setFrequency(static_cast<int>(2 * waveFrequency));
+    timer.setFrequency(2 * waveFrequency);
     timer.setAutoReloadRegister(1);
     timer.enable();
 }
@@ -139,82 +139,82 @@ void Generator::stop(DACDriver::Channel channel) {
     dac.setChannel(channel, V_DDA_VOLTAGE);
 }
 
-std::function<fixed(fixed)> Generator::buildFunction(const Expression *exp) {
+std::function<float(float)> Generator::buildFunction(const Expression *exp) {
     assert(exp != nullptr);
 
     switch (exp->type) {
         case ExpressionType::NUMBER: {
-            fixed number{exp->argument.number};
-            return [=](fixed) { return number; };
+            float number = exp->argument.number;
+            return [=](float) { return number; };
             break;
         }
         case ExpressionType::SINUSOIDS: {
             auto exp1 = buildFunction(exp->argument.args[0]);
-            return [=](fixed t) { return sin(exp1(t) * t); };
+            return [=](float t) { return sin(exp1(t) * t); };
             break;
         }
         case ExpressionType::TRIANGULAR: {
             auto exp1 = buildFunction(exp->argument.args[0]);
-            return [=](fixed t) {
-                fixed arg = exp1(t);
-                return 4 * abs(arg * t - fpm::floor(arg * t + fixed{0.5})) - 1;
+            return [=](float t) {
+                float arg = exp1(t);
+                return 4 * abs(arg * t - floorf(arg * t + 0.5)) - 1;
             };
             break;
         }
         case ExpressionType::STEP: {
             auto exp1 = buildFunction(exp->argument.args[0]);
-            return [=](fixed t) { return t >= exp1(t) ? fixed{1} : fixed{0}; };
+            return [=](float t) { return t >= exp1(t) ? 1 : 0; };
         }
         case ExpressionType::ADD_OP: {
             auto exp1 = buildFunction(exp->argument.args[0]);
             auto exp2 = buildFunction(exp->argument.args[1]);
-            return [=](fixed t) { return exp1(t) + exp2(t); };
+            return [=](float t) { return exp1(t) + exp2(t); };
         }
         case ExpressionType::SUB_OP: {
             auto exp1 = buildFunction(exp->argument.args[0]);
             auto exp2 = buildFunction(exp->argument.args[1]);
-            return [=](fixed t) { return exp1(t) - exp2(t); };
+            return [=](float t) { return exp1(t) - exp2(t); };
         }
         case ExpressionType::MUL_OP: {
             auto exp1 = buildFunction(exp->argument.args[0]);
             auto exp2 = buildFunction(exp->argument.args[1]);
-            return [=](fixed t) { return exp1(t) * exp2(t); };
+            return [=](float t) { return exp1(t) * exp2(t); };
         }
         case ExpressionType::DIV_OP: {
             auto exp1 = buildFunction(exp->argument.args[0]);
             auto exp2 = buildFunction(exp->argument.args[1]);
-            return [=](fixed t) { return exp1(t) / exp2(t); };
+            return [=](float t) { return exp1(t) / exp2(t); };
         }
         default:  // NONE
-            return [](fixed) { return fixed{0.0}; };
+            return [](float) { return 0.0; };
     }
 }
 
 void Generator::generateWave(uint16_t *buff,
-                             const std::function<fixed(fixed)> &func,
-                             fixed startTime, fixed interval) {
+                             const std::function<float(float)> &func,
+                             float startTime, float interval) {
     for (uint16_t i = 0; i < buffersSize; i++) {
         buff[i] = computeDacValue(func, startTime + i * interval);
     }
 }
 
-uint16_t Generator::computeDacValue(const std::function<fixed(fixed)> &func,
-                                    fixed t) {
+uint16_t Generator::computeDacValue(const std::function<float(float)> &func,
+                                    float t) {
     // Compute the target value
-    auto val = func(t);
+    float val = func(t);
 
     // Convert the target value into the dac register value
-    uint16_t rawVal = static_cast<uint16_t>((1 - val / 12) * 4095);
+    uint16_t rawVal = (1 - val / 12) * 4095;
 
     return rawVal < 4096 ? rawVal : 4095;
 }
 
-fixed Generator::benchmarkComputation(ChannelCtrlData &ctrlData) {
+float Generator::benchmarkComputation(ChannelCtrlData &ctrlData) {
     // Measure the execution time of the function
     auto start = miosix::getTime();
-    generateWave(ctrlData.buffer1, ctrlData.func, fixed{0}, 1 / waveFrequency);
+    generateWave(ctrlData.buffer1, ctrlData.func, 0, 1 / waveFrequency);
     auto stop = miosix::getTime();
 
     // Compute the maximum possible frequency
-    return fixed{1e9f} / ((stop - start) / buffersSize);
+    return 1e9f / ((stop - start) / buffersSize);
 }

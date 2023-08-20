@@ -32,13 +32,9 @@
 #include <miosix.h>
 #include <parser/parser_types.h>
 
-#include <fpm/fixed.hpp>
-#include <fpm/math.hpp>
 #include <functional>
 
 #pragma once
-
-using fixed = fpm::fixed_16_16;
 
 class Generator {
 public:
@@ -68,26 +64,26 @@ private:
      *
      * @warning The expression must not be null.
      */
-    std::function<fixed(fixed)> buildFunction(const Expression *exp);
+    std::function<float(float)> buildFunction(const Expression *exp);
 
-    void generateWave(uint16_t *buff, const std::function<fixed(fixed)> &func,
-                      fixed startTime, fixed interval);
+    void generateWave(uint16_t *buff, const std::function<float(float)> &func,
+                      float startTime, float interval);
 
-    uint16_t computeDacValue(const std::function<fixed(fixed)> &func, fixed t);
+    uint16_t computeDacValue(const std::function<float(float)> &func, float t);
 
     struct ChannelCtrlData {
         uint16_t *buffer1;
         uint16_t *buffer2;
-        std::function<fixed(fixed)> func;
-        fixed nextStartTime{0};
+        std::function<float(float)> func;
+        float nextStartTime{0};
     };
 
-    fixed benchmarkComputation(ChannelCtrlData &ctrlData);
+    float benchmarkComputation(ChannelCtrlData &ctrlData);
 
     uint16_t buffersSize;  // Size of each buffers in number of elements
     ChannelCtrlData channelCtrlData[2];
 
-    const fixed waveFrequency{1000};
+    const float waveFrequency{10000};
 
     DACDriver dac;
     GP32bitTimer timer2;

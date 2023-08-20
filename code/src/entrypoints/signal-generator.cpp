@@ -33,9 +33,9 @@
 
 using namespace miosix;
 
-RGB errorColor(64, 0, 0);
-RGB runningColor(0, 64, 0);
-RGB idleColor(0, 64, 64);
+RGB errorColor(8, 0, 0);
+RGB runningColor(0, 8, 0);
+RGB idleColor(0, 8, 8);
 
 CPUProfiler profiler;
 
