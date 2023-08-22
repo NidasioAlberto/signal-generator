@@ -44,8 +44,8 @@ DMAStream& stream5 =
 GP32bitTimer tim2(TIM2);
 
 static constexpr size_t SIGNAL_ARRAY_SIZE = 10e3;
-static uint32_t buffer1[SIGNAL_ARRAY_SIZE] = {0};
-static uint32_t buffer2[SIGNAL_ARRAY_SIZE] = {0};
+static uint16_t buffer1[SIGNAL_ARRAY_SIZE] = {0};
+static uint16_t buffer2[SIGNAL_ARRAY_SIZE] = {0};
 
 static int counter1 = 0;
 static int counter2 = 0;
@@ -69,23 +69,16 @@ void loadBuffer2() {
 int main() {
     CPUProfiler p;
 
+    // Prepare the first buffers
     loadBuffer1();
     loadBuffer2();
 
     // Setup DAC
     {
         dac.enableChannel(DACDriver::Channel::CH1);
-        dac.enableChannel(DACDriver::Channel::CH2);
-
         dac.disableBuffer(DACDriver::Channel::CH1);
-        dac.disableBuffer(DACDriver::Channel::CH2);
-
         dac.enableDMA(DACDriver::Channel::CH1);
-        dac.enableDMA(DACDriver::Channel::CH2);
-
         dac.enableTrigger(DACDriver::Channel::CH1,
-                          DACDriver::TriggerSource::TIM2_TRGO);
-        dac.enableTrigger(DACDriver::Channel::CH2,
                           DACDriver::TriggerSource::TIM2_TRGO);
     }
 
@@ -95,46 +88,66 @@ int main() {
             .channel = DMATransaction::Channel::CHANNEL7,
             .direction = DMATransaction::Direction::MEM_TO_PER,
             .priority = DMATransaction::Priority::HIGH,
-            .srcSize = DMATransaction::DataSize::BITS_32,
-            .dstSize = DMATransaction::DataSize::BITS_32,
+            .srcSize = DMATransaction::DataSize::BITS_16,
+            .dstSize = DMATransaction::DataSize::BITS_16,
             .srcAddress = buffer1,
             .dstAddress = &(DAC->DHR12R1),
             .secondMemoryAddress = buffer2,
-            .numberOfDataItems = SIGNAL_ARRAY_SIZE - 1,
+            .numberOfDataItems = SIGNAL_ARRAY_SIZE,
             .srcIncrement = true,
             .circularMode = true,
             .doubleBufferMode = true,
             .enableTransferCompleteInterrupt = true,
         };
         stream5.setup(trn);
-
-        stream5.setTransferCompleteCallback([]() {
-            if (!(DMA1_Stream5->CR & DMA_SxCR_CT)) {
-                // Current target is buffer 1 so we refill buffer 2
-                loadBuffer2();
-            } else {
-                // Current target is buffer 2 so we refill buffer 1
-                loadBuffer1();
-            }
-        });
-
         stream5.enable();
     }
 
     // Setup TIM2
     {
         tim2.setMasterMode(TimerUtils::MasterMode::UPDATE);
-        tim2.setFrequency(2 * 1e6);
+        tim2.setFrequency(2 * 5e6);
         tim2.setAutoReloadRegister(1);
         tim2.enable();
+
+        printf("Timer frequency: %d\n", tim2.getFrequency());
     }
+
+    std::thread thread([]() {
+        while (true) {
+            stream5.waitForTransferComplete();
+
+            // if (!stream5.timedWaitForTransferComplete(20e9)) {
+            //     printf("Wait for transfer complete interrupt timed out\n");
+            // }
+
+            switch (stream5.getCurrentBufferNumber()) {
+                case 1: {
+                    // Current target is buffer 1 so we refill buffer 2
+                    loadBuffer2();
+                    break;
+                }
+                case 2: {
+                    // Current target is buffer 2 so we refill buffer 1
+                    loadBuffer1();
+                    break;
+                }
+            }
+        }
+    });
 
     while (true) {
         p.update();
         p.print();
         printf("Counts: %d %d\n", counter1, counter2);
-        printf("Free heap: %d\n", MemoryProfiling::getCurrentFreeHeap());
-        printf("Free stack: %d\n", MemoryProfiling::getCurrentFreeStack());
+        printf("Free heap: %dB % 5.1f%%\n",
+               MemoryProfiling::getCurrentFreeHeap(),
+               100.0 * MemoryProfiling::getCurrentFreeHeap() /
+                   MemoryProfiling::getHeapSize());
+        printf("Free stack: %dB % 5.1f%%\n",
+               MemoryProfiling::getCurrentFreeStack(),
+               100.0 * MemoryProfiling::getCurrentFreeStack() /
+                   MemoryProfiling::getStackSize());
         Thread::sleep(1000);
     };
 }

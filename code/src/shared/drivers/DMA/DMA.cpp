@@ -28,9 +28,6 @@
 #include "DMA.h"
 
 #include <kernel/logging.h>
-#include <kernel/scheduler/scheduler.h>
-#include <kernel/sync.h>
-#include <utils/OtherUtils.h>
 
 #include <map>
 
@@ -209,9 +206,11 @@ void DMADriver::IRQhandleInterrupt(DMAStreamId id) {
         }
 
         // Wakeup the waiting thread if it is waiting
-        if (stream->waitingThread && stream->waitingForTransferComplete) {
+        if (stream->waitingThread && stream->waitingForHalfTransfer) {
             IRQwakeupThread(stream);
         }
+
+        stream->clearHalfTransferInterrupt();
     }
 
     // Check if the interrupt was triggered by a transfer complete event
@@ -227,10 +226,9 @@ void DMADriver::IRQhandleInterrupt(DMAStreamId id) {
         if (stream->waitingThread && stream->waitingForTransferComplete) {
             IRQwakeupThread(stream);
         }
-    }
 
-    // Make sure to clear the interrupt flags
-    stream->clearAllInterrupts();
+        stream->clearTransferCompleteInterrupt();
+    }
 }
 
 void DMADriver::IRQwakeupThread(DMAStream* stream) {
@@ -408,80 +406,36 @@ void DMAStream::enable() {
 
 void DMAStream::disable() { registers->CR &= ~DMA_SxCR_EN; }
 
-#define waitForInterruptEventImpl(enableEvent, getEventStatus, eventTriggered, \
-                                  waitForEvent)                                \
-    if (!enableEvent) {                                                        \
-        /* Pool the flag if the user did not enabled the interrupt */          \
-        while (!getEventStatus())                                              \
-            ;                                                                  \
-    } else {                                                                   \
-        /* Check flag and return if it is set */                               \
-        if (getEventStatus() || eventTriggered)                                \
-            return;                                                            \
-                                                                               \
-        /* Save the current thread pointer and wait condition */               \
-        waitingThread = Thread::getCurrentThread();                            \
-        waitForEvent = true;                                                   \
-                                                                               \
-        /* Wait until the thread is woken up and the pointer is cleared */     \
-        FastInterruptDisableLock dLock;                                        \
-        do {                                                                   \
-            Thread::IRQenableIrqAndWait(dLock);                                \
-        } while (waitingThread);                                               \
-    }
-
 void DMAStream::waitForHalfTransfer() {
-    waitForInterruptEventImpl(currentSetup.enableHalfTransferInterrupt,
-                              getHalfTransferInterruptStatus,
-                              halfTransferTriggered, waitingForHalfTransfer)
+    waitForInterruptEventImpl(
+        currentSetup.enableHalfTransferInterrupt,
+        std::bind(&DMAStream::getHalfTransferInterruptStatus, this),
+        std::bind(&DMAStream::clearHalfTransferInterrupt, this),
+        halfTransferTriggered, waitingForHalfTransfer);
 }
 
 void DMAStream::waitForTransferComplete() {
-    waitForInterruptEventImpl(currentSetup.enableTransferCompleteInterrupt,
-                              getTransferCompleteInterruptStatus,
-                              transferCompleteTriggered,
-                              waitingForTransferComplete)
+    waitForInterruptEventImpl(
+        currentSetup.enableTransferCompleteInterrupt,
+        std::bind(&DMAStream::getTransferCompleteInterruptStatus, this),
+        std::bind(&DMAStream::clearTransferCompleteInterrupt, this),
+        transferCompleteTriggered, waitingForTransferComplete);
 }
 
-#define timedWaitForInterruptEventImpl(                                    \
-    enableEvent, getEventStatus, eventTriggered, waitForEvent, timeout_ns) \
-    if (!currentSetup.enableHalfTransferInterrupt) {                       \
-        /* Pool the flag if the user did not enabled the interrupt */      \
-        return OtherUtils::timedWaitFlag(                                  \
-            std::bind(&DMAStream::getHalfTransferInterruptStatus, this),   \
-            timeout_ns);                                                   \
-    } else {                                                               \
-        /* Check flag and return if it is set */                           \
-        if (getHalfTransferInterruptStatus() || halfTransferTriggered)     \
-            return true;                                                   \
-                                                                           \
-        /* Save the current thread pointer and wait condition */           \
-        waitingThread = Thread::getCurrentThread();                        \
-        waitingForHalfTransfer = true;                                     \
-                                                                           \
-        /* Wait until the thread is woken up and the pointer is cleared */ \
-        FastInterruptDisableLock dLock;                                    \
-        do {                                                               \
-            if (Thread::IRQenableIrqAndTimedWait(dLock, timeout_ns) ==     \
-                TimedWaitResult::Timeout)                                  \
-                return false;                                              \
-        } while (waitingThread);                                           \
-    }                                                                      \
-                                                                           \
-    return true;
-
 bool DMAStream::timedWaitForHalfTransfer(uint64_t timeout_ns) {
-    timedWaitForInterruptEventImpl(currentSetup.enableHalfTransferInterrupt,
-                                   getHalfTransferInterruptStatus,
-                                   halfTransferTriggered,
-                                   waitingForHalfTransfer, timeout_ns)
+    return timedWaitForInterruptEventImpl(
+        currentSetup.enableHalfTransferInterrupt,
+        std::bind(&DMAStream::getHalfTransferInterruptStatus, this),
+        std::bind(&DMAStream::clearHalfTransferInterrupt, this),
+        halfTransferTriggered, waitingForHalfTransfer, timeout_ns);
 }
 
 bool DMAStream::timedWaitForTransferComplete(uint64_t timeout_ns) {
-    timedWaitForInterruptEventImpl(currentSetup.enableTransferCompleteInterrupt,
-                                   getTransferCompleteInterruptStatus,
-                                   transferCompleteTriggered,
-                                   waitingForTransferComplete, timeout_ns)
+    return timedWaitForInterruptEventImpl(
+        currentSetup.enableTransferCompleteInterrupt,
+        std::bind(&DMAStream::getTransferCompleteInterruptStatus, this),
+        std::bind(&DMAStream::clearTransferCompleteInterrupt, this),
+        transferCompleteTriggered, waitingForTransferComplete, timeout_ns);
 }
 
 void DMAStream::setHalfTransferCallback(std::function<void()> callback) {
@@ -544,9 +498,13 @@ bool DMAStream::getDirectModeErrorInterruptStatus() {
     return (*ISR & (DMA_LISR_DMEIF0 << IFindex)) != 0;
 }
 
+int DMAStream::getCurrentBufferNumber() {
+    return (registers->CR & DMA_SxCR_CT) != 0 ? 2 : 1;
+}
+
 DMAStream::DMAStream(DMAStreamId id) : id(id) {
-    // Get the channel registers base address
-    // and the interrupt flags clear register address
+    // Get the channel registers base address and the interrupt flags clear
+    // register address
     if (id < DMAStreamId::DMA2_Str0) {
         registers = reinterpret_cast<DMA_Stream_TypeDef*>(
             DMA1_BASE + 0x10 + 0x18 * static_cast<int>(id));

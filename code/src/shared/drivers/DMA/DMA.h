@@ -28,7 +28,9 @@
 #pragma once
 
 #include <interfaces/arch_registers.h>
+#include <kernel/scheduler/scheduler.h>
 #include <kernel/sync.h>
+#include <utils/OtherUtils.h>
 
 #include <functional>
 #include <map>
@@ -180,6 +182,13 @@ public:
 
     bool getDirectModeErrorInterruptStatus();
 
+    /**
+     * @brief Returns the number of the buffer currently in use.
+     *
+     * @return 1 or 2 depending on the buffer currently in use.
+     */
+    int getCurrentBufferNumber();
+
 private:
     DMAStream(DMAStreamId id);
 
@@ -199,6 +208,110 @@ private:
     volatile uint32_t* ISR;   ///< Interrupt status register
     volatile uint32_t* IFCR;  ///< Interrupt flags clear register
     int IFindex;              ///< Interrupt flags index
+
+    inline void waitForInterruptEventImpl(
+        bool isInterruptEnabled, std::function<bool()> getEventStatus,
+        std::function<void()> clearEventStatus, bool& eventTriggered,
+        bool& waitingForEvent) {
+        // If the interrupt is enabled we can just pause and wait for it.
+        // Otherwise we need to pool the flag.
+        if (isInterruptEnabled) {
+            // When the interrupt is used we have 2 cases:
+            // - This function has been called after the interrupt fired. In
+            // this case the interrupt sets a flag and we check it.
+            // - The interrupt has not yet fired. In this case we pause the
+            // thread and the interrupt will wake us up.
+
+            if (!eventTriggered) {
+                // Save the current thread pointer
+                waitingThread = miosix::Thread::getCurrentThread();
+
+                // Set the waiting flag to tell the interrupt routine which
+                // event we are waiting for
+                waitingForEvent = true;
+
+                // Wait until the thread is woken up and the pointer is cleared
+                miosix::FastInterruptDisableLock dLock;
+                do {
+                    miosix::Thread::IRQenableIrqAndWait(dLock);
+                } while (waitingThread);
+            }
+
+            // Before returning we need to clear the flags otherwise we could
+            // get misfires
+            waitingForEvent = false;
+            eventTriggered = false;
+        } else {
+            // Pool the flag if the user did not enable the interrupt
+            while (!getEventStatus())
+                ;
+
+            // Clear the flag
+            clearEventStatus();
+        }
+    }
+
+    inline bool timedWaitForInterruptEventImpl(
+        bool isInterruptEnabled, std::function<bool()> getEventStatus,
+        std::function<void()> clearEventStatus, bool& eventTriggered,
+        bool& waitingForEvent, uint64_t timeout_ns) {
+        // Return value: true if the event was triggered, false if the timeout
+        // expired
+        bool result = false;
+
+        // If the interrupt is enabled we can just pause and wait for it.
+        // Otherwise we need to pool the flag.
+        if (isInterruptEnabled) {
+            // When the interrupt is used we have 2 cases:
+            // - This function has been called after the interrupt fired. In
+            // this case the interrupt sets a flag and we check it.
+            // - The interrupt has not yet fired. In this case we pause the
+            // thread and the interrupt will wake us up.
+
+            if (eventTriggered) {
+                result = true;
+            } else {
+                // Save the current thread pointer
+                waitingThread = miosix::Thread::getCurrentThread();
+
+                // Set the waiting flag to tell the interrupt routine which
+                // event we are waiting for
+                waitingForEvent = true;
+
+                // Wait until the thread is woken up and the pointer is cleared
+                miosix::FastInterruptDisableLock dLock;
+                do {
+                    if (miosix::Thread::IRQenableIrqAndTimedWait(
+                            dLock, timeout_ns + miosix::getTime()) ==
+                        miosix::TimedWaitResult::Timeout) {
+                        result = false;
+
+                        // If the timeout expired we clear the thread pointer so
+                        // that the interrupt, if it will occur, will not wake
+                        // up the thread (and we can exit the while loop)
+                        waitingThread = nullptr;
+                    } else {
+                        result = true;
+                    }
+                } while (waitingThread);
+            }
+
+            // Before returning we need to clear the flags otherwise we could
+            // get misfires
+            waitingForEvent = false;
+            eventTriggered = false;
+        } else {
+            // Pool the flag if the user did not enable the interrupt
+            result = OtherUtils::timedPollingFlag(getEventStatus, timeout_ns);
+
+            if (result) {
+                // Clear the flag
+                clearEventStatus();
+            }
+        }
+
+        return result;
+    }
 
 public:
     DMAStream(const DMAStream&) = delete;
