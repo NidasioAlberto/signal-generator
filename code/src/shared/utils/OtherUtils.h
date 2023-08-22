@@ -38,7 +38,8 @@ namespace OtherUtils {
  *
  * @return true if the flag was set, false if the timeout was reached.
  */
-bool timedWaitFlag(std::function<bool()> readFlag, uint64_t timeout_ns) {
+inline bool timedPollingFlag(std::function<bool()> readFlag,
+                             uint64_t timeout_ns) {
     uint64_t start = miosix::getTime();
 
     while (miosix::getTime() - start < timeout_ns) {
