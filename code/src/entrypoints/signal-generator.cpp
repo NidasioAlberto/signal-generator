@@ -33,25 +33,24 @@
 
 using namespace miosix;
 
-RGB errorColor(8, 0, 0);
-RGB runningColor(0, 8, 0);
-RGB idleColor(0, 8, 8);
+RGB errorColor(32, 0, 0);
+RGB runningColor(0, 32, 0);
+RGB idleColor(0, 32, 32);
 
 CPUProfiler profiler;
 
 void printWelcomeMessage();
 void printHelpMessage();
-void printCPUUsage();
 
 int main() {
     RGBLed led;
     led.init();
     led.setColor(idleColor);
 
-    Generator generator;
+    Generator generator(8e3, 10e3);
     generator.init();
 
-    // Print a welcome messege
+    // Print a welcome message
     printWelcomeMessage();
 
     std::function<void(const Command &)> onCommand =
@@ -84,7 +83,8 @@ int main() {
                     printHelpMessage();
                     break;
                 case CommandType::CPU:
-                    printCPUUsage();
+                    profiler.print();
+                    break;
             }
         };
 
@@ -93,8 +93,10 @@ int main() {
     Parser parser(onCommand, onError);
     parser.start();
 
-    while (true)
+    while (true) {
+        profiler.update();
         Thread::sleep(1000);
+    }
 }
 
 void printWelcomeMessage() {
@@ -131,9 +133,4 @@ void printHelpMessage() {
     printf(
         "Type \"<start|stop> <channel number>\" to start or stop a channel\n");
     printf("Type \"help\" to show this message\n");
-}
-
-void printCPUUsage() {
-    profiler.update();
-    profiler.print();
 }

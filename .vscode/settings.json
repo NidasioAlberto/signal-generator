@@ -62,7 +62,8 @@
         "mutex": "cpp",
         "shared_mutex": "cpp",
         "codecvt": "cpp",
-        "iomanip": "cpp"
+        "iomanip": "cpp",
+        "cfenv": "cpp"
     },
     "cortex-debug.registerUseNaturalFormat": true,
     "cortex-debug.variableUseNaturalFormat": false,
@@ -135,6 +136,7 @@
         "PWREN",
         "Qbsp",
         "Qconfigure",
+        "Qenable",
         "Qhandle",
         "Qset",
         "Qsystem",

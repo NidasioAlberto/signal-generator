@@ -27,18 +27,17 @@
 
 #include "Generator.h"
 
-Generator::Generator(uint16_t totalBuffersSize)
-    : buffersSize(totalBuffersSize / 4 / 2), timer2(TIM2), timer4(TIM4) {
-    // Allocate the buffers
-    channelCtrlData[0].buffer1 =
-        static_cast<uint16_t *>(malloc(totalBuffersSize / 4));
-    channelCtrlData[0].buffer2 =
-        static_cast<uint16_t *>(malloc(totalBuffersSize / 4));
-    channelCtrlData[1].buffer1 =
-        static_cast<uint16_t *>(malloc(totalBuffersSize / 4));
-    channelCtrlData[1].buffer2 =
-        static_cast<uint16_t *>(malloc(totalBuffersSize / 4));
-}
+Generator::Generator(const uint16_t totalBuffersSize, const float waveFrequency)
+    : channelCtrlData{
+          // DAC1 on TIM2 and DMA1 Stream 5
+          {TIM2, DMADriver::instance().acquireStream(DMAStreamId::DMA1_Str5),
+           DACDriver::TriggerSource::TIM2_TRGO,
+           static_cast<size_t>(totalBuffersSize / 2), waveFrequency},
+          // DAC2 on TIM4 and DMA1 Stream 6
+          {TIM4, DMADriver::instance().acquireStream(DMAStreamId::DMA1_Str6),
+           DACDriver::TriggerSource::TIM4_TRGO,
+           static_cast<size_t>(totalBuffersSize / 2), waveFrequency},
+      } {}
 
 void Generator::init() {
     dac.enableChannel(DACDriver::Channel::CH1);
@@ -64,29 +63,26 @@ void Generator::setExpression(DACDriver::Channel channel,
 
 void Generator::start(DACDriver::Channel channel) {
     ChannelCtrlData &ctrlData = channelCtrlData[static_cast<int>(channel)];
-    DMAStream &stream = channel == DACDriver::Channel::CH1 ? stream5 : stream6;
-    GP32bitTimer &timer = channel == DACDriver::Channel::CH1 ? timer2 : timer4;
     volatile void *dacDstAddress =
         channel == DACDriver::Channel::CH1 ? &(DAC->DHR12R1) : &(DAC->DHR12R2);
 
-    // Benchmark the function to check maximum freq for wave generation
-    float maxFreq = benchmarkComputation(ctrlData);
-    // printf("Maximum frequency: %f\n", static_cast<float>(maxFreq));
+    // Check if the channel was already started
+    if (ctrlData.thread != nullptr) {
+        return;  // TODO: Add boolean value
+    }
 
     // Make the wave start at time 0
     ctrlData.nextStartTime = 0;
 
     // Prefill both buffers
-    generateWave(ctrlData.buffer1, ctrlData.func, 0, 1 / waveFrequency);
-    generateWave(ctrlData.buffer2, ctrlData.func, buffersSize / waveFrequency,
-                 1 / waveFrequency);
-    ctrlData.nextStartTime = 2 * buffersSize / waveFrequency;
+    generateWave(ctrlData, ctrlData.buffer1);
+    ctrlData.nextStartTime += ctrlData.bufferSizeItems * ctrlData.wavePeriod;
+    generateWave(ctrlData, ctrlData.buffer2);
+    ctrlData.nextStartTime += ctrlData.bufferSizeItems * ctrlData.wavePeriod;
 
     // Setup DAC
     dac.enableDMA(channel);
-    dac.enableTrigger(channel, channel == DACDriver::Channel::CH1
-                                   ? DACDriver::TriggerSource::TIM2_TRGO
-                                   : DACDriver::TriggerSource::TIM4_TRGO);
+    dac.enableTrigger(channel, ctrlData.triggerSource);
 
     // Setup DMA
     DMATransaction trn{
@@ -97,41 +93,57 @@ void Generator::start(DACDriver::Channel channel) {
         .srcAddress = ctrlData.buffer1,
         .dstAddress = dacDstAddress,
         .secondMemoryAddress = ctrlData.buffer2,
-        .numberOfDataItems = buffersSize,
+        .numberOfDataItems = static_cast<uint16_t>(ctrlData.bufferSizeItems),
         .srcIncrement = true,
         .circularMode = true,
         .doubleBufferMode = true,
         .enableTransferCompleteInterrupt = true,
     };
-    stream.setup(trn);
-    stream.setTransferCompleteCallback([&ctrlData, this]() {
-        if (!(DMA1_Stream5->CR & DMA_SxCR_CT)) {
-            // Current target is buffer 1 so we refill buffer 2
-            generateWave(ctrlData.buffer2, ctrlData.func,
-                         ctrlData.nextStartTime, 1 / waveFrequency);
-            ctrlData.nextStartTime += buffersSize / waveFrequency;
-        } else {
-            // Current target is buffer 2 so we refill buffer 1
-            generateWave(ctrlData.buffer1, ctrlData.func,
-                         ctrlData.nextStartTime, 1 / waveFrequency);
-            ctrlData.nextStartTime += buffersSize / waveFrequency;
+    ctrlData.stream.setup(trn);
+    ctrlData.stream.enable();
+
+    // Prepare the thread
+    ctrlData.thread = new std::thread([this, &ctrlData]() {
+        while (!ctrlData.shouldStop) {
+            // Wait for maximum the double duration of a buffer
+            if (!ctrlData.stream.timedWaitForTransferComplete(
+                    1e9 * 2 * ctrlData.bufferSizeItems /
+                    ctrlData.waveFrequency)) {
+                continue;
+            }
+
+            // Generate the next buffer
+            if (!(DMA1_Stream5->CR & DMA_SxCR_CT)) {
+                // Current target is buffer 1 so we refill buffer 2
+                generateWave(ctrlData, ctrlData.buffer2);
+                ctrlData.nextStartTime +=
+                    ctrlData.bufferSizeItems * ctrlData.wavePeriod;
+            } else {
+                // Current target is buffer 2 so we refill buffer 1
+                generateWave(ctrlData, ctrlData.buffer1);
+                ctrlData.nextStartTime +=
+                    ctrlData.bufferSizeItems * ctrlData.wavePeriod;
+            }
         }
     });
-    stream.enable();
 
-    timer.setMasterMode(TimerUtils::MasterMode::UPDATE);
-    timer.setFrequency(2 * waveFrequency);
-    timer.setAutoReloadRegister(1);
-    timer.enable();
+    ctrlData.timer.setMasterMode(TimerUtils::MasterMode::UPDATE);
+    ctrlData.timer.setFrequency(2 * ctrlData.waveFrequency);
+    ctrlData.timer.setAutoReloadRegister(1);
+    ctrlData.timer.enable();
 }
 
 void Generator::stop(DACDriver::Channel channel) {
-    DMAStream &stream = channel == DACDriver::Channel::CH1 ? stream5 : stream6;
-    GP32bitTimer &timer = channel == DACDriver::Channel::CH1 ? timer2 : timer4;
+    ChannelCtrlData &ctrlData = channelCtrlData[static_cast<int>(channel)];
+
+    // Stop the thread
+    ctrlData.shouldStop = true;
+    ctrlData.thread->join();
+    delete ctrlData.thread;
 
     // Stop peripherals
-    timer.disable();
-    stream.disable();
+    ctrlData.timer.disable();
+    ctrlData.stream.disable();
     dac.disableDMA(channel);
     dac.disableTrigger(channel);
 
@@ -190,14 +202,6 @@ std::function<float(float)> Generator::buildFunction(const Expression *exp) {
     }
 }
 
-void Generator::generateWave(uint16_t *buff,
-                             const std::function<float(float)> &func,
-                             float startTime, float interval) {
-    for (uint16_t i = 0; i < buffersSize; i++) {
-        buff[i] = computeDacValue(func, startTime + i * interval);
-    }
-}
-
 uint16_t Generator::computeDacValue(const std::function<float(float)> &func,
                                     float t) {
     // Compute the target value
@@ -209,12 +213,9 @@ uint16_t Generator::computeDacValue(const std::function<float(float)> &func,
     return rawVal < 4096 ? rawVal : 4095;
 }
 
-float Generator::benchmarkComputation(ChannelCtrlData &ctrlData) {
-    // Measure the execution time of the function
-    auto start = miosix::getTime();
-    generateWave(ctrlData.buffer1, ctrlData.func, 0, 1 / waveFrequency);
-    auto stop = miosix::getTime();
-
-    // Compute the maximum possible frequency
-    return 1e9f / ((stop - start) / buffersSize);
+void Generator::generateWave(ChannelCtrlData &ctrlData, uint16_t *buff) {
+    for (uint16_t i = 0; i < ctrlData.bufferSizeItems; i++) {
+        buff[i] = computeDacValue(
+            ctrlData.func, ctrlData.nextStartTime + i * ctrlData.wavePeriod);
+    }
 }

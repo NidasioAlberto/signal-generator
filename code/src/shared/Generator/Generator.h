@@ -33,6 +33,7 @@
 #include <parser/parser_types.h>
 
 #include <functional>
+#include <thread>
 
 #pragma once
 
@@ -43,7 +44,7 @@ public:
      *
      * @param totalBuffersSize Total size occupied by the buffers, in bytes.
      */
-    Generator(uint16_t totalBuffersSize = 8e3);
+    Generator(const uint16_t totalBuffersSize, const float waveFrequency);
 
     void init();
 
@@ -66,34 +67,48 @@ private:
      */
     std::function<float(float)> buildFunction(const Expression *exp);
 
-    void generateWave(uint16_t *buff, const std::function<float(float)> &func,
-                      float startTime, float interval);
-
     uint16_t computeDacValue(const std::function<float(float)> &func, float t);
 
     struct ChannelCtrlData {
+        const size_t bufferSizeBytes;  // Size of one buffer in bytes
+        const size_t bufferSizeItems;  // Size of one buffer in items
         uint16_t *buffer1;
         uint16_t *buffer2;
         std::function<float(float)> func;
-        float nextStartTime{0};
+
+        const float waveFrequency;
+        const float wavePeriod;
+        float nextStartTime = 0;
+
+        bool shouldStop = false;
+        std::thread *thread = nullptr;
+
+        GP32bitTimer timer;
+        DMAStream &stream;
+
+        DACDriver::TriggerSource triggerSource;
+
+        /**
+         * @param buffersSizeBytes Size of both buffers combined
+         */
+        ChannelCtrlData(TIM_TypeDef *timer, DMAStream &stream5,
+                        DACDriver::TriggerSource triggerSource,
+                        const size_t buffersSizeBytes,
+                        const float waveFrequency)
+            : bufferSizeBytes(buffersSizeBytes / 2),
+              bufferSizeItems(bufferSizeBytes / sizeof(uint16_t)),
+              waveFrequency(waveFrequency),
+              wavePeriod(1 / waveFrequency),
+              timer(timer),
+              stream(stream5),
+              triggerSource(triggerSource) {
+            buffer1 = static_cast<uint16_t *>(malloc(bufferSizeBytes));
+            buffer2 = static_cast<uint16_t *>(malloc(bufferSizeBytes));
+        }
     };
 
-    float benchmarkComputation(ChannelCtrlData &ctrlData);
-
-    uint16_t buffersSize;  // Size of each buffers in number of elements
-    ChannelCtrlData channelCtrlData[2];
-
-    const float waveFrequency{10000};
+    void generateWave(ChannelCtrlData &ctrlData, uint16_t *buff);
 
     DACDriver dac;
-    GP32bitTimer timer2;
-    GP32bitTimer timer4;
-
-    // DAC1 on DMA1 Stream 5
-    DMAStream &stream5 =
-        DMADriver::instance().acquireStream(DMAStreamId::DMA1_Str5);
-
-    // DAC2 on DMA1 Stream 6
-    DMAStream &stream6 =
-        DMADriver::instance().acquireStream(DMAStreamId::DMA1_Str6);
+    ChannelCtrlData channelCtrlData[2];
 };
