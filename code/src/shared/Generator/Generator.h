@@ -25,12 +25,12 @@
  *   along with this program; if not, see <http://www.gnu.org/licenses/>   *
  ***************************************************************************/
 
+#include <Parser/parser_types.h>
 #include <drivers/DAC/DAC.h>
 #include <drivers/DMA/DMA.h>
 #include <drivers/timer/GeneralPurposeTimer.h>
 #include <math.h>
 #include <miosix.h>
-#include <parser/parser_types.h>
 
 #include <functional>
 #include <thread>

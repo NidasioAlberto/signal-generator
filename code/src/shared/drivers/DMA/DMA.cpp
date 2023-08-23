@@ -143,15 +143,15 @@ void __attribute__((used)) DMA2_Stream2_IRQImpl() {
     DMADriver::instance().IRQhandleInterrupt(DMAStreamId::DMA2_Str2);
 }
 
-// void __attribute__((naked)) DMA2_Stream3_IRQHandler() {
-//     saveContext();
-//     asm volatile("bl _Z20DMA2_Stream3_IRQImplv");
-//     restoreContext();
-// }
+void __attribute__((naked)) DMA2_Stream3_IRQHandler() {
+    saveContext();
+    asm volatile("bl _Z20DMA2_Stream3_IRQImplv");
+    restoreContext();
+}
 
-// void __attribute__((used)) DMA2_Stream3_IRQImpl() {
-//     DMADriver::instance().IRQhandleInterrupt(DMAStreamId::DMA2_Str3);
-// }
+void __attribute__((used)) DMA2_Stream3_IRQImpl() {
+    DMADriver::instance().IRQhandleInterrupt(DMAStreamId::DMA2_Str3);
+}
 
 void __attribute__((naked)) DMA2_Stream4_IRQHandler() {
     saveContext();

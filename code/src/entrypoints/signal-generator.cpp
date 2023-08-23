@@ -25,9 +25,9 @@
  *   along with this program; if not, see <http://www.gnu.org/licenses/>   *
  ***************************************************************************/
 
+#include <Generator/Generator.h>
 #include <Parser/Parser.h>
 #include <RGBLed/RGBLed.h>
-#include <generator/Generator.h>
 #include <miosix.h>
 #include <util/util.h>
 
