@@ -33,9 +33,9 @@
 
 using namespace miosix;
 
-RGB errorColor(32, 0, 0);
-RGB runningColor(0, 32, 0);
-RGB idleColor(0, 32, 32);
+RGB errorColor(64, 0, 0);
+RGB runningColor(0, 64, 0);
+RGB idleColor(0, 64, 64);
 
 CPUProfiler profiler;
 
@@ -50,34 +50,43 @@ int main() {
     Generator generator(8e3, 10e3);
     generator.init();
 
-    // Print a welcome message
     printWelcomeMessage();
 
     std::function<void(const Command &)> onCommand =
         [&](const Command &command) {
-            // TODO: Check also if the expression is set before start
+            DACDriver::Channel channel =
+                static_cast<DACDriver::Channel>(command.channel);
+
             switch (command.type) {
                 case CommandType::START:
-                    generator.start(
-                        static_cast<DACDriver::Channel>(command.channel));
-                    printf("Started channel %d...\n",
-                           static_cast<int>(command.channel));
-                    led.setColor(runningColor);
+                    if (generator.start(channel)) {
+                        printf("Started channel %d\n", command.channel);
+                        led.setColor(runningColor);
+                    } else {
+                        printf("Could not start channel %d\n", command.channel);
+                    }
                     break;
                 case CommandType::STOP:
-                    generator.stop(
-                        static_cast<DACDriver::Channel>(command.channel));
-                    printf("Stopped channel %d...\n",
-                           static_cast<int>(command.channel));
-                    led.setColor(idleColor);
+                    if (generator.stop(channel)) {
+                        printf("Stopped channel %d\n", command.channel);
+                        led.setColor(idleColor);
+                    } else {
+                        printf("Could not stop channel %d\n", command.channel);
+                    }
                     break;
                 case CommandType::EXPRESSION:
-                    generator.setExpression(
-                        static_cast<DACDriver::Channel>(command.channel),
-                        command.exp);
+                    if (generator.isRunning(channel)) {
+                        printf(
+                            "The channel is on, I will first stop and then "
+                            "restart it\n");
+                        generator.stop(channel);
+                        generator.setExpression(channel, command.exp);
+                        generator.start(channel);
+                    } else {
+                        generator.setExpression(channel, command.exp);
+                    }
                     printf("Channel %d updated with new expression\n",
-                           static_cast<int>(command.channel));
-                    led.setColor(idleColor);
+                           command.channel);
                     break;
                 case CommandType::HELP:
                     printHelpMessage();

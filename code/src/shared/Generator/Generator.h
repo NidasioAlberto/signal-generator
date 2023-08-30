@@ -55,9 +55,11 @@ public:
      */
     void setExpression(DACDriver::Channel channel, const Expression *exp);
 
-    void start(DACDriver::Channel channel);
+    bool start(DACDriver::Channel channel);
 
-    void stop(DACDriver::Channel channel);
+    bool stop(DACDriver::Channel channel);
+
+    bool isRunning(DACDriver::Channel channel);
 
 private:
     /**

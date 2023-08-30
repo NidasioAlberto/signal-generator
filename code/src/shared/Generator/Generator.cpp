@@ -61,14 +61,19 @@ void Generator::setExpression(DACDriver::Channel channel,
     }
 }
 
-void Generator::start(DACDriver::Channel channel) {
+bool Generator::start(DACDriver::Channel channel) {
     ChannelCtrlData &ctrlData = channelCtrlData[static_cast<int>(channel)];
     volatile void *dacDstAddress =
         channel == DACDriver::Channel::CH1 ? &(DAC->DHR12R1) : &(DAC->DHR12R2);
 
     // Check if the channel was already started
     if (ctrlData.thread != nullptr) {
-        return;  // TODO: Add boolean value
+        return false;
+    }
+
+    // Check if the function has been set
+    if (!ctrlData.func) {
+        return false;
     }
 
     // Make the wave start at time 0
@@ -113,16 +118,21 @@ void Generator::start(DACDriver::Channel channel) {
             }
 
             // Generate the next buffer
-            if (!(DMA1_Stream5->CR & DMA_SxCR_CT)) {
-                // Current target is buffer 1 so we refill buffer 2
-                generateWave(ctrlData, ctrlData.buffer2);
-                ctrlData.nextStartTime +=
-                    ctrlData.bufferSizeItems * ctrlData.wavePeriod;
-            } else {
-                // Current target is buffer 2 so we refill buffer 1
-                generateWave(ctrlData, ctrlData.buffer1);
-                ctrlData.nextStartTime +=
-                    ctrlData.bufferSizeItems * ctrlData.wavePeriod;
+            switch (ctrlData.stream.getCurrentBufferNumber()) {
+                case 1: {
+                    // Current target is buffer 1 so we refill buffer 2
+                    generateWave(ctrlData, ctrlData.buffer2);
+                    ctrlData.nextStartTime +=
+                        ctrlData.bufferSizeItems * ctrlData.wavePeriod;
+                    break;
+                }
+                case 2: {
+                    // Current target is buffer 2 so we refill buffer 1
+                    generateWave(ctrlData, ctrlData.buffer1);
+                    ctrlData.nextStartTime +=
+                        ctrlData.bufferSizeItems * ctrlData.wavePeriod;
+                    break;
+                }
             }
         }
     });
@@ -131,24 +141,38 @@ void Generator::start(DACDriver::Channel channel) {
     ctrlData.timer.setFrequency(2 * ctrlData.waveFrequency);
     ctrlData.timer.setAutoReloadRegister(1);
     ctrlData.timer.enable();
+
+    return true;
 }
 
-void Generator::stop(DACDriver::Channel channel) {
+bool Generator::stop(DACDriver::Channel channel) {
     ChannelCtrlData &ctrlData = channelCtrlData[static_cast<int>(channel)];
 
-    // Stop the thread
-    ctrlData.shouldStop = true;
-    ctrlData.thread->join();
-    delete ctrlData.thread;
+    // If the thread is null the channel has already been stopped
+    if (ctrlData.thread != nullptr) {
+        // Stop the thread
+        ctrlData.shouldStop = true;
+        ctrlData.thread->join();
+        delete ctrlData.thread;
+        ctrlData.thread = nullptr;
 
-    // Stop peripherals
-    ctrlData.timer.disable();
-    ctrlData.stream.disable();
-    dac.disableDMA(channel);
-    dac.disableTrigger(channel);
+        // Stop peripherals
+        ctrlData.timer.disable();
+        ctrlData.stream.disable();
+        dac.disableDMA(channel);
+        dac.disableTrigger(channel);
 
-    // Bring the output to 0V
-    dac.setChannel(channel, V_DDA_VOLTAGE);
+        // Bring the output to 0V
+        dac.setChannel(channel, V_DDA_VOLTAGE);
+
+        return true;
+    } else {
+        return false;
+    }
+}
+
+bool Generator::isRunning(DACDriver::Channel channel) {
+    return channelCtrlData[static_cast<int>(channel)].thread != nullptr;
 }
 
 std::function<float(float)> Generator::buildFunction(const Expression *exp) {
