@@ -69,6 +69,9 @@ endfunction()
 add_executable(adc-dac src/entrypoints/adc-dac.cpp)
 mbs_custom_target(adc-dac stm32f205rc_signal_generator)
 
+add_executable(basic-signal-generator src/entrypoints/basic-signal-generator.cpp)
+mbs_custom_target(basic-signal-generator stm32f205rc_signal_generator)
+
 add_executable(dac-dma-timer src/entrypoints/dac-dma-timer.cpp)
 mbs_custom_target(dac-dma-timer stm32f205rc_signal_generator)
 
