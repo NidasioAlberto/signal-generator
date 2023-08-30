@@ -143,15 +143,15 @@ void __attribute__((used)) DMA2_Stream2_IRQImpl() {
     DMADriver::instance().IRQhandleInterrupt(DMAStreamId::DMA2_Str2);
 }
 
-void __attribute__((naked)) DMA2_Stream3_IRQHandler() {
-    saveContext();
-    asm volatile("bl _Z20DMA2_Stream3_IRQImplv");
-    restoreContext();
-}
+// void __attribute__((naked)) DMA2_Stream3_IRQHandler() {
+//     saveContext();
+//     asm volatile("bl _Z20DMA2_Stream3_IRQImplv");
+//     restoreContext();
+// }
 
-void __attribute__((used)) DMA2_Stream3_IRQImpl() {
-    DMADriver::instance().IRQhandleInterrupt(DMAStreamId::DMA2_Str3);
-}
+// void __attribute__((used)) DMA2_Stream3_IRQImpl() {
+//     DMADriver::instance().IRQhandleInterrupt(DMAStreamId::DMA2_Str3);
+// }
 
 void __attribute__((naked)) DMA2_Stream4_IRQHandler() {
     saveContext();
@@ -196,38 +196,25 @@ void __attribute__((used)) DMA2_Stream6_IRQImpl() {
 void DMADriver::IRQhandleInterrupt(DMAStreamId id) {
     auto stream = streams[id];
 
-    // Check if the interrupt was triggered by an half transfer event
-    if (stream->getHalfTransferInterruptStatus()) {
-        stream->halfTransferTriggered = true;
+    stream->readFlags();
+    stream->clearAllFlags();
 
-        // Run the callback if defined
-        if (stream->halfTransferCallback) {
-            stream->halfTransferCallback();
-        }
-
-        // Wakeup the waiting thread if it is waiting
-        if (stream->waitingThread && stream->waitingForHalfTransfer) {
-            IRQwakeupThread(stream);
-        }
-
-        stream->clearHalfTransferInterrupt();
+    // Run the callbacks if neccessary
+    if (stream->halfTransferCallback && stream->halfTransferFlag) {
+        stream->halfTransferCallback();
+    }
+    if (stream->transferCompleteCallback && stream->transferCompleteFlag) {
+        stream->transferCompleteCallback();
+    }
+    if (stream->errorCallback &&
+        (stream->transferErrorFlag || stream->fifoErrorFlag ||
+         stream->directModeErrorFlag)) {
+        stream->errorCallback();
     }
 
-    // Check if the interrupt was triggered by a transfer complete event
-    if (stream->getTransferCompleteInterruptStatus()) {
-        stream->transferCompleteTriggered = true;
-
-        // Run the callback if defined
-        if (stream->transferCompleteCallback) {
-            stream->transferCompleteCallback();
-        }
-
-        // Wakeup the waiting thread if it is waiting
-        if (stream->waitingThread && stream->waitingForTransferComplete) {
-            IRQwakeupThread(stream);
-        }
-
-        stream->clearTransferCompleteInterrupt();
+    // Wakeup the thread if the user is waiting
+    if (stream->waitingThread) {
+        IRQwakeupThread(stream);
     }
 }
 
@@ -362,27 +349,27 @@ void DMAStream::setup(DMATransaction transaction) {
 
     bool enableInterrupt = false;
     if (transaction.enableHalfTransferInterrupt) {
-        clearHalfTransferInterrupt();
+        clearHalfTransferFlag();
         registers->CR |= DMA_SxCR_HTIE;
         enableInterrupt = true;
     }
     if (transaction.enableTransferCompleteInterrupt) {
-        clearTransferCompleteInterrupt();
+        clearTransferCompleteFlag();
         registers->CR |= DMA_SxCR_TCIE;
         enableInterrupt = true;
     }
     if (transaction.enableTransferErrorInterrupt) {
-        clearTransferErrorInterrupt();
+        clearTransferErrorFlag();
         registers->CR |= DMA_SxCR_TEIE;
         enableInterrupt = true;
     }
     if (transaction.enableFifoErrorInterrupt) {
-        clearFifoErrorInterrupt();
+        clearFifoErrorFlag();
         registers->CR |= DMA_SxFCR_FEIE;
         enableInterrupt = true;
     }
     if (transaction.enableDirectModeErrorInterrupt) {
-        clearDirectModeErrorInterrupt();
+        clearDirectModeErrorFlag();
         registers->CR |= DMA_SxCR_DMEIE;
         enableInterrupt = true;
     }
@@ -397,8 +384,12 @@ void DMAStream::setup(DMATransaction transaction) {
 }
 
 void DMAStream::enable() {
-    // Reset the flags
-    transferCompleteTriggered = false;
+    // Reset all saved flags
+    halfTransferFlag = false;
+    transferCompleteFlag = false;
+    transferErrorFlag = false;
+    fifoErrorFlag = false;
+    directModeErrorFlag = false;
 
     // Enable the peripheral
     registers->CR |= DMA_SxCR_EN;
@@ -409,33 +400,33 @@ void DMAStream::disable() { registers->CR &= ~DMA_SxCR_EN; }
 void DMAStream::waitForHalfTransfer() {
     waitForInterruptEventImpl(
         currentSetup.enableHalfTransferInterrupt,
-        std::bind(&DMAStream::getHalfTransferInterruptStatus, this),
-        std::bind(&DMAStream::clearHalfTransferInterrupt, this),
-        halfTransferTriggered, waitingForHalfTransfer);
+        std::bind(&DMAStream::getHalfTransferFlagStatus, this),
+        std::bind(&DMAStream::clearHalfTransferFlag, this), halfTransferFlag,
+        -1);
 }
 
 void DMAStream::waitForTransferComplete() {
     waitForInterruptEventImpl(
         currentSetup.enableTransferCompleteInterrupt,
-        std::bind(&DMAStream::getTransferCompleteInterruptStatus, this),
-        std::bind(&DMAStream::clearTransferCompleteInterrupt, this),
-        transferCompleteTriggered, waitingForTransferComplete);
+        std::bind(&DMAStream::getTransferCompleteFlagStatus, this),
+        std::bind(&DMAStream::clearTransferCompleteFlag, this),
+        transferCompleteFlag, -1);
 }
 
 bool DMAStream::timedWaitForHalfTransfer(uint64_t timeout_ns) {
-    return timedWaitForInterruptEventImpl(
+    return waitForInterruptEventImpl(
         currentSetup.enableHalfTransferInterrupt,
-        std::bind(&DMAStream::getHalfTransferInterruptStatus, this),
-        std::bind(&DMAStream::clearHalfTransferInterrupt, this),
-        halfTransferTriggered, waitingForHalfTransfer, timeout_ns);
+        std::bind(&DMAStream::getHalfTransferFlagStatus, this),
+        std::bind(&DMAStream::clearHalfTransferFlag, this), halfTransferFlag,
+        timeout_ns);
 }
 
 bool DMAStream::timedWaitForTransferComplete(uint64_t timeout_ns) {
-    return timedWaitForInterruptEventImpl(
+    return waitForInterruptEventImpl(
         currentSetup.enableTransferCompleteInterrupt,
-        std::bind(&DMAStream::getTransferCompleteInterruptStatus, this),
-        std::bind(&DMAStream::clearTransferCompleteInterrupt, this),
-        transferCompleteTriggered, waitingForTransferComplete, timeout_ns);
+        std::bind(&DMAStream::getTransferCompleteFlagStatus, this),
+        std::bind(&DMAStream::clearTransferCompleteFlag, this),
+        transferCompleteFlag, timeout_ns);
 }
 
 void DMAStream::setHalfTransferCallback(std::function<void()> callback) {
@@ -452,50 +443,20 @@ void DMAStream::resetTransferCompleteCallback() {
     transferCompleteCallback = nullptr;
 }
 
-void DMAStream::clearHalfTransferInterrupt() {
-    *IFCR |= DMA_LIFCR_CHTIF0 << IFindex;
+void DMAStream::setErrorCallback(std::function<void()> callback) {
+    errorCallback = callback;
 }
 
-void DMAStream::clearTransferCompleteInterrupt() {
-    *IFCR |= DMA_LIFCR_CTCIF0 << IFindex;
-}
+void DMAStream::resetErrorCallback() { errorCallback = nullptr; }
 
-void DMAStream::clearTransferErrorInterrupt() {
-    *IFCR |= DMA_LIFCR_CTEIF0 << IFindex;
-}
+void DMAStream::readFlags() {
+    uint8_t flags = *ISR >> IFindex;
 
-void DMAStream::clearFifoErrorInterrupt() {
-    *IFCR |= DMA_LIFCR_CFEIF0 << IFindex;
-}
-
-void DMAStream::clearDirectModeErrorInterrupt() {
-    *IFCR |= DMA_LIFCR_CDMEIF0 << IFindex;
-}
-
-void DMAStream::clearAllInterrupts() {
-    *IFCR |= (DMA_LIFCR_CHTIF0 | DMA_LIFCR_CTCIF0 | DMA_LIFCR_CTEIF0 |
-              DMA_LIFCR_CFEIF0 | DMA_LIFCR_CDMEIF0)
-             << IFindex;
-}
-
-bool DMAStream::getHalfTransferInterruptStatus() {
-    return (*ISR & (DMA_LISR_HTIF0 << IFindex)) != 0;
-}
-
-bool DMAStream::getTransferCompleteInterruptStatus() {
-    return (*ISR & (DMA_LISR_TCIF0 << IFindex)) != 0;
-}
-
-bool DMAStream::getTransferErrorInterruptStatus() {
-    return (*ISR & (DMA_LISR_TEIF0 << IFindex)) != 0;
-}
-
-bool DMAStream::getFifoErrorInterruptStatus() {
-    return (*ISR & (DMA_LISR_FEIF0 << IFindex)) != 0;
-}
-
-bool DMAStream::getDirectModeErrorInterruptStatus() {
-    return (*ISR & (DMA_LISR_DMEIF0 << IFindex)) != 0;
+    halfTransferFlag = flags & DMA_LISR_HTIF0;
+    transferCompleteFlag = flags & DMA_LISR_TCIF0;
+    transferErrorFlag = flags & DMA_LISR_TEIF0;
+    fifoErrorFlag = flags & DMA_LISR_DMEIF0;
+    directModeErrorFlag = flags & DMA_LISR_DMEIF0;
 }
 
 int DMAStream::getCurrentBufferNumber() {

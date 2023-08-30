@@ -84,5 +84,5 @@ inline void SPIDMABus::write(const uint8_t* data, size_t nBytes) {
 
     disableTxDMARequest();
     txStream.disable();
-    txStream.clearAllInterrupts();
+    txStream.clearAllFlags();
 }
