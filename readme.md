@@ -17,8 +17,6 @@ To achieve this goals a custom board was designed and software drivers were deve
     <img src="report/graphics/console_example.png" alt="PCB Render" width="50%" />
 </div>
 
-Sure, let's convert the provided LaTeX into markdown:
-
 ## Analog Front End
 
 The stm32 incorporates a Digital-to-Analog Converter (DAC) with an integrated output buffer. When enabled, the buffer allows the DAC to drive external loads directly. However, this comes at the cost of limited driving capability, especially when interfacing with capacitive loads. Disabling the buffer offers a pure analog output, but necessitates an external buffer or amplifier to drive any meaningful external load. The inherent impedance of the DAC's output pin can also cause distortions and constrain the signal's frequency, particularly when dealing with capacitive loads.
