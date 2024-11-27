@@ -3,7 +3,6 @@
 ## Introduction
 
 The main idea of this project is to develop a waveform generator instrument using an STM32 microcontroller and its built-in DAC. The project has 2 parts:
-\begin{itemize}
 - **Software**: The application needs to showcase the STM32 capability to output
             waveforms  at sample rates of 100kHz or greater. The software has to include a
             peripheral driver to access the built in DAC using DMA.
